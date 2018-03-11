@@ -1,0 +1,20 @@
+{
+  "name": "csdwheels",
+  "description": "some javascript wheels made by csdoker.",
+  "main": "index.js",
+  "authors": [
+    "csdoker"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "csdwheels"
+  ],
+  "homepage": "https://github.com/csd758371536/csdwheels",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

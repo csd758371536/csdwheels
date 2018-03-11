@@ -1,0 +1,33 @@
+.page-navigator {
+  margin: 24px 0;
+  text-align: center;
+  font-size: 0;
+}
+.page-navigator li {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 4px;
+}
+.page-navigator li a {
+  box-sizing: content-box;
+  display: inline-block;
+  padding: 0 8px;
+  min-width: 20px;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 200;
+  cursor: pointer;
+}
+.page-navigator li a:link {
+  color: #555;
+}
+.page-navigator li a:hover {
+  background-color: #eee;
+  color: #42b983;
+}
+.page-navigator li a.current {
+  color: #444;
+  background-color: #eee;
+}

@@ -1,0 +1,203 @@
+/**
+* Author: csdoker
+* CreateTime: 2017/12/23
+* Tips: 重写浏览器默认样式
+*/
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+html {
+  /*标准字体大小设置 14 像素「rem 参照对象」*/
+  font-size: 14px;
+  /*滚动事件发生在 html 元素上；JS 中可以监听 html 的滚动*/
+  overflow-y: auto;
+  /*让 html 和浏览器窗口高度一致*/
+  height: 100%;
+  /*少数浏览器默认背景色为浅灰色，所以设置默认背景颜色为纯白*/
+  background-color: #fff;
+}
+
+html,
+body {
+  /*body 宽度大 html 度时，某些浏览器会出现内部滚动条；所以设置「html、body」宽度相同且「overflow-x: hidden」*/
+  overflow-x: hidden;
+  width: 100%;
+  /*取消部分浏览器点击有阴影*/
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  /*优化移动端滚动事件*/
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}
+
+body {
+  /*让绝对定位元素，根据 body 定位*/
+  position: relative;
+  height: 100%;
+  /*设置网页基本字体颜色为浅灰色*/
+  color: #666;
+  /*使字体渲染更顺滑*/
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/*设置基本字体配置*/
+body,button,input,select,textarea {
+  // font-family: 'Helvetica Neue', Helvetica, 'PingFang SC',
+  //  'Hiragino Sans GB', 'Microsoft Yahei', Arial, sans-serif;
+  font-family: "Helvetica Neue", "Microsoft Yahei",
+      "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+}
+
+/**
+ * 移除常用标签的浏览器默认的「margin、padding」
+ */
+body,p,h1,h2,h3,h4,h5,h6,hr,dl,dt,dd,ul,ol,
+li,th,td,button,figure,input,textarea,optgroup,
+form,pre,code,legend,fieldset,blockquote,thead,tbody,tfoot {
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6{ font-size:100%; }
+address, cite, dfn, em, var { font-style:normal; }
+code, kbd, pre, samp { font-family:couriernew, courier, monospace; }
+
+/**
+ * 不同浏览器的 input、select、textarea 的盒子模型宽度计算方式不同，统一为最常见的 content-box
+ */
+input,
+select,
+textarea {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+table {
+  /*table 相邻单元格的边框间的距离设置为 0*/
+  border-spacing: 0;
+  /*默认情况下给 tr 设置 border 没有效果
+  如果 table 设置了边框为合并模式：「border-collapse: collapse;」就可以了*/
+  border-collapse: collapse;
+}
+
+/**
+ * 移除浏览器部分元素的默认边框
+ * acronym、fieldset … 等其他标签不是很常用，就不会一一列举；如果项目中用到，可以自己单独写
+ */
+img,
+input,
+button,
+textarea {
+  border: none;
+  -webkit-appearance: none;
+}
+
+input {
+  /*由于 input 默认不继承父元素的居中样式，所以设置：「text-align: inherit」*/
+  text-align: inherit;
+}
+
+textarea {
+  /*textarea 默认不可以放缩*/
+  resize: none;
+}
+
+/**
+ * 由于以下元素的部分属性没有继承父节点样式，所以声明这些元素的这些属性为父元素的属性
+ * 取消这些元素 `outline` 样式
+ */
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+select,
+button,
+option,
+textarea,
+optgroup {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  line-height: inherit;
+  color: inherit;
+  outline: none;
+}
+
+/**
+ * 取消超链接元素的默认文字装饰
+ * 另外 del、ins 标签的中划线、下划线还是挺好的，就不去掉
+ */
+a,a:hover,a:active,a:visited {
+  text-decoration: none;
+}
+
+sup { vertical-align:text-top; }
+sub{ vertical-align:text-bottom; }
+fieldset { border:0; }
+button, input, select, textarea { font-size:100%; }
+
+ol,
+ul {
+  /*开发中 UI 设计的列表都是和原生的样式差太多，所以直接给取消 ol，ul 默认列表样式*/
+  list-style: none;
+}
+
+button,
+input[type='submit'],
+input[type='button'] {
+  /*鼠标经过是「小手」形状表示可点击*/
+  cursor: pointer;
+}
+
+input::-moz-focus-inner {
+  /*取消火狐浏览器部分版本 input 聚焦时默认的「padding、border」*/
+  padding: 0;
+  border: 0;
+}
+
+/*取消部分浏览器数字输入控件的操作按钮*/
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+/*输入控件 placeholder 色设置 #999*/
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: #999;
+}
+
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+  color: #999;
+}
+
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  color: #999;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  color: #999;
+}
+
+template {
+  /*由于部分浏览 template 会显示出来，所以要隐*/
+  display: none;
+}
