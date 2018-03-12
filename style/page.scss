@@ -1,0 +1,33 @@
+.page-navigator {
+  margin: 24px 0;
+  text-align: center;
+  font-size: 0;
+  li {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 4px;
+    a {
+      box-sizing: content-box;
+      display: inline-block;
+      padding: 0 8px;
+      min-width: 20px;
+      height: 32px;
+      line-height: 32px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 200;
+      cursor: pointer;
+      &:link {
+        color: #555;
+      }
+      &:hover {
+        background-color: #eee;
+        color: #42b983;
+      }
+      &.current {
+        color: #444;
+        background-color: #eee;
+      }
+    }
+  }
+}
