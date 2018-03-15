@@ -49,6 +49,10 @@ page.pageEvent = function () {
 
 可以给分页按钮绑定对应的事件（比如上面这段代码就打印了当前页码）
 
+#### 效果演示
+
+test/page/test.html
+
 ## 3. 测试
 
 > npm install
@@ -56,6 +60,6 @@ page.pageEvent = function () {
 > npm test
 
 
-## 3. 协议
+## 4. 协议
 
 MIT
