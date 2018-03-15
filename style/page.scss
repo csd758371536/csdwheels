@@ -15,7 +15,6 @@
       line-height: 32px;
       border-radius: 16px;
       font-size: 16px;
-      // font-weight: 200;
       cursor: pointer;
       &:link {
         color: #555;
@@ -25,7 +24,7 @@
         color: #42b983;
       }
       &.current {
-        color: #444;
+        color: #42b983;
         background-color: #eee;
       }
     }

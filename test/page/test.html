@@ -5,39 +5,44 @@
   <meta charset="utf-8">
   <title></title>
   <link rel="stylesheet" href="../../style/base.css">
+  <link rel="stylesheet" href="../../style/test.min.css">
   <link rel="stylesheet" href="../../style/page.min.css">
 </head>
 
 <body>
-  <article class="">
-    1111111
-  </article>
-  <ol class="page-navigator">
-    <li class="pre">
-      <a href="javascript:;">« 前一页</a>
-    </li>
-    <li>
-      <a href="javascript:;">1</a>
-    </li>
-    <li>
-      <a class="current" href="javascript:;">2</a>
-    </li>
-    <li>
-      <a href="javascript:;">3</a>
-    </li>
-    <li>
-      <a href="javascript:;">4</a>
-    </li>
-    <li>
-      <a href="javascript:;">5</a>
-    </li>
-    <li class="next">
-      <a href="javascript:;">后一页 »</a>
-    </li>
-  </ol>
-  <script src="../../src/page.js" charset="utf-8"></script>
+  <div class="main">
+    <article class="content" id="content">1</article>
+    <ol class="page-navigator" id="pagelist">
+      <!-- <li>
+        <a href="javascript:;">« 前一页</a>
+      </li>
+      <li>
+        <a href="javascript:;">1</a>
+      </li>
+      <li>
+        <a class="current" href="javascript:;">2</a>
+      </li>
+      <li>
+        <a href="javascript:;">3</a>
+      </li>
+      <li>
+        <a href="javascript:;">4</a>
+      </li>
+      <li>
+        <a href="javascript:;">5</a>
+      </li>
+      <li>
+        <a href="javascript:;">后一页 »</a>
+      </li> -->
+    </ol>
+  </div>
+  <script src="../../dist/page/page.min.js" charset="utf-8"></script>
   <script type="text/javascript">
-    // new page();
+    var pageModule =  new Page(162, 7, 5);
+    // 绑定事件
+    pageModule.pageEvent = function () {
+      document.getElementById('content').innerHTML = this.pageNumber;
+    };
   </script>
 </body>
 
