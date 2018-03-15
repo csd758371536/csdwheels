@@ -5,15 +5,15 @@
    * pageSize: 每页最多显示的数据数量
    * pageMax: 界面最多能显示的页码数量
    */
-  var Page = function(dataCount, pageSize, pageMax) {
+  var Page = function(pageOption) {
     // 支持Page()或new Page()创建
     if (!(this instanceof Page)) return new Page();
     // 最多显示页码数
-    this.pageMax = pageMax;
+    this.pageMax = pageOption.pageMax;
     // 当前页码
     this.pageNumber = 1;
     // 总页数
-    this.pageCount = Math.ceil(dataCount / pageSize);
+    this.pageCount = Math.ceil(pageOption.dataCount / pageOption.pageSize);
     // 渲染
     this.renderPages();
     // 改变页码

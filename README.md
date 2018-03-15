@@ -23,7 +23,12 @@
 最后就能使用某个插件了
 
 ```js
-var page =  new Page(162, 7, 5);
+var pageOption = {
+  dataCount: 162,
+  pageSize: 7,
+  pageMax: 5
+};
+var page =  new Page(pageOption);
 ```
 
 
@@ -33,11 +38,19 @@ var page =  new Page(162, 7, 5);
 
 #### 初始化
 
-```js
-var page =  new Page(162, 7, 5);
-```
+支持三个参数：
 
-支持三个参数：数据总数、每页最多显示的数据数量、界面最多能显示的页码数量
+```js
+var pageOption = {
+  // 数据总数（必填）
+  dataCount: 162,
+  // 每页最多显示的数据数量（必填）
+  pageSize: 7,
+  // 界面最多能显示的页码数量（必填）
+  pageMax: 5
+};
+var page =  new Page(pageOption);
+```
 
 #### 绑定事件
 

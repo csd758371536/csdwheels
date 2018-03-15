@@ -38,9 +38,14 @@
   </div>
   <script src="../../dist/page/page.min.js" charset="utf-8"></script>
   <script type="text/javascript">
-    var pageModule =  new Page(162, 7, 5);
+    var pageOption = {
+      dataCount: 162,
+      pageSize: 7,
+      pageMax: 5
+    };
+    var page =  new Page(pageOption);
     // 绑定事件
-    pageModule.pageEvent = function () {
+    page.pageEvent = function () {
       document.getElementById('content').innerHTML = this.pageNumber;
     };
   </script>
