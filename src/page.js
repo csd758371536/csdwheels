@@ -1,5 +1,18 @@
 (function(window, document, undefined) {
   'use strict';
+
+  function addEvent(element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent('on' + type, function() {
+				handler.call(element);
+			});
+		} else {
+			element['on' + type] = handler;
+		}
+	};
+
   /*
    * dataCount: 数据总数
    * pageSize: 每页最多显示的数据数量
