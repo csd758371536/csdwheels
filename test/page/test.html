@@ -38,16 +38,15 @@
   </div>
   <script src="../../dist/page/page.min.js" charset="utf-8"></script>
   <script type="text/javascript">
-    var pageOption = {
+    var option = {
       dataCount: 162,
       pageSize: 7,
-      pageMax: 5
+      pageMax: 5,
+      pageEvent: function () {
+        document.getElementById('content').innerHTML = this.pageNumber;
+      }
     };
-    var page =  new Page(pageOption);
-    // 绑定事件
-    page.pageEvent = function () {
-      document.getElementById('content').innerHTML = this.pageNumber;
-    };
+    var page = new Page(option);
   </script>
 </body>
 
