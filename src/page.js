@@ -225,10 +225,18 @@
             return html;
         },
         renderFirst: function() {
-            return this.renderDom(1, this.pageMax);
+            if (this.pageCount < this.pageMax) {
+                return this.renderDom(1, this.pageCount);
+            } else {
+                return this.renderDom(1, this.pageMax);
+            }
         },
         renderLast: function() {
-            return this.renderDom(this.pageCount - this.pageMax + 1, this.pageCount);
+            if (this.pageCount < this.pageMax) {
+                return this.renderDom(1, this.pageCount);
+            } else {
+                return this.renderDom(this.pageCount - this.pageMax + 1, this.pageCount);
+            }
         },
         renderCenter: function() {
             var begin, end;
