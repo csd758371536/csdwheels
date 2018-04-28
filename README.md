@@ -13,23 +13,17 @@
 
 > bower install csdwheels --save
 
-然后引入某个插件的css及js文件
+然后引入某个插件的css、js文件，并且插入dom结构
 
+例：
 ```html
+<ol class="page-navigator" id="pagelist"></ol>
+
 <link rel="stylesheet" href="page.min.css">
 <script type="text/javascript" src="page.min.js"></script>
 ```
 
 最后就能使用某个插件了
-
-```js
-var pageOption = {
-  dataCount: 162,
-  pageSize: 7,
-  pageMax: 5
-};
-var page =  new Page(pageOption);
-```
 
 
 ## 2. 使用
@@ -38,29 +32,53 @@ var page =  new Page(pageOption);
 
 #### 初始化
 
-支持三个参数：
+引入css、js
+```html
+<link rel="stylesheet" href="page.min.css">
+<script type="text/javascript" src="page.min.js"></script>
+```
 
+插入dom
+```html
+<ol class="page-navigator" id="pagelist"></ol>
+```
+
+配置分页，支持两种分页类型
+
+1、不显示省略号：
 ```js
 var pageOption = {
   // 数据总数（必填）
   dataCount: 162,
-  // 每页最多显示的数据数量（必填）
+  // 分页类型（必填）
+  pageType: 1,
+  // 每页最多显示的数据数量（选填，默认5个）
   pageSize: 7,
-  // 界面最多能显示的页码数量（必填）
-  pageMax: 5
+  // 界面最多能显示的页码数量（选填，默认5个）
+  pageMax: 5,
+  // 回调事件（选填，参数必填，值为当前页码）
+  pageEvent: function(pageNumber) {}
 };
 var page =  new Page(pageOption);
 ```
 
-#### 绑定事件
-
+2、显示省略号
 ```js
-page.pageEvent = function () {
-  document.getElementById('content').innerHTML = this.pageNumber;
+var pageOption = {
+  // 数据总数（必填）
+  dataCount: 162,
+  // 分页类型（必填）
+  pageType: 2,
+  // 每页最多显示的数据数量（选填，默认5个）
+  pageSize: 7,
+  // 当前页码前后最多显示的页码数量（选填，默认2个）
+  pageShow: 2,
+  // 回调事件（选填，参数必填，值为当前页码）
+  pageEvent: function(pageNumber) {}
 };
+var page =  new Page(pageOption);
 ```
 
-可以给分页按钮绑定对应的事件（比如上面这段代码就打印了当前页码）
 
 #### 效果演示
 
