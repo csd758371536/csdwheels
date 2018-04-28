@@ -102,12 +102,12 @@
         }
         if (option.pageType == 1) {
             // 合并默认配置
-            option = extend(true, this.defaultOption1, option)
+            option = extend(true, this.defaultOption1, option);
             // 最多显示页码数
             this.pageMax = option.pageMax;
         } else {
             // 合并默认配置
-            option = extend(true, this.defaultOption2, option)
+            option = extend(true, this.defaultOption2, option);
             // 当前页码前后最多显示的页码数量
             this.pageShow = option.pageShow;
         }
@@ -214,8 +214,7 @@
                 html = "<li><a href='javascript:;' id=''>...</a></li>" + html;
             }
             if (this.pageNumber > 1) {
-                html = "<li><a href='javascript:;' id='first'>首页</a></li><li><a href='javascript:;' id='prev'>前一页</a></li><li><a href='javascript:;' id='page'>1</a></li>"
-                 + html;
+                html = "<li><a href='javascript:;' id='first'>首页</a></li><li><a href='javascript:;' id='prev'>前一页</a></li><li><a href='javascript:;' id='page'>1</a></li>" + html;
             }
             if (this.pageNumber + this.pageShow + 1 < this.pageCount) {
                 html = html + "<li><a href='javascript:;' id=''>...</a></li>";
