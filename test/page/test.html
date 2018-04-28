@@ -12,38 +12,15 @@
 <body>
   <div class="main">
     <article class="content" id="content">1</article>
-    <ol class="page-navigator" id="pagelist">
-      <!-- <li>
-        <a href="javascript:;">« 前一页</a>
-      </li>
-      <li>
-        <a href="javascript:;">1</a>
-      </li>
-      <li>
-        <a class="current" href="javascript:;">2</a>
-      </li>
-      <li>
-        <a href="javascript:;">3</a>
-      </li>
-      <li>
-        <a href="javascript:;">4</a>
-      </li>
-      <li>
-        <a href="javascript:;">5</a>
-      </li>
-      <li>
-        <a href="javascript:;">后一页 »</a>
-      </li> -->
-    </ol>
+    <ol class="page-navigator" id="pagelist"></ol>
   </div>
   <script src="../../dist/page/page.min.js" charset="utf-8"></script>
   <script type="text/javascript">
     var option = {
       dataCount: 162,
-      pageSize: 7,
-      pageMax: 5,
-      pageEvent: function () {
-        document.getElementById('content').innerHTML = this.pageNumber;
+      pageType: 2,
+      pageEvent: function (pageNumber) {
+        document.getElementById('content').innerHTML = pageNumber;
       }
     };
     var page = new Page(option);

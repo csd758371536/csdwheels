@@ -91,31 +91,56 @@
     var Page = function(option) {
         // 支持Page()或new Page()创建
         if (!(this instanceof Page)) return new Page();
-        // 合并默认配置
-        option = extend(true, this.defaultOption, option)
-        // 最多显示页码数
-        this.pageMax = option.pageMax;
+        // 检查配置的必填参数是否错误
+        if (!option.hasOwnProperty('dataCount')) {
+            console.log('请传入数据总数！');
+            return;
+        }
+        if (!option.hasOwnProperty('pageType')) {
+            console.log('请传入分页类型！');
+            return;
+        }
+        if (option.pageType == 1) {
+            // 合并默认配置
+            option = extend(true, this.defaultOption1, option)
+            // 最多显示页码数
+            this.pageMax = option.pageMax;
+        } else {
+            // 合并默认配置
+            option = extend(true, this.defaultOption2, option)
+            // 当前页码前后最多显示的页码数量
+            this.pageShow = option.pageShow;
+        }
+        // 分页类型
+        this.pageType = option.pageType;
         // 当前页码
         this.pageNumber = 1;
         // 总页数
         this.pageCount = Math.ceil(option.dataCount / option.pageSize);
-        // 事件
+        // 绑定事件
         this.pageEvent = option.pageEvent;
         // 渲染
         this.renderPages();
-        // 改变页码
+        // 改变页数并触发事件
         this.changePage();
     };
 
     Page.prototype = {
         construct: Page,
         // 默认配置
-        defaultOption: {
-          dataCount: 162,
-          pageSize: 7,
+        defaultOption1: {
+          dataCount: 0,
+          pageSize: 5,
           pageMax: 5,
-          pageType: 'normal',
-          pageEvent: function() {}
+          pageType: 1,
+          pageEvent: function(pageNumber) {}
+        },
+        defaultOption2: {
+          dataCount: 0,
+          pageSize: 5,
+          pageShow: 2,
+          pageType: 2,
+          pageEvent: function(pageNumber) {}
         },
         changePage: function() {
             var _this = this;
@@ -132,16 +157,27 @@
                         _this.firstPage();
                     } else if (target.id === 'last') {
                         _this.lastPage();
-                    } else {
+                    } else if (target.id === 'page') {
                         _this.goPage(parseInt(target.innerHTML));
+                    } else {
+                        return;
                     }
-                    _this.pageEvent();
+                    _this.pageEvent(_this.pageNumber);
                 }
             });
         },
         renderPages: function() {
-            var html = "",
-                count;
+            var html = "";
+            if (this.pageType === 1) {
+                html = this.renderPageType1();
+            } else {
+                html = this.renderPageType2();
+            }
+            document.getElementById('pagelist').innerHTML = html;
+        },
+        renderPageType1: function() {
+            var html = "";
+            var count;
             if (this.pageMax % 2 === 0) {
                 count = 2;
             } else {
@@ -160,7 +196,34 @@
             if (this.pageNumber < this.pageCount) {
                 html = html + "<li><a href='javascript:;' id='next'>后一页</a></li><li><a href='javascript:;' id='last'>尾页</a></li>";
             }
-            document.getElementById('pagelist').innerHTML = html;
+            return html;
+        },
+        renderPageType2: function() {
+            var html = "";
+            html = "<li><a href='javascript:;' id='page' class='current'>"+ this.pageNumber + "</a></li>";
+            for (var i = 1; i <= this.pageShow; i++) {
+                if (this.pageNumber - i > 1) {
+                    html = "<li><a href='javascript:;' id='page'>"+ parseInt(this.pageNumber - i) + "</a></li>" + html;
+                }
+                if (this.pageNumber + i < this.pageCount) {
+                    html = html + "<li><a href='javascript:;' id='page'>"+ parseInt(this.pageNumber + i) + "</a></li>";
+                }
+            }
+
+            if (this.pageNumber - (this.pageShow + 1) > 1) {
+                html = "<li><a href='javascript:;' id=''>...</a></li>" + html;
+            }
+            if (this.pageNumber > 1) {
+                html = "<li><a href='javascript:;' id='first'>首页</a></li><li><a href='javascript:;' id='prev'>前一页</a></li><li><a href='javascript:;' id='page'>1</a></li>"
+                 + html;
+            }
+            if (this.pageNumber + this.pageShow + 1 < this.pageCount) {
+                html = html + "<li><a href='javascript:;' id=''>...</a></li>";
+            }
+            if (this.pageNumber < this.pageCount) {
+                html = html + "<li><a href='javascript:;' id='page'>" + this.pageCount + "</a></li><li><a href='javascript:;' id='next'>后一页</a></li><li><a href='javascript:;' id='last'>尾页</a></li>";
+            }
+            return html;
         },
         renderFirst: function() {
             return this.renderDom(1, this.pageMax);
@@ -215,40 +278,6 @@
             this.renderPages();
         }
     };
-
-    // test
-
-    // 第二种：显示首页和最后一页页码、每一页前后最多显示2个页码
-    function showPages (page, pageCount) {
-        var str = page + '';
-        for (var i = 1; i <= 2; i++) {
-            if (page - i > 1) {
-                str = page - i + ' ' + str;
-            }
-            if (page + i < pageCount) {
-                str = str + ' ' + (page + i);
-            }
-        }
-        if (page - 3 > 1) {
-            str = '... ' + str;
-        }
-        if (page > 1) {
-            str = '上一页 ' + 1 + ' ' + str;
-        }
-        if (page + 3 < pageCount) {
-            str = str + ' ...';
-        }
-        if (page < pageCount) {
-            str = str + ' ' + pageCount + ' 下一页';
-        }
-        return str;
-    }
-
-    var pageCount = 50;
-    for (var i = 1; i <= pageCount; i++) {
-        var ret = showPages(i, pageCount);
-        console.log(ret);
-    }
 
     window.Page = Page;
 })(window, document);
