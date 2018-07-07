@@ -16,27 +16,28 @@
     <article class="content" id="content2">1</article>
     <ol class="page-navigator" id="pagelist2"></ol>
   </div>
-  <script src="../../dist/page/page.min.js" charset="utf-8"></script>
+  <!-- <script src="../../dist/page/page.min.js" charset="utf-8"></script> -->
+  <script src="../../src/page.js" charset="utf-8"></script>
   <script type="text/javascript">
     var option1 = {
       element: 'pagelist1',
       dataCount: 162,
-      pageType: 1,
-      pageEvent: function (pageNumber) {
-        document.getElementById('content1').innerHTML = pageNumber;
-      }
+      pageSize: 5,
+      pageType: 1
     };
-    var page1 = new Page(option1);
+    new Page(option1, function (pageNumber) {
+      document.getElementById('content1').innerHTML = pageNumber;
+    });
 
     var option2 = {
       element: 'pagelist2',
       dataCount: 162,
-      pageType: 2,
-      pageEvent: function (pageNumber) {
-        document.getElementById('content2').innerHTML = pageNumber;
-      }
+      pageSize: 5,
+      pageType: 2
     };
-    var page1 = new Page(option2);
+    new Page(option2, function (pageNumber) {
+      document.getElementById('content2').innerHTML = pageNumber;
+    });
   </script>
 </body>
 

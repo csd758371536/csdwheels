@@ -94,45 +94,34 @@
   /*
    * dataCount: 数据总数
    * pageSize: 每页最多显示的数据数量
-   * pageMax: 界面最多能显示的页码数量
+   * pageShow: 界面最多能显示的页码数量
    */
-  var Page = function(option) {
-    // 支持Page()或new Page()创建
-    if (!(this instanceof Page)) return new Page();
+  var Page = function(option, callback) {
     // 检查配置的必填参数是否错误
     if (!option.hasOwnProperty('dataCount')) {
-      console.log('请传入数据总数！');
-      return;
+      throw 'missing required arguments: dataCount';
     }
-    if (!option.hasOwnProperty('pageType')) {
-      console.log('请传入分页类型！');
-      return;
+    if (!option.hasOwnProperty('pageSize')) {
+      throw 'missing required arguments: pageSize';
     }
     if (!option.hasOwnProperty('element')) {
-      console.log('请传入分页器元素ID！');
-      return;
+      throw 'missing required arguments: element';
     }
-    if (option.pageType == 1) {
-      // 合并默认配置
-      option = extend(true, this.defaultOption1, option);
-      // 最多显示页码数
-      this.pageMax = option.pageMax;
-    } else {
-      // 合并默认配置
-      option = extend(true, this.defaultOption2, option);
-      // 当前页码前后最多显示的页码数量
-      this.pageShow = option.pageShow;
-    }
+    // 支持Page()或new Page()创建
+    if (!(this instanceof Page)) return new Page();
+    // 分页类型
+    this.pageType = option.pageType || 1;
+    // 当pageType为1时表示：最多显示页码数
+    // 当pageType为2时表示：当前页码前后最多显示的页码数量
+    this.pageShow = option.pageShow || 3;
     // 分页器元素
     this.pageList = document.getElementById(option.element);
-    // 分页类型
-    this.pageType = option.pageType;
     // 当前页码
     this.pageNumber = 1;
     // 总页数
     this.pageCount = Math.ceil(option.dataCount / option.pageSize);
     // 绑定事件
-    this.pageEvent = option.pageEvent;
+    this.pageEvent = callback || function() {};
     // 渲染
     this.renderPages();
     // 改变页数并触发事件
@@ -141,21 +130,6 @@
 
   Page.prototype = {
     construct: Page,
-    // 默认配置
-    defaultOption1: {
-      dataCount: 0,
-      pageSize: 5,
-      pageMax: 5,
-      pageType: 1,
-      pageEvent: function(pageNumber) {}
-    },
-    defaultOption2: {
-      dataCount: 0,
-      pageSize: 5,
-      pageShow: 2,
-      pageType: 2,
-      pageEvent: function(pageNumber) {}
-    },
     changePage: function() {
       var _this = this;
       var pagelist = _this.pageList;
@@ -192,14 +166,14 @@
     renderPageType1: function() {
       var html = "";
       var count;
-      if (this.pageMax % 2 === 0) {
+      if (this.pageShow % 2 === 0) {
         count = 2;
       } else {
         count = 1;
       }
-      if (this.pageNumber < (this.pageMax + count) / 2) {
+      if (this.pageNumber < (this.pageShow + count) / 2) {
         html = this.renderFirst();
-      } else if (this.pageCount - this.pageNumber < (this.pageMax - count) / 2) {
+      } else if (this.pageCount - this.pageNumber < (this.pageShow - count) / 2) {
         html = this.renderLast();
       } else {
         html = this.renderCenter();
@@ -239,27 +213,27 @@
       return html;
     },
     renderFirst: function() {
-      if (this.pageCount < this.pageMax) {
+      if (this.pageCount < this.pageShow) {
         return this.renderDom(1, this.pageCount);
       } else {
-        return this.renderDom(1, this.pageMax);
+        return this.renderDom(1, this.pageShow);
       }
     },
     renderLast: function() {
-      if (this.pageCount < this.pageMax) {
+      if (this.pageCount < this.pageShow) {
         return this.renderDom(1, this.pageCount);
       } else {
-        return this.renderDom(this.pageCount - this.pageMax + 1, this.pageCount);
+        return this.renderDom(this.pageCount - this.pageShow + 1, this.pageCount);
       }
     },
     renderCenter: function() {
       var begin, end;
-      if (this.pageMax % 2 === 0) {
-        begin = this.pageNumber - this.pageMax / 2;
-        end = this.pageNumber + (this.pageMax - 2) / 2;
+      if (this.pageShow % 2 === 0) {
+        begin = this.pageNumber - this.pageShow / 2;
+        end = this.pageNumber + (this.pageShow - 2) / 2;
       } else {
-        begin = this.pageNumber - (this.pageMax - 1) / 2;
-        end = this.pageNumber + (this.pageMax - 1) / 2;
+        begin = this.pageNumber - (this.pageShow - 1) / 2;
+        end = this.pageNumber + (this.pageShow - 1) / 2;
       }
       return this.renderDom(begin, end);
     },
