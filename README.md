@@ -48,16 +48,18 @@
 1、不显示省略号：
 ```js
 var pageOption = {
+  // 分页器元素（必填）
+  element: 'pagelist',
   // 数据总数（必填）
   dataCount: 162,
-  // 分页类型（必填）
+  // 每页最多显示的数据数量（必填）
+  pageSize: 5,
+  // 分页类型（选填，默认为1）
   pageType: 1,
-  // 每页最多显示的数据数量（选填，默认5个）
-  pageSize: 7,
   // 界面最多能显示的页码数量（选填，默认5个）
-  pageMax: 5,
-  // 回调事件（选填，参数必填，值为当前页码）
-  pageEvent: function(pageNumber) {}
+  pageShow: 5,
+  // 点击页码后的回调事件（选填）
+  callback: function() {}
 };
 var page =  new Page(pageOption);
 ```
@@ -65,16 +67,18 @@ var page =  new Page(pageOption);
 2、显示省略号
 ```js
 var pageOption = {
+  // 分页器元素（必填）
+  element: 'pagelist',
   // 数据总数（必填）
   dataCount: 162,
-  // 分页类型（必填）
+  // 每页最多显示的数据数量（必填）
+  pageSize: 5,
+  // 分页类型（选填，默认为1）
   pageType: 2,
-  // 每页最多显示的数据数量（选填，默认5个）
-  pageSize: 7,
   // 当前页码前后最多显示的页码数量（选填，默认2个）
   pageShow: 2,
-  // 回调事件（选填，参数必填，值为当前页码）
-  pageEvent: function(pageNumber) {}
+  // 点击页码后的回调事件（选填）
+  callback: function() {}
 };
 var page =  new Page(pageOption);
 ```

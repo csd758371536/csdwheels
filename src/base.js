@@ -8,12 +8,63 @@
   };
   Base.prototype = {
     construct: Base,
-    init: function () {
-      
+    init: function() {
+
     }
   };
   window.Base = Base;
 })(window, document);
+
+;(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define([], factory);
+  } else if (typeof module === 'object' && module.exports) {
+    module.exports = factory();
+  } else {
+    root.Plugin = factory();
+  }
+}(typeof self !== 'undefined' ? self : this, function() {
+  'use strict';
+
+  // tool
+  function extend(o, n) {
+    for (var p in n) {
+      if (n.hasOwnProperty(p) && (!o.hasOwnProperty(p)))
+        o[p] = n[p];
+    }
+  }
+
+  // polyfill
+  function addEvent(element, type, handler) {
+    if (element.addEventListener) {
+      element.addEventListener(type, handler, false);
+    } else if (element.attachEvent) {
+      element.attachEvent('on' + type, function() {
+        handler.call(element);
+      });
+    } else {
+      element['on' + type] = handler;
+    }
+  }
+
+  // plugin construct function
+  function Plugin(opt) {
+    this.init(opt)
+  }
+  Plugin.prototype = {
+    construct: Plugin,
+    init: function(opt) {
+      // default option
+      var def = {
+
+      };
+      this.pluginOption = extend(def, opt);
+    }
+  };
+
+  return Plugin;
+}));
+
 
 // var plugin =(function(){
 //      function _firstFunc(str){

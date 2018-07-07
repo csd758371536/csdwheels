@@ -23,21 +23,23 @@
       element: 'pagelist1',
       dataCount: 162,
       pageSize: 5,
-      pageType: 1
+      pageType: 1,
+      callback: function () {
+        document.getElementById('content1').innerHTML = this.pageNumber;
+      }
     };
-    new Page(option1, function (pageNumber) {
-      document.getElementById('content1').innerHTML = pageNumber;
-    });
+    new Page(option1);
 
     var option2 = {
       element: 'pagelist2',
       dataCount: 162,
       pageSize: 5,
-      pageType: 2
+      pageType: 2,
+      callback: function () {
+        document.getElementById('content2').innerHTML = this.pageNumber;
+      }
     };
-    new Page(option2, function (pageNumber) {
-      document.getElementById('content2').innerHTML = pageNumber;
-    });
+    new Page(option2);
   </script>
 </body>
 
