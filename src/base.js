@@ -15,7 +15,8 @@
   window.Base = Base;
 })(window, document);
 
-;(function(root, factory) {
+;
+(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
   } else if (typeof module === 'object' && module.exports) {
@@ -34,6 +35,12 @@
     }
   }
 
+  function mergeOptions(userOptions, options) {
+    Object.keys(userOptions).forEach(function(key) {
+      options[key] = userOptions[key];
+    });
+  }
+
   // polyfill
   function addEvent(element, type, handler) {
     if (element.addEventListener) {
@@ -48,17 +55,15 @@
   }
 
   // plugin construct function
-  function Plugin(opt) {
-    this.init(opt)
+  function Plugin(selector, userOptions) {
+    this.init(selector, userOptions)
   }
   Plugin.prototype = {
     construct: Plugin,
-    init: function(opt) {
-      // default option
-      var def = {
-
-      };
-      this.pluginOption = extend(def, opt);
+    // default option
+    options: {},
+    init: function(selector, userOptions) {
+      extend(this.option, userOptions);
     }
   };
 
