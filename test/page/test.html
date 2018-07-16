@@ -20,26 +20,22 @@
   <script src="../../src/page.js" charset="utf-8"></script>
   <script type="text/javascript">
     var option1 = {
-      element: 'pagelist1',
-      dataCount: 162,
       pageSize: 5,
-      pageType: 1,
-      callback: function () {
-        document.getElementById('content1').innerHTML = this.pageNumber;
-      }
+      ellipsis: true
     };
-    new Page(option1);
+    var page1 = new Page('pagelist1', option1, function(pageNumber, pageSize) {
+      document.getElementById('content1').innerHTML = pageNumber;
+    });
+    page1.initPage(162, 1);
 
     var option2 = {
-      element: 'pagelist2',
-      dataCount: 162,
       pageSize: 5,
-      pageType: 2,
-      callback: function () {
-        document.getElementById('content2').innerHTML = this.pageNumber;
-      }
+      ellipsis: false
     };
-    new Page(option2);
+    var page2 = new Page('pagelist2', option2, function(pageNumber, pageSize) {
+      document.getElementById('content2').innerHTML = pageNumber;
+    });
+    page2.initPage(162, 1);
   </script>
 </body>
 

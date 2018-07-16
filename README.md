@@ -43,46 +43,33 @@
 <ol class="page-navigator" id="pagelist"></ol>
 ```
 
-配置分页，支持两种分页类型
-
-1、不显示省略号：
+配置说明
 ```js
+// 分页元素ID（必填）
+var selector = 'pagelist';
+
+// 分页配置（必填）
 var pageOption = {
-  // 分页器元素（必填）
-  element: 'pagelist',
-  // 数据总数（必填）
-  dataCount: 162,
   // 每页最多显示的数据数量（必填）
   pageSize: 5,
-  // 分页类型（选填，默认为1）
-  pageType: 1,
-  // 界面最多能显示的页码数量（选填，默认5个）
-  pageShow: 5,
-  // 点击页码后的回调事件（选填）
-  callback: function() {}
+  // 是否显示省略号（选填，默认显示）
+  ellipsis: true,
+  // 当前页前后两边可显示的页码个数（选填，默认为2）
+  pageShow: 2
 };
-var page =  new Page(pageOption);
-```
+// 回调事件（必填，接收两个参数：1、当前页码，2、每页最多显示的数据数量）
+var callback = function(pageNumber, pageSize) {}
 
-2、显示省略号
-```js
-var pageOption = {
-  // 分页器元素（必填）
-  element: 'pagelist',
-  // 数据总数（必填）
-  dataCount: 162,
-  // 每页最多显示的数据数量（必填）
-  pageSize: 5,
-  // 分页类型（选填，默认为1）
-  pageType: 2,
-  // 当前页码前后最多显示的页码数量（选填，默认2个）
-  pageShow: 2,
-  // 点击页码后的回调事件（选填）
-  callback: function() {}
-};
-var page =  new Page(pageOption);
-```
+// 数据总数（必填）
+var dataCount = 162;
 
+// 当前页码（必填）
+var pageNumber = 1;
+
+// 初始化分页器
+var page =  new Page(selector, pageOption, callback);
+page.initPage(dataCount, pageNumber)
+```
 
 #### 效果演示
 

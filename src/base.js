@@ -15,6 +15,11 @@
   window.Base = Base;
 })(window, document);
 
+// 检查配置的必填参数是否错误
+// if (!option.hasOwnProperty('data')) {
+//   throw 'missing required arguments: data';
+// }
+
 ;
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -28,9 +33,9 @@
   'use strict';
 
   // tool
-  function extend(o, n) {
+  function extend(o, n, override) {
     for (var p in n) {
-      if (n.hasOwnProperty(p) && (!o.hasOwnProperty(p)))
+      if (n.hasOwnProperty(p) && (!o.hasOwnProperty(p) || override))
         o[p] = n[p];
     }
   }
@@ -56,6 +61,8 @@
 
   // plugin construct function
   function Plugin(selector, userOptions) {
+    // Plugin()或new Plugin()创建
+    if (!(this instanceof Plugin)) return new Plugin(selector, userOptions);
     this.init(selector, userOptions)
   }
   Plugin.prototype = {
@@ -63,7 +70,7 @@
     // default option
     options: {},
     init: function(selector, userOptions) {
-      extend(this.option, userOptions);
+      extend(this.options, userOptions, true);
     }
   };
 

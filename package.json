@@ -1,6 +1,6 @@
 {
   "name": "csdwheels",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "some javascript wheels made by csdoker.",
   "main": "index.js",
   "scripts": {

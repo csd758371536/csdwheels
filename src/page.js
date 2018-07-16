@@ -21,49 +21,45 @@
     }
   }
 
-  /*
-   * dataCount: 数据总数
-   * pageSize: 每页最多显示的数据数量
-   * pageShow: 界面最多能显示的页码数量
-   */
-  var Page = function(option) {
-    // 检查配置的必填参数是否错误
-    if (!option.hasOwnProperty('dataCount')) {
-      throw 'missing required arguments: dataCount';
+  function extend(o, n, override) {
+    for (var p in n) {
+      if (n.hasOwnProperty(p) && (!o.hasOwnProperty(p) || override))
+        o[p] = n[p];
     }
-    if (!option.hasOwnProperty('pageSize')) {
-      throw 'missing required arguments: pageSize';
-    }
-    if (!option.hasOwnProperty('element')) {
-      throw 'missing required arguments: element';
-    }
-    // 支持Page()或new Page()创建
-    if (!(this instanceof Page)) return new Page();
-    // 分页类型
-    this.pageType = option.pageType || 1;
-    // 当pageType为1时表示：最多显示页码数
-    // 当pageType为2时表示：当前页码前后最多显示的页码数量
-    this.pageShow = option.pageShow || 3;
+  }
+
+  var Page = function(selector, pageOption, callback) {
+    // 默认配置
+    this.options = {
+      ellipsis: true, // 是否显示省略号
+      pageShow: 2
+    };
+    // 合并配置
+    extend(this.options, pageOption, true);
     // 分页器元素
-    this.pageList = document.getElementById(option.element);
-    // 当前页码
-    this.pageNumber = 1;
-    // 总页数
-    this.pageCount = Math.ceil(option.dataCount / option.pageSize);
+    this.pageElement = document.getElementById(selector);
     // 绑定事件
-    this.pageEvent = option.callback || function() {};
-    // 渲染
-    this.renderPages();
-    // 改变页数并触发事件
-    this.changePage();
+    this.pageEvent = callback;
   };
 
   Page.prototype = {
     construct: Page,
+    initPage: function (dataCount, pageNumber) {
+      // 数据总数
+      this.dataCount = dataCount;
+      // 当前页码
+      this.pageNumber = pageNumber;
+      // 总页数
+      this.pageCount = Math.ceil(this.dataCount / this.options.pageSize);
+      // 渲染
+      this.renderPages();
+      // 改变页数并触发事件
+      this.changePage();
+    },
     changePage: function() {
       var _this = this;
-      var pagelist = _this.pageList;
-      addEvent(pagelist, 'click', function(ev) {
+      var pageElement = _this.pageElement;
+      addEvent(pageElement, 'click', function(ev) {
         var e = ev || window.event;
         var target = e.target || e.srcElement;
         if (target.nodeName.toLocaleLowerCase() == 'a') {
@@ -80,33 +76,34 @@
           } else {
             return;
           }
-          _this.pageEvent();
+          _this.pageEvent(_this.pageNumber, _this.options.pageSize);
         }
       });
     },
     renderPages: function() {
       var html = "";
-      if (this.pageType === 1) {
-        html = this.renderPageType1();
+      if (this.options.ellipsis) {
+        html = this.renderEllipsis();
       } else {
-        html = this.renderPageType2();
+        html = this.renderNoEllipsis();
       }
-      this.pageList.innerHTML = html;
+      this.pageElement.innerHTML = html;
     },
-    renderPageType1: function() {
+    renderNoEllipsis: function() {
       var html = "";
       var count;
-      if (this.pageShow % 2 === 0) {
+      var pageShow = this.options.pageShow * 2 + 1;
+      if (pageShow % 2 === 0) {
         count = 2;
       } else {
         count = 1;
       }
-      if (this.pageNumber < (this.pageShow + count) / 2) {
-        html = this.renderFirst();
-      } else if (this.pageCount - this.pageNumber < (this.pageShow - count) / 2) {
-        html = this.renderLast();
+      if (this.pageNumber < (pageShow + count) / 2) {
+        html = this.renderFirst(pageShow);
+      } else if (this.pageCount - this.pageNumber < (pageShow - count) / 2) {
+        html = this.renderLast(pageShow);
       } else {
-        html = this.renderCenter();
+        html = this.renderCenter(pageShow);
       }
       if (this.pageNumber > 1) {
         html = "<li><a href='javascript:;' id='first'>首页</a></li><li><a href='javascript:;' id='prev'>前一页</a></li>" + html;
@@ -116,10 +113,10 @@
       }
       return html;
     },
-    renderPageType2: function() {
+    renderEllipsis: function() {
       var html = "";
       html = "<li><a href='javascript:;' id='page' class='current'>" + this.pageNumber + "</a></li>";
-      for (var i = 1; i <= this.pageShow; i++) {
+      for (var i = 1; i <= this.options.pageShow; i++) {
         if (this.pageNumber - i > 1) {
           html = "<li><a href='javascript:;' id='page'>" + parseInt(this.pageNumber - i) + "</a></li>" + html;
         }
@@ -127,14 +124,13 @@
           html = html + "<li><a href='javascript:;' id='page'>" + parseInt(this.pageNumber + i) + "</a></li>";
         }
       }
-
-      if (this.pageNumber - (this.pageShow + 1) > 1) {
+      if (this.pageNumber - (this.options.pageShow + 1) > 1) {
         html = "<li><a href='javascript:;' id=''>...</a></li>" + html;
       }
       if (this.pageNumber > 1) {
         html = "<li><a href='javascript:;' id='first'>首页</a></li><li><a href='javascript:;' id='prev'>前一页</a></li><li><a href='javascript:;' id='page'>1</a></li>" + html;
       }
-      if (this.pageNumber + this.pageShow + 1 < this.pageCount) {
+      if (this.pageNumber + this.options.pageShow + 1 < this.pageCount) {
         html = html + "<li><a href='javascript:;' id=''>...</a></li>";
       }
       if (this.pageNumber < this.pageCount) {
@@ -142,28 +138,28 @@
       }
       return html;
     },
-    renderFirst: function() {
-      if (this.pageCount < this.pageShow) {
+    renderFirst: function(pageShow) {
+      if (this.pageCount < pageShow) {
         return this.renderDom(1, this.pageCount);
       } else {
-        return this.renderDom(1, this.pageShow);
+        return this.renderDom(1, pageShow);
       }
     },
-    renderLast: function() {
-      if (this.pageCount < this.pageShow) {
+    renderLast: function(pageShow) {
+      if (this.pageCount < pageShow) {
         return this.renderDom(1, this.pageCount);
       } else {
-        return this.renderDom(this.pageCount - this.pageShow + 1, this.pageCount);
+        return this.renderDom(this.pageCount - pageShow + 1, this.pageCount);
       }
     },
-    renderCenter: function() {
+    renderCenter: function(pageShow) {
       var begin, end;
-      if (this.pageShow % 2 === 0) {
-        begin = this.pageNumber - this.pageShow / 2;
-        end = this.pageNumber + (this.pageShow - 2) / 2;
+      if (pageShow % 2 === 0) {
+        begin = this.pageNumber - pageShow / 2;
+        end = this.pageNumber + (pageShow - 2) / 2;
       } else {
-        begin = this.pageNumber - (this.pageShow - 1) / 2;
-        end = this.pageNumber + (this.pageShow - 1) / 2;
+        begin = this.pageNumber - (pageShow - 1) / 2;
+        end = this.pageNumber + (pageShow - 1) / 2;
       }
       return this.renderDom(begin, end);
     },
