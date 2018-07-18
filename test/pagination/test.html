@@ -6,7 +6,7 @@
   <title></title>
   <link rel="stylesheet" href="../../style/base.css">
   <link rel="stylesheet" href="../../style/test.min.css">
-  <link rel="stylesheet" href="../../style/page.min.css">
+  <link rel="stylesheet" href="../../style/pagination/pagination.min.css">
 </head>
 
 <body>
@@ -16,14 +16,14 @@
     <article class="content" id="content2">1</article>
     <ol class="page-navigator" id="pagelist2"></ol>
   </div>
-  <!-- <script src="../../dist/page/page.min.js" charset="utf-8"></script> -->
-  <script src="../../src/page.js" charset="utf-8"></script>
+  <script src="../../dist/pagination/pagination.min.js" charset="utf-8"></script>
+  <!-- <script src="../../src/pagination/pagination.js" charset="utf-8"></script> -->
   <script type="text/javascript">
     var option1 = {
       pageSize: 5,
       ellipsis: true
     };
-    var page1 = new Page('pagelist1', option1, function(pageNumber, pageSize) {
+    var page1 = new Pagination('pagelist1', option1, function(pageNumber, pageSize) {
       document.getElementById('content1').innerHTML = pageNumber;
     });
     page1.initPage(162, 1);
@@ -32,7 +32,7 @@
       pageSize: 5,
       ellipsis: false
     };
-    var page2 = new Page('pagelist2', option2, function(pageNumber, pageSize) {
+    var page2 = new Pagination('pagelist2', option2, function(pageNumber, pageSize) {
       document.getElementById('content2').innerHTML = pageNumber;
     });
     page2.initPage(162, 1);

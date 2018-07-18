@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/csd758371536/csdwheels.svg?branch=master)](https://travis-ci.org/csd758371536/csdwheels) [![npm](https://img.shields.io/npm/v/csdwheels.svg?style=flat-square)](https://www.npmjs.com/package/csdwheels) [![npm](https://img.shields.io/npm/dt/csdwheels.svg?style=flat-square)](https://www.npmjs.com/package/csdwheels) [![npm](https://img.shields.io/npm/l/csdwheels.svg?style=flat-square)](https://www.npmjs.com/package/csdwheels)
 
 
-## 1. 安装
+## 安装
 
 支持npm或bower
 
@@ -19,14 +19,14 @@
 ```html
 <ol class="page-navigator" id="pagelist"></ol>
 
-<link rel="stylesheet" href="page.min.css">
-<script type="text/javascript" src="page.min.js"></script>
+<link rel="stylesheet" href="pagination.min.css">
+<script type="text/javascript" src="pagination.min.js"></script>
 ```
 
 最后就能使用某个插件了
 
 
-## 2. 使用
+## 使用
 
 ### 分页
 
@@ -34,8 +34,8 @@
 
 引入css、js
 ```html
-<link rel="stylesheet" href="page.min.css">
-<script type="text/javascript" src="page.min.js"></script>
+<link rel="stylesheet" href="pagination.min.css">
+<script type="text/javascript" src="pagination.min.js"></script>
 ```
 
 插入dom
@@ -67,21 +67,32 @@ var dataCount = 162;
 var pageNumber = 1;
 
 // 初始化分页器
-var page =  new Page(selector, pageOption, callback);
+var page =  new Pagination(selector, pageOption, callback);
 page.initPage(dataCount, pageNumber)
 ```
 
+#### 使用场景
+
+##### 前端分页
+
+在`callback`回调函数里对总数据进行处理，然后取出当前页需要展示的数据即可
+
+##### 后端分页
+
+在页面初始化时将url上的页码参数取得，调用后端的接口，获取当前页的数据，然后在页面初始化方法里调用一次`initPage`方法
+在`callback`回调函数里取得当前页码，然后将当前页码作为url参数，最后进行页面跳转（如果是单页应用就直接改变路由参数，如果是多页需要在链接后面带上参数）
+
 #### 效果演示
 
-test/page/test.html
+test/pagination/test.html
 
-## 3. 测试
+## 测试
 
 > npm install
 
 > npm test
 
 
-## 4. 协议
+## 协议
 
 MIT

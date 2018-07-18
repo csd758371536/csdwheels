@@ -1,10 +1,10 @@
 {
   "name": "csdwheels",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "some javascript wheels made by csdoker.",
   "main": "index.js",
   "scripts": {
-    "lint": "jshint src/page.js",
+    "lint": "jshint src/pagination/pagination.js",
     "test": "npm run lint && node test/test.js",
     "build": "gulp mini && npm run test"
   },

@@ -4,7 +4,7 @@
   } else if (typeof module === 'object' && module.exports) {
     module.exports = factory();
   } else {
-    root.Page = factory();
+    root.Pagination = factory();
   }
 }(typeof self !== 'undefined' ? self : this, function() {
   'use strict';
@@ -28,11 +28,11 @@
     }
   }
 
-  var Page = function(selector, pageOption, callback) {
+  var Pagination = function(selector, pageOption, callback) {
     // 默认配置
     this.options = {
-      ellipsis: true, // 是否显示省略号
-      pageShow: 2
+      pageShow: 2,
+      ellipsis: true
     };
     // 合并配置
     extend(this.options, pageOption, true);
@@ -42,8 +42,8 @@
     this.pageEvent = callback;
   };
 
-  Page.prototype = {
-    construct: Page,
+  Pagination.prototype = {
+    construct: Pagination,
     initPage: function (dataCount, pageNumber) {
       // 数据总数
       this.dataCount = dataCount;
@@ -200,5 +200,5 @@
     }
   };
 
-  return Page;
+  return Pagination;
 }));
