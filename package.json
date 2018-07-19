@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "jshint src/pagination/pagination.js",
-    "test": "npm run lint && node test/test.js",
+    "test": "node test/test.js",
     "build": "gulp mini && npm run test"
   },
   "repository": {
