@@ -222,11 +222,12 @@
       return fragment;
     },
     createHtml: function(elemDatas) {
-      var fragment = document.createDocumentFragment(); 
+      var fragment = document.createDocumentFragment();
+      var liEle = document.createElement("li");
+      var aEle = document.createElement("a");
       elemDatas.forEach(function (elementData, index) {
-        // id, className, content
-        var liEle = document.createElement("li");
-        var aEle = document.createElement("a");
+        liEle = liEle.cloneNode(false);
+        aEle = aEle.cloneNode(false);
         aEle.setAttribute('href', 'javascript:;');
         aEle.setAttribute('id', elementData.id);
         aEle.setAttribute('class', elementData.className);
