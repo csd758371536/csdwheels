@@ -44,7 +44,46 @@
 
   Pagination.prototype = {
     construct: Pagination,
-    initPage: function (dataCount, pageNumber) {
+    pageInfos: [
+      {
+        id: 'first',
+        className: '',
+        content: '首页'
+      },
+      {
+        id: 'prev',
+        className: '',
+        content: '前一页'
+      },
+      {
+        id: 'next',
+        className: '',
+        content: '后一页'
+      },
+      {
+        id: 'last',
+        className: '',
+        content: '尾页'
+      },
+      {
+        id: '',
+        className: '',
+        content: '...'
+      },
+      {
+        id: 'page',
+        className: '',
+        content: '1'
+      }
+    ],
+    getPageInfos: function(className, content) {
+      return {
+        id: 'page',
+        className: className,
+        content: content
+      };
+    },
+    initPage: function(dataCount, pageNumber) {
       // 数据总数
       this.dataCount = dataCount;
       // 当前页码
@@ -76,6 +115,7 @@
           } else {
             return;
           }
+          _this.renderPages();
           _this.pageEvent(_this.pageNumber, _this.options.pageSize);
         }
       });
@@ -90,136 +130,53 @@
     },
     renderNoEllipsis: function() {
       var fragment = document.createDocumentFragment();
-      var count;
-      var pageShow = this.options.pageShow * 2 + 1;
-      if (pageShow % 2 === 0) {
-        count = 2;
+      var count = pageMax % 2 === 0 ? 2 : 1;
+      var pageMax = this.options.pageShow * 2 + 1;
+      if (this.pageNumber < (pageMax + count) / 2) {
+        fragment.appendChild(this.renderFirst(pageMax));
+      } else if (this.pageCount - this.pageNumber < (pageMax - count) / 2) {
+        fragment.appendChild(this.renderLast(pageMax));
       } else {
-        count = 1;
-      }
-      if (this.pageNumber < (pageShow + count) / 2) {
-        fragment.appendChild(this.renderFirst(pageShow));
-      } else if (this.pageCount - this.pageNumber < (pageShow - count) / 2) {
-        fragment.appendChild(this.renderLast(pageShow));
-      } else {
-        fragment.appendChild(this.renderCenter(pageShow));
+        fragment.appendChild(this.renderCenter(pageMax));
       }
       if (this.pageNumber > 1) {
-        fragment.insertBefore(this.createHtml([
-          {
-            id: 'first',
-            className: '',
-            content: '首页'
-          },
-          {
-            id: 'prev',
-            className: '',
-            content: '前一页'
-          }
-        ]), fragment.firstChild);
+        this.addFragmentBefore(fragment, [this.pageInfos[0], this.pageInfos[1]]);
       }
       if (this.pageNumber < this.pageCount) {
-        fragment.appendChild(this.createHtml([
-          {
-            id: 'next',
-            className: '',
-            content: '后一页'
-          },
-          {
-            id: 'last',
-            className: '',
-            content: '尾页'
-          }
-        ]));
+        this.addFragmentAfter(fragment, [this.pageInfos[2], this.pageInfos[3]]);
       }
       return fragment;
     },
     renderEllipsis: function() {
       var fragment = document.createDocumentFragment();
-      fragment.appendChild(this.createHtml([
-        {
-          id: 'page',
-          className: 'current',
-          content: this.pageNumber
-        }
-      ]));
+      this.addFragmentAfter(fragment, [this.getPageInfos('current', this.pageNumber)]);
       for (var i = 1; i <= this.options.pageShow; i++) {
         if (this.pageNumber - i > 1) {
-          fragment.insertBefore(this.createHtml([
-            {
-              id: 'page',
-              className: '',
-              content: this.pageNumber - i
-            }
-          ]), fragment.firstChild);
+          this.addFragmentBefore(fragment, [this.getPageInfos('', this.pageNumber - i)]);
         }
         if (this.pageNumber + i < this.pageCount) {
-          fragment.appendChild(this.createHtml([
-            {
-              id: 'page',
-              className: '',
-              content: this.pageNumber + i
-            }
-          ]));
+          this.addFragmentAfter(fragment, [this.getPageInfos('', this.pageNumber + i)]);
         }
       }
       if (this.pageNumber - (this.options.pageShow + 1) > 1) {
-        fragment.insertBefore(this.createHtml([
-          {
-            id: '',
-            className: '',
-            content: '...'
-          }
-        ]), fragment.firstChild);
+        this.addFragmentBefore(fragment, [this.pageInfos[4]]);
       }
       if (this.pageNumber > 1) {
-        fragment.insertBefore(this.createHtml([
-          {
-            id: 'first',
-            className: '',
-            content: '首页'
-          },
-          {
-            id: 'prev',
-            className: '',
-            content: '前一页'
-          },
-          {
-            id: 'page',
-            className: '',
-            content: '1'
-          }
-        ]), fragment.firstChild);
+        this.addFragmentBefore(fragment, [this.pageInfos[0], this.pageInfos[1],this.pageInfos[5]]);
       }
       if (this.pageNumber + this.options.pageShow + 1 < this.pageCount) {
-        fragment.appendChild(this.createHtml([
-          {
-            id: '',
-            className: '',
-            content: '...'
-          }
-        ]));
+        this.addFragmentAfter(fragment, [this.pageInfos[4]]);
       }
       if (this.pageNumber < this.pageCount) {
-        fragment.appendChild(this.createHtml([
-          {
-            id: 'page',
-            className: '',
-            content: this.pageCount
-          },
-          {
-            id: 'next',
-            className: '',
-            content: '后一页'
-          },
-          {
-            id: 'last',
-            className: '',
-            content: '尾页'
-          }
-        ]));
+        this.addFragmentAfter(fragment, [this.getPageInfos('', this.pageCount),this.pageInfos[2], this.pageInfos[3]]);
       }
       return fragment;
+    },
+    addFragmentBefore: function(fragment, datas) {
+      fragment.insertBefore(this.createHtml(datas), fragment.firstChild);
+    },
+    addFragmentAfter: function(fragment, datas) {
+      fragment.appendChild(this.createHtml(datas));
     },
     createHtml: function(elemDatas) {
       var fragment = document.createDocumentFragment();
@@ -252,56 +209,33 @@
       }
     },
     renderCenter: function(pageShow) {
-      var begin, end;
-      if (pageShow % 2 === 0) {
-        begin = this.pageNumber - pageShow / 2;
-        end = this.pageNumber + (pageShow - 2) / 2;
-      } else {
-        begin = this.pageNumber - (pageShow - 1) / 2;
-        end = this.pageNumber + (pageShow - 1) / 2;
-      }
+      var begin = pageShow % 2 === 0 ? this.pageNumber - pageShow / 2 : this.pageNumber - (pageShow - 1) / 2;
+      var end = pageShow % 2 === 0 ? this.pageNumber + (pageShow - 2) / 2 : this.pageNumber + (pageShow - 1) / 2;
       return this.renderDom(begin, end);
     },
     renderDom: function(begin, end) {
       var fragment = document.createDocumentFragment();
+      var str = '';
       for (var i = begin; i <= end; i++) {
-        var str = '';
-        if (this.pageNumber === i) {
-          str = 'current';
-        }
-        fragment.appendChild(this.createHtml([
-          {
-            id: 'page',
-            className: str,
-            content: i
-          }
-        ]));
+        str = this.pageNumber === i ? 'current' : '';
+        this.addFragmentAfter(fragment, [this.getPageInfos(str, i)]);
       }
       return fragment;
     },
     prevPage: function() {
-      if (this.pageNumber > 1) {
-        this.pageNumber--;
-        this.renderPages();
-      }
+      this.pageNumber--;
     },
     nextPage: function() {
-      if (this.pageNumber < this.pageCount) {
-        this.pageNumber++;
-        this.renderPages();
-      }
+      this.pageNumber++;
     },
     goPage: function(pageNumber) {
       this.pageNumber = pageNumber;
-      this.renderPages();
     },
     firstPage: function() {
       this.pageNumber = 1;
-      this.renderPages();
     },
     lastPage: function() {
       this.pageNumber = this.pageCount;
-      this.renderPages();
     }
   };
 
