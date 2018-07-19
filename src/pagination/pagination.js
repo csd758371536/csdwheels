@@ -81,16 +81,15 @@
       });
     },
     renderPages: function() {
-      var html = "";
+      this.pageElement.innerHTML = '';
       if (this.options.ellipsis) {
-        html = this.renderEllipsis();
+        this.pageElement.appendChild(this.renderEllipsis());
       } else {
-        html = this.renderNoEllipsis();
+        this.pageElement.appendChild(this.renderNoEllipsis());
       }
-      this.pageElement.innerHTML = html;
     },
     renderNoEllipsis: function() {
-      var html = "";
+      var fragment = document.createDocumentFragment();
       var count;
       var pageShow = this.options.pageShow * 2 + 1;
       if (pageShow % 2 === 0) {
@@ -99,44 +98,143 @@
         count = 1;
       }
       if (this.pageNumber < (pageShow + count) / 2) {
-        html = this.renderFirst(pageShow);
+        fragment.appendChild(this.renderFirst(pageShow));
       } else if (this.pageCount - this.pageNumber < (pageShow - count) / 2) {
-        html = this.renderLast(pageShow);
+        fragment.appendChild(this.renderLast(pageShow));
       } else {
-        html = this.renderCenter(pageShow);
+        fragment.appendChild(this.renderCenter(pageShow));
       }
       if (this.pageNumber > 1) {
-        html = "<li><a href='javascript:;' id='first'>首页</a></li><li><a href='javascript:;' id='prev'>前一页</a></li>" + html;
+        fragment.insertBefore(this.createHtml([
+          {
+            id: 'first',
+            className: '',
+            content: '首页'
+          },
+          {
+            id: 'prev',
+            className: '',
+            content: '前一页'
+          }
+        ]), fragment.firstChild);
       }
       if (this.pageNumber < this.pageCount) {
-        html = html + "<li><a href='javascript:;' id='next'>后一页</a></li><li><a href='javascript:;' id='last'>尾页</a></li>";
+        fragment.appendChild(this.createHtml([
+          {
+            id: 'next',
+            className: '',
+            content: '后一页'
+          },
+          {
+            id: 'last',
+            className: '',
+            content: '尾页'
+          }
+        ]));
       }
-      return html;
+      return fragment;
     },
     renderEllipsis: function() {
-      var html = "";
-      html = "<li><a href='javascript:;' id='page' class='current'>" + this.pageNumber + "</a></li>";
+      var fragment = document.createDocumentFragment();
+      fragment.appendChild(this.createHtml([
+        {
+          id: 'page',
+          className: 'current',
+          content: this.pageNumber
+        }
+      ]));
       for (var i = 1; i <= this.options.pageShow; i++) {
         if (this.pageNumber - i > 1) {
-          html = "<li><a href='javascript:;' id='page'>" + parseInt(this.pageNumber - i) + "</a></li>" + html;
+          fragment.insertBefore(this.createHtml([
+            {
+              id: 'page',
+              className: '',
+              content: this.pageNumber - i
+            }
+          ]), fragment.firstChild);
         }
         if (this.pageNumber + i < this.pageCount) {
-          html = html + "<li><a href='javascript:;' id='page'>" + parseInt(this.pageNumber + i) + "</a></li>";
+          fragment.appendChild(this.createHtml([
+            {
+              id: 'page',
+              className: '',
+              content: this.pageNumber + i
+            }
+          ]));
         }
       }
       if (this.pageNumber - (this.options.pageShow + 1) > 1) {
-        html = "<li><a href='javascript:;' id=''>...</a></li>" + html;
+        fragment.insertBefore(this.createHtml([
+          {
+            id: '',
+            className: '',
+            content: '...'
+          }
+        ]), fragment.firstChild);
       }
       if (this.pageNumber > 1) {
-        html = "<li><a href='javascript:;' id='first'>首页</a></li><li><a href='javascript:;' id='prev'>前一页</a></li><li><a href='javascript:;' id='page'>1</a></li>" + html;
+        fragment.insertBefore(this.createHtml([
+          {
+            id: 'first',
+            className: '',
+            content: '首页'
+          },
+          {
+            id: 'prev',
+            className: '',
+            content: '前一页'
+          },
+          {
+            id: 'page',
+            className: '',
+            content: '1'
+          }
+        ]), fragment.firstChild);
       }
       if (this.pageNumber + this.options.pageShow + 1 < this.pageCount) {
-        html = html + "<li><a href='javascript:;' id=''>...</a></li>";
+        fragment.appendChild(this.createHtml([
+          {
+            id: '',
+            className: '',
+            content: '...'
+          }
+        ]));
       }
       if (this.pageNumber < this.pageCount) {
-        html = html + "<li><a href='javascript:;' id='page'>" + this.pageCount + "</a></li><li><a href='javascript:;' id='next'>后一页</a></li><li><a href='javascript:;' id='last'>尾页</a></li>";
+        fragment.appendChild(this.createHtml([
+          {
+            id: 'page',
+            className: '',
+            content: this.pageCount
+          },
+          {
+            id: 'next',
+            className: '',
+            content: '后一页'
+          },
+          {
+            id: 'last',
+            className: '',
+            content: '尾页'
+          }
+        ]));
       }
-      return html;
+      return fragment;
+    },
+    createHtml: function(elemDatas) {
+      var fragment = document.createDocumentFragment(); 
+      elemDatas.forEach(function (elementData, index) {
+        // id, className, content
+        var liEle = document.createElement("li");
+        var aEle = document.createElement("a");
+        aEle.setAttribute('href', 'javascript:;');
+        aEle.setAttribute('id', elementData.id);
+        aEle.setAttribute('class', elementData.className);
+        aEle.innerHTML = elementData.content;
+        liEle.appendChild(aEle);
+        fragment.appendChild(liEle);
+      });
+      return fragment;
     },
     renderFirst: function(pageShow) {
       if (this.pageCount < pageShow) {
@@ -164,15 +262,21 @@
       return this.renderDom(begin, end);
     },
     renderDom: function(begin, end) {
-      var html = "";
+      var fragment = document.createDocumentFragment();
       for (var i = begin; i <= end; i++) {
-        var str = "";
+        var str = '';
         if (this.pageNumber === i) {
-          str = " class='current'";
+          str = 'current';
         }
-        html = html + "<li><a href='javascript:;' id='page'" + str + ">" + i + "</a></li>";
+        fragment.appendChild(this.createHtml([
+          {
+            id: 'page',
+            className: str,
+            content: i
+          }
+        ]));
       }
-      return html;
+      return fragment;
     },
     prevPage: function() {
       if (this.pageNumber > 1) {
