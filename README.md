@@ -1,9 +1,12 @@
 # csdwheels
 
-> 造轮子！造轮子！
+日常工作中经常会发现有大量业务逻辑是重复的，而用别人的插件和轮子也不能完美解决一些定制化的需求，所以我抽取出来了这套插件库，希望能让大家提升工作效率，少加班~
+
+> 目前项目使用 ES5及UMD 规范封装，所以在前端暂时只支持<script>标签的引入方式，未来计划会逐步用 ES6 重构，并且使用 Webpack 等工具来支持模块化的引入及按需加载
 
 [![Build Status](https://travis-ci.org/csdoker/csdwheels.svg?branch=master)](https://travis-ci.org/csdoker/csdwheels) [![npm](https://img.shields.io/npm/v/csdwheels.svg?style=flat-square)](https://www.npmjs.com/package/csdwheels) [![npm](https://img.shields.io/npm/dt/csdwheels.svg?style=flat-square)](https://www.npmjs.com/package/csdwheels) [![npm](https://img.shields.io/npm/l/csdwheels.svg?style=flat-square)](https://www.npmjs.com/package/csdwheels)
 
+项目地址：[https://project.csdoker.com/csdwheels](https://project.csdoker.com/csdwheels)
 
 ## 安装
 
@@ -24,7 +27,6 @@
 ```
 
 最后就能使用某个插件了
-
 
 ## 使用
 
@@ -103,7 +105,6 @@ test/pagination/test.html
 > npm install
 
 > npm test
-
 
 ## 协议
 
