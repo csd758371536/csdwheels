@@ -133,24 +133,27 @@
     extend(this.options, pageOption, true);
     // 分页器元素
     this.pageElement = document.getElementById(this.options.elem);
-    // 回调事件
-    this.pageEvent = this.options.callback;
     // 数据总数
     this.dataCount = this.options.count;
     // 当前页码
     this.pageNumber = this.options.curr;
     // 总页数
-    this.pageCount = Math.ceil(this.options.count / this.options.pageSize);
+    this.pageCount = Math.ceil(this.options.count / this.options.limit);
     // 渲染
     this.renderPages();
+    // 执行回调函数
+    this.options.callback && this.options.callback({
+      curr: this.pageNumber,
+      limit: this.options.limit,
+      isFirst: true
+    });
     // 改变页数并触发事件
     this.changePage();
   };
 
   Pagination.prototype = {
     construct: Pagination,
-    pageInfos: [
-      {
+    pageInfos: [{
         id: "first",
         className: "",
         content: "首页"
@@ -209,14 +212,18 @@
             return;
           }
           _this.renderPages();
-          _this.pageEvent(_this.pageNumber, _this.options.pageSize);
+          _this.options.callback && _this.options.callback({
+            curr: _this.pageNumber,
+            limit: _this.options.limit,
+            isFirst: false
+          });
           _this.pageHash();
         }
       });
     },
     pageHash: function() {
       if (this.options.hash) {
-        window.location.hash = '#!'+this.options.hash+'='+this.pageNumber;
+        window.location.hash = '#!' + this.options.hash + '=' + this.pageNumber;
       }
     },
     renderPages: function() {
@@ -326,13 +333,13 @@
     },
     renderCenter: function(pageShow) {
       var begin =
-        pageShow % 2 === 0
-          ? this.pageNumber - pageShow / 2
-          : this.pageNumber - (pageShow - 1) / 2;
+        pageShow % 2 === 0 ?
+        this.pageNumber - pageShow / 2 :
+        this.pageNumber - (pageShow - 1) / 2;
       var end =
-        pageShow % 2 === 0
-          ? this.pageNumber + (pageShow - 2) / 2
-          : this.pageNumber + (pageShow - 1) / 2;
+        pageShow % 2 === 0 ?
+        this.pageNumber + (pageShow - 2) / 2 :
+        this.pageNumber + (pageShow - 1) / 2;
       return this.renderDom(begin, end);
     },
     renderDom: function(begin, end) {

@@ -11,53 +11,54 @@
 
 <body>
   <div class="main">
-    <article class="content" id="content1">1</article>
     <ol class="page-navigator" id="pagelist1"></ol>
-
-    <article class="content" id="content2">1</article>
     <ol class="page-navigator" id="pagelist2"></ol>
-
-    <article class="content" id="content3">1</article>
     <ol class="page-navigator" id="pagelist3"></ol>
+    <ol class="page-navigator" id="pagelist4"></ol>
   </div>
   <!-- <script src="../../dist/pagination/pagination.min.js" charset="utf-8"></script> -->
   <script src="../../src/pagination/pagination.js" charset="utf-8"></script>
   <script type="text/javascript">
+    // 显示省略号
     new Pagination({
       elem: 'pagelist1',
       curr: 1,
       count: 162,
-      pageSize: 5,
+      limit: 5,
       ellipsis: true,
-      callback: function(pageNumber, pageSize) {
-        document.getElementById('content1').innerHTML = pageNumber;
+      callback: function(obj) {
+        console.log(obj);
       }
     });
+    // 不显示省略号
     new Pagination({
       elem: 'pagelist2',
       curr: 1,
       count: 162,
-      pageSize: 5,
+      limit: 5,
       ellipsis: false,
-      callback: function(pageNumber, pageSize) {
-        document.getElementById('content2').innerHTML = pageNumber;
+      callback: function(obj) {
+        console.log(obj);
       }
     });
-    
-    document.getElementById('content3').innerHTML = parseInt(location.hash.replace('#!page=', ''));
+    // 带hash参数
     new Pagination({
       elem: 'pagelist3',
-      curr: parseInt(location.hash.replace('#!page=', '')),
+      curr: parseInt(location.hash.replace('#!page=', '')) || 1,
       count: 162,
-      pageSize: 5,
+      limit: 5,
       ellipsis: true,
       hash: 'page',
-      callback: function(pageNumber, pageSize) {
-        document.getElementById('content3').innerHTML = pageNumber;
+      callback: function(obj) {
+        console.log(obj);
+        // 首次不执行
+        if (!obj.isFirst) {
+          console.log('这不是第一次加载页面');
+        } else {
+          console.log('这是第一次加载页面');
+        }
       }
     });
-
-    // 多页
   </script>
 </body>
 
