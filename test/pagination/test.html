@@ -13,29 +13,51 @@
   <div class="main">
     <article class="content" id="content1">1</article>
     <ol class="page-navigator" id="pagelist1"></ol>
+
     <article class="content" id="content2">1</article>
     <ol class="page-navigator" id="pagelist2"></ol>
+
+    <article class="content" id="content3">1</article>
+    <ol class="page-navigator" id="pagelist3"></ol>
   </div>
   <!-- <script src="../../dist/pagination/pagination.min.js" charset="utf-8"></script> -->
   <script src="../../src/pagination/pagination.js" charset="utf-8"></script>
   <script type="text/javascript">
-    var option1 = {
+    new Pagination({
+      elem: 'pagelist1',
+      curr: 1,
+      count: 162,
       pageSize: 5,
-      ellipsis: true
-    };
-    var page1 = new Pagination('pagelist1', option1, function(pageNumber, pageSize) {
-      document.getElementById('content1').innerHTML = pageNumber;
+      ellipsis: true,
+      callback: function(pageNumber, pageSize) {
+        document.getElementById('content1').innerHTML = pageNumber;
+      }
     });
-    page1.initPage(162, 1);
+    new Pagination({
+      elem: 'pagelist2',
+      curr: 1,
+      count: 162,
+      pageSize: 5,
+      ellipsis: false,
+      callback: function(pageNumber, pageSize) {
+        document.getElementById('content2').innerHTML = pageNumber;
+      }
+    });
+    
+    document.getElementById('content3').innerHTML = parseInt(location.hash.replace('#!page=', ''));
+    new Pagination({
+      elem: 'pagelist3',
+      curr: parseInt(location.hash.replace('#!page=', '')),
+      count: 162,
+      pageSize: 5,
+      ellipsis: true,
+      hash: 'page',
+      callback: function(pageNumber, pageSize) {
+        document.getElementById('content3').innerHTML = pageNumber;
+      }
+    });
 
-    var option2 = {
-      pageSize: 5,
-      ellipsis: false
-    };
-    var page2 = new Pagination('pagelist2', option2, function(pageNumber, pageSize) {
-      document.getElementById('content2').innerHTML = pageNumber;
-    });
-    page2.initPage(162, 1);
+    // 多页
   </script>
 </body>
 
