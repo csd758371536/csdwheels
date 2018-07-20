@@ -32,18 +32,18 @@
 
 #### 初始化
 
-引入css、js
+1. 引入css、js
 ```html
 <link rel="stylesheet" href="pagination.min.css">
 <script type="text/javascript" src="pagination.min.js"></script>
 ```
 
-插入dom
+2. 插入dom
 ```html
 <ol class="page-navigator" id="pagelist"></ol>
 ```
 
-配置说明
+3. 配置说明
 ```js
 // 分页配置
 var pageOption = {
@@ -82,13 +82,14 @@ new Pagination(pageOption);
 #### 使用场景
 
 > 此分页器只负责分页本身的逻辑，具体的数据请求与渲染需要另外去完成
+
 > 此分页器不仅能应用在一般的异步分页上，还可直接对一段已知数据进行分页展现，更可以取代传统的超链接分页
 
-##### 前端分页
+1. 前端分页
 
 在`callback`里对总数据进行处理，然后取出当前页需要展示的数据即可
 
-##### 后端分页
+2. 后端分页
 
 利用url上的页码参数，可以在页面载入时就定位到指定页码，并且可以同时请求后端指定页码下对应的数据
 在`callback`回调函数里取得当前页码，可以使用`window.location.href`改变url，并将当前页码作为url参数，然后进行页面跳转，例如"./test.html?page="
