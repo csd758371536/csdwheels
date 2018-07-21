@@ -47,10 +47,11 @@
 
 3. 配置说明
 ```js
+// 分页元素ID（必填）
+var selector = '#pagelist';
+
 // 分页配置
 var pageOption = {
-  // 分页元素ID（必填）
-  elem: 'pagelist',
   // 每页显示数据条数（必填）
   limit: 5,
   // 数据总数（一般通过后端获取，必填）
@@ -78,7 +79,7 @@ var pageOption = {
 };
 
 // 初始化分页器
-new Pagination(pageOption);
+new Pagination(selector, pageOption);
 ```
 
 #### 使用场景

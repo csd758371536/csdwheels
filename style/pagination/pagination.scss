@@ -1,12 +1,12 @@
-.page-navigator {
+.pagination {
   margin: 24px 0;
   text-align: center;
   font-size: 0;
-  li {
+  .pagination-item {
     display: inline-block;
     vertical-align: middle;
     margin: 0 4px;
-    a {
+    .pagination-link {
       box-sizing: content-box;
       display: inline-block;
       padding: 0 8px;

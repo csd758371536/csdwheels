@@ -121,7 +121,13 @@
     }
   }
 
-  var Pagination = function(pageOption) {
+  // 模仿jQuery $()
+  function $(selector, context) {
+    context = arguments.length > 1 ? context : document;
+    return context ? context.querySelectorAll(selector) : null;
+  }
+
+  var Pagination = function(selector, pageOption) {
     // 默认配置
     this.options = {
       curr: 1,
@@ -132,7 +138,7 @@
     // 合并配置
     extend(this.options, pageOption, true);
     // 分页器元素
-    this.pageElement = document.getElementById(this.options.elem);
+    this.pageElement = $(selector)[0];
     // 数据总数
     this.dataCount = this.options.count;
     // 当前页码
@@ -151,37 +157,30 @@
     this.changePage();
   };
 
+  var ITEM = 'pagination-item';
+  var LINK = 'pagination-link';
+
   Pagination.prototype = {
-    construct: Pagination,
+    constructor: Pagination,
     pageInfos: [{
         id: "first",
-        className: "",
         content: "首页"
       },
       {
         id: "prev",
-        className: "",
         content: "前一页"
       },
       {
         id: "next",
-        className: "",
         content: "后一页"
       },
       {
         id: "last",
-        className: "",
         content: "尾页"
       },
       {
         id: "",
-        className: "",
         content: "..."
-      },
-      {
-        id: "page",
-        className: "",
-        content: "1"
       }
     ],
     getPageInfos: function(className, content) {
@@ -192,32 +191,32 @@
       };
     },
     changePage: function() {
-      var _this = this;
-      var pageElement = _this.pageElement;
+      var self = this;
+      var pageElement = self.pageElement;
       EventUtil.addEvent(pageElement, "click", function(ev) {
         var e = ev || window.event;
         var target = e.target || e.srcElement;
         if (target.nodeName.toLocaleLowerCase() == "a") {
           if (target.id === "prev") {
-            _this.prevPage();
+            self.prevPage();
           } else if (target.id === "next") {
-            _this.nextPage();
+            self.nextPage();
           } else if (target.id === "first") {
-            _this.firstPage();
+            self.firstPage();
           } else if (target.id === "last") {
-            _this.lastPage();
+            self.lastPage();
           } else if (target.id === "page") {
-            _this.goPage(parseInt(target.innerHTML));
+            self.goPage(parseInt(target.innerHTML));
           } else {
             return;
           }
-          _this.renderPages();
-          _this.options.callback && _this.options.callback({
-            curr: _this.pageNumber,
-            limit: _this.options.limit,
+          self.renderPages();
+          self.options.callback && self.options.callback({
+            curr: self.pageNumber,
+            limit: self.options.limit,
             isFirst: false
           });
-          _this.pageHash();
+          self.pageHash();
         }
       });
     },
@@ -259,17 +258,17 @@
     renderEllipsis: function() {
       var fragment = document.createDocumentFragment();
       this.addFragmentAfter(fragment, [
-        this.getPageInfos("current", this.pageNumber)
+        this.getPageInfos(LINK + " current", this.pageNumber)
       ]);
       for (var i = 1; i <= this.options.pageShow; i++) {
         if (this.pageNumber - i > 1) {
           this.addFragmentBefore(fragment, [
-            this.getPageInfos("", this.pageNumber - i)
+            this.getPageInfos(LINK, this.pageNumber - i)
           ]);
         }
         if (this.pageNumber + i < this.pageCount) {
           this.addFragmentAfter(fragment, [
-            this.getPageInfos("", this.pageNumber + i)
+            this.getPageInfos(LINK, this.pageNumber + i)
           ]);
         }
       }
@@ -280,7 +279,7 @@
         this.addFragmentBefore(fragment, [
           this.pageInfos[0],
           this.pageInfos[1],
-          this.pageInfos[5]
+          this.getPageInfos(LINK, 1)
         ]);
       }
       if (this.pageNumber + this.options.pageShow + 1 < this.pageCount) {
@@ -288,7 +287,7 @@
       }
       if (this.pageNumber < this.pageCount) {
         this.addFragmentAfter(fragment, [
-          this.getPageInfos("", this.pageCount),
+          this.getPageInfos(LINK, this.pageCount),
           this.pageInfos[2],
           this.pageInfos[3]
         ]);
@@ -302,15 +301,21 @@
       fragment.appendChild(this.createHtml(datas));
     },
     createHtml: function(elemDatas) {
+      var self = this;
       var fragment = document.createDocumentFragment();
       var liEle = document.createElement("li");
       var aEle = document.createElement("a");
       elemDatas.forEach(function(elementData, index) {
         liEle = liEle.cloneNode(false);
         aEle = aEle.cloneNode(false);
+        liEle.setAttribute("class", ITEM);
         aEle.setAttribute("href", "javascript:;");
         aEle.setAttribute("id", elementData.id);
-        aEle.setAttribute("class", elementData.className);
+        if (elementData.id !== 'page') {
+          aEle.setAttribute("class", LINK);
+        } else {
+          aEle.setAttribute("class", elementData.className);
+        }
         aEle.innerHTML = elementData.content;
         liEle.appendChild(aEle);
         fragment.appendChild(liEle);
@@ -346,7 +351,7 @@
       var fragment = document.createDocumentFragment();
       var str = "";
       for (var i = begin; i <= end; i++) {
-        str = this.pageNumber === i ? "current" : "";
+        str = this.pageNumber === i ? LINK + " current" : LINK;
         this.addFragmentAfter(fragment, [this.getPageInfos(str, i)]);
       }
       return fragment;

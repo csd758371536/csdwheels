@@ -11,17 +11,16 @@
 
 <body>
   <div class="main">
-    <ol class="page-navigator" id="pagelist1"></ol>
-    <ol class="page-navigator" id="pagelist2"></ol>
-    <ol class="page-navigator" id="pagelist3"></ol>
-    <ol class="page-navigator" id="pagelist4"></ol>
+    <ol class="pagination" id="pagelist1"></ol>
+    <ol class="pagination" id="pagelist2"></ol>
+    <ol class="pagination" id="pagelist3"></ol>
+    <ol class="pagination" id="pagelist4"></ol>
   </div>
   <!-- <script src="../../dist/pagination/pagination.min.js" charset="utf-8"></script> -->
   <script src="../../src/pagination/pagination.js" charset="utf-8"></script>
   <script type="text/javascript">
     // 显示省略号
-    new Pagination({
-      elem: 'pagelist1',
+    new Pagination('#pagelist1', {
       curr: 1,
       count: 162,
       limit: 5,
@@ -31,8 +30,7 @@
       }
     });
     // 不显示省略号
-    new Pagination({
-      elem: 'pagelist2',
+    new Pagination('#pagelist2', {
       curr: 1,
       count: 162,
       limit: 5,
@@ -42,8 +40,7 @@
       }
     });
     // 带hash参数
-    new Pagination({
-      elem: 'pagelist3',
+    new Pagination('#pagelist3', {
       curr: parseInt(location.hash.replace('#!page=', '')) || 1,
       count: 162,
       limit: 5,
@@ -53,9 +50,7 @@
         console.log(obj);
         // 首次不执行
         if (!obj.isFirst) {
-          console.log('这不是第一次加载页面');
-        } else {
-          console.log('这是第一次加载页面');
+          // do something
         }
       }
     });
