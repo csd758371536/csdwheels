@@ -238,14 +238,12 @@
     },
     renderNoEllipsis: function() {
       var fragment = document.createDocumentFragment();
-      var count = pageMax % 2 === 0 ? 2 : 1;
-      var pageMax = this.options.pageShow * 2 + 1;
-      if (this.pageNumber < (pageMax + count) / 2) {
-        fragment.appendChild(this.renderFirst(pageMax));
-      } else if (this.pageCount - this.pageNumber < (pageMax - count) / 2) {
-        fragment.appendChild(this.renderLast(pageMax));
+      if (this.pageNumber < this.options.pageShow + 1) {
+        fragment.appendChild(this.renderDom(1, this.options.pageShow * 2 + 1));
+      } else if (this.pageNumber > this.pageCount - this.options.pageShow) {
+        fragment.appendChild(this.renderDom(this.pageCount - this.options.pageShow * 2, this.pageCount));
       } else {
-        fragment.appendChild(this.renderCenter(pageMax));
+        fragment.appendChild(this.renderDom(this.pageNumber - this.options.pageShow, this.pageNumber + this.options.pageShow));
       }
       if (this.pageNumber > 1) {
         this.addFragmentBefore(fragment, [
@@ -325,31 +323,6 @@
       });
       return fragment;
     },
-    renderFirst: function(pageShow) {
-      if (this.pageCount < pageShow) {
-        return this.renderDom(1, this.pageCount);
-      } else {
-        return this.renderDom(1, pageShow);
-      }
-    },
-    renderLast: function(pageShow) {
-      if (this.pageCount < pageShow) {
-        return this.renderDom(1, this.pageCount);
-      } else {
-        return this.renderDom(this.pageCount - pageShow + 1, this.pageCount);
-      }
-    },
-    renderCenter: function(pageShow) {
-      var begin =
-        pageShow % 2 === 0 ?
-        this.pageNumber - pageShow / 2 :
-        this.pageNumber - (pageShow - 1) / 2;
-      var end =
-        pageShow % 2 === 0 ?
-        this.pageNumber + (pageShow - 2) / 2 :
-        this.pageNumber + (pageShow - 1) / 2;
-      return this.renderDom(begin, end);
-    },
     renderDom: function(begin, end) {
       var fragment = document.createDocumentFragment();
       var str = "";
@@ -375,38 +348,5 @@
       this.pageNumber = this.pageCount;
     }
   };
-
-  // function calc1(index, length, max) {
-  //   var str = '';
-  //   var preIndex = index - (max + 1);
-  //   var aftIndex = index + (max + 1);
-  //   for (var i = 1; i <= length; i++) {
-  //     if ((i !== preIndex && i !== aftIndex) || (i === 1 || i === length)) {
-  //       str = str + ' ' + i;
-  //     } else {
-  //       str = str + ' ' + '...';
-  //     }
-  //   }
-  //   return str.trim();
-  // }
-  
-  // function calc2(index, length, max) {
-  //   var str = '';
-  //   if (index < max + 1) {
-  //     for (var i = 1; i <= max * 2 + 1; i++) {
-  //       str = str + ' ' + i;
-  //     }
-  //   } else if (index > length - max) {
-  //     for (var i = length - max * 2; i <= length; i++) {
-  //       str = str + ' ' + i;
-  //     }
-  //   } else {
-  //     for (var i = index - max; i <= index + max; i++) {
-  //       str = str + ' ' + i;
-  //     }
-  //   }
-  //   return str.trim();
-  // }
-
   return Pagination;
 });
