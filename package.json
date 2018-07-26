@@ -1,29 +1,28 @@
 {
-  "name": "csdwheels",
-  "version": "1.2.3",
-  "description": "some javascript wheels made by csdoker.",
-  "main": "index.js",
+  "name": "csdwheels-es6",
+  "version": "1.0.0",
+  "description": "csdwheels rewrite by es6",
+  "main": "webpack.config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {},
   "scripts": {
-    "lint": "jshint src/pagination/pagination.js",
-    "test": "node test/test.js",
-    "build": "gulp mini && npm run test"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/csdoker/csdwheels.git"
   },
   "keywords": [
-    "csdwheels"
+    "csdwheels",
+    "es6"
   ],
   "author": "csdoker",
-  "license": "MIT",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/csdoker/csdwheels/issues"
   },
-  "homepage": "https://github.com/csdoker/csdwheels#readme",
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^3.0.0"
-  }
+  "homepage": "https://github.com/csdoker/csdwheels#readme"
 }
