@@ -4,9 +4,7 @@
 
 ## 安装
 
-> npm install csdwheels --save-dev
-
-> git checkout es6
+> npm install csdwheels-es6 --save-dev
 
 > npm install
 
