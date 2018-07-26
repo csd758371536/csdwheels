@@ -1,6 +1,6 @@
 {
   "name": "csdwheels",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "some javascript wheels made by csdoker.",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/csd758371536/csdwheels.git"
+    "url": "git+https://github.com/csdoker/csdwheels.git"
   },
   "keywords": [
     "csdwheels"
@@ -18,9 +18,9 @@
   "author": "csdoker",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/csd758371536/csdwheels/issues"
+    "url": "https://github.com/csdoker/csdwheels/issues"
   },
-  "homepage": "https://github.com/csd758371536/csdwheels#readme",
+  "homepage": "https://github.com/csdoker/csdwheels#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-rename": "^1.2.2",
