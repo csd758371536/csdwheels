@@ -8,27 +8,63 @@
 
 项目地址：[https://project.csdoker.com/csdwheels](https://project.csdoker.com/csdwheels)
 
-## 安装
+## 版本说明
 
-支持npm或bower
+> 各分支分别为不同版本的代码
 
+- csdwheels：原生JavaScript，ES5语法
+- csdwheels-es6：原生JavaScript，ES6语法（生产环境已经编译为ES5+UMD规范）
+
+## 安装插件
+
+ES5：
 > npm install csdwheels --save-dev
 
-> bower install csdwheels --save
+ES6：
+> npm install csdwheels-es6 --save-dev
 
-然后引入某个插件的css、js文件，并且插入dom结构
+## 引入方式
 
-例：
+### ES5
+
+在dist文件目录下，找到某个插件的css、js文件，然后将它们引入HTML文档中，并添加插件的DOM结构：
 ```html
-<ol class="page-navigator" id="pagelist"></ol>
-
-<link rel="stylesheet" href="pagination.min.css">
-<script type="text/javascript" src="pagination.min.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="author" content="csdoker">
+  <title>pagination</title>
+  <link rel="stylesheet" href="pagination.min.css">
+</head>
+<body>
+  <ol class="page-navigator" id="pagelist"></ol>
+  <script type="text/javascript" src="pagination.min.js"></script>
+</body>
+</html>
 ```
 
-最后就能使用某个插件了
+### ES6
 
-## 使用
+因为样式已打包进源码中，所以只需要添加插件的DOM结构，然后在你的js文件中使用import引入插件的js即可：
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="author" content="csdoker">
+  <title>pagination</title>
+</head>
+<body>
+  <ol class="page-navigator" id="pagelist"></ol>
+  <script type="text/javascript">
+    import Pagination from 'csdwheels-es6/pagination';
+  </script>
+</body>
+</html>
+```
+
+引入插件后，你就能在自己的js文件中初始化插件并使用它了。
+
+## 使用说明
 
 ### 分页
 
