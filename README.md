@@ -47,6 +47,7 @@ ES6：
 ### ES6
 
 因为样式已打包进源码中，所以只需要添加插件的DOM结构，然后在你的js文件中使用import引入插件的js即可：
+```html
 <html>
 <head>
   <meta charset="UTF-8">
@@ -62,7 +63,7 @@ ES6：
 </html>
 ```
 
-引入插件后，你就能在自己的js文件中初始化插件并使用它了。
+引入后，你就能在自己的js文件中初始化插件并使用它了。
 
 ## 使用说明
 
@@ -70,18 +71,10 @@ ES6：
 
 #### 初始化
 
-1. 引入css、js
-```html
-<link rel="stylesheet" href="pagination.min.css">
-<script type="text/javascript" src="pagination.min.js"></script>
-```
-
-2. 插入dom
 ```html
 <ol class="page-navigator" id="pagelist"></ol>
 ```
 
-3. 配置说明
 ```js
 // 分页元素ID（必填）
 var selector = '#pagelist';
