@@ -1,4 +1,4 @@
-class Calendar {
+class Dialog {
   constructor(options = {}) {
     this.options = {};
     Object.assign(this.options, options);
@@ -6,9 +6,9 @@ class Calendar {
   }
 
   init(options) {
-    console.log('这是日历插件！');
+    console.log('这是弹窗插件！');
     // this._doSometing(options.elem);
   }
 }
 
-export default Calendar;
+export default Dialog;

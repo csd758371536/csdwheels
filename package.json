@@ -2,7 +2,7 @@
   "name": "csdwheels-es6",
   "version": "1.0.0",
   "description": "csdwheels rewrite by es6",
-  "main": "lib/index.js",
+  "main": "dist/csdwheels.min.js",
   "directories": {
     "test": "test"
   },
@@ -15,7 +15,9 @@
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
+    "clean-webpack-plugin": "^0.1.19",
     "cross-env": "^5.2.0",
+    "uglifyjs-webpack-plugin": "^1.2.7",
     "webpack": "^4.16.2",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"

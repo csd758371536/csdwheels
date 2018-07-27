@@ -1,15 +1,14 @@
-class Person{
-  constructor(name, age){
-    this.name = name;
-    this.age = age;
+class Pagination {
+  constructor(options = {}) {
+    this.options = {};
+    Object.assign(this.options, options);
+    this.init(options);
   }
 
-  say(){
-    return `我是${this.name},我今年${this.age}岁了。`;
+  init(options) {
+    console.log('这是分页插件！');
+    // this._doSometing(options.elem);
   }
 }
 
-let p = new Person('张三', 20);
-document.write(p.say());
-
-export default Person;
+export default Pagination;
