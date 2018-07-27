@@ -1,25 +1,33 @@
 var path = require('path');
 
 module.exports = {
+  // 模式配置
   mode: 'development',
-  entry: [
-    "babel-polyfill",
-    path.join(__dirname, './src/main.es6')
-  ],
-  output: {
-    path: path.join(__dirname, './bundle'),
-    filename: "bundle.js"
+  // 入口文件
+  entry: {
+    pagination: './src/pagination/pagination.js',
+    calendar: './src/calendar/calendar.js'
   },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        include: path.join(__dirname , 'src'),
-        exclude: /node_modules/,
-        use: ['babel-loader']
-      }
-    ]
-  }
+  // 出口文件
+  output: {
+    path: path.resolve('dist'),
+    filename: "[name].js"
+  },
+  // // 对应的插件
+  // plugins: [],
+  // // 开发服务器配置
+  // devServer: {},
+  // // 处理对应模块
+  // module: {
+  //   rules: [
+  //     {
+  //       test: /\.js$/,
+  //       include: path.join(__dirname , 'src'),
+  //       exclude: /node_modules/,
+  //       use: ['babel-loader']
+  //     }
+  //   ]
+  // }
 }
 
 
