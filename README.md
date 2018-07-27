@@ -42,7 +42,7 @@
 
 > ES6版本使用之前必须先使用命令安装对应的npm包
 
-因为样式已打包进`dist-es6`目录下的源码中，所以只需要添加插件的DOM结构，然后使用`import`引入插件即可：
+因为样式已打包进`dist-es6`目录下的源码中，所以只需要添加插件的DOM结构，然后在你的JS文件中使用`import`引入插件即可：
 ```html
 <html>
 <head>
@@ -62,9 +62,6 @@
 
 // 安装npm包后，直接引入对应的插件
 import Plugin from 'csdwheels';
-
-// 初始化插件
-new Plugin();
 ```
 
 ## 使用说明
