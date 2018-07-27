@@ -12,8 +12,8 @@
 
 > 各分支分别为不同版本的代码
 
-- csdwheels：原生JavaScript，ES5语法
-- csdwheels-es6：原生JavaScript，ES6语法（生产环境已经编译为ES5+UMD规范）
+- master：原生JavaScript，ES5语法
+- csdwheels-es6：原生JavaScript，ES6语法（生产环境已经编译为ES5+UMD规范，同时支持ES6的导入方式）
 
 ## 安装插件
 
