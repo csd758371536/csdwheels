@@ -4,7 +4,7 @@ const uglify = require('gulp-uglify');
 const rename = require("gulp-rename");
 
 gulp.task('page', function() {
-  gulp.src('src/pagination/pagination.js')
+  gulp.src('src/es5/pagination/pagination.js')
   .pipe(uglify())    //uglify
   .pipe(rename("pagination.min.js"))
   .pipe(gulp.dest('dist/pagination'));

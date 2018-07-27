@@ -1,19 +1,24 @@
 {
   "name": "csdwheels",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "some javascript wheels made by csdoker.",
-  "main": "dist-es6/index.js",
+  "main": "dist-es6/csdwheels.min.js",
   "scripts": {
-    "lint": "jshint src/pagination/pagination.js",
     "test": "node test/test.js",
-    "build": "gulp mini && npm run test"
+    "dev": "webpack-dev-server",
+    "build": "webpack && gulp mini && npm run test"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/csdoker/csdwheels.git"
   },
   "keywords": [
-    "csdwheels"
+    "csdwheels",
+    "javascript",
+    "wheels",
+    "es5",
+    "umd",
+    "es6"
   ],
   "author": "csdoker",
   "license": "MIT",
@@ -22,8 +27,20 @@
   },
   "homepage": "https://github.com/csdoker/csdwheels#readme",
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-runtime": "^6.26.0",
+    "clean-webpack-plugin": "^0.1.19",
+    "cross-env": "^5.2.0",
     "gulp": "^3.9.1",
     "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^3.0.0"
+    "gulp-uglify": "^3.0.0",
+    "uglifyjs-webpack-plugin": "^1.2.7",
+    "webpack": "^4.16.3",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
   }
 }

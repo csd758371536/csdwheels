@@ -10,18 +10,14 @@
 
 ## 版本说明
 
-> 各分支分别为不同版本的代码
-
-- master：原生JavaScript，ES5语法
-- csdwheels-es6：原生JavaScript，ES6语法（生产环境已经编译为ES5+UMD规范，同时支持ES6的导入方式）
+- ES5：`src/es5`文件下为ES5版本源码，ES5语法 + UMD（dist文件下为打包压缩后的代码）
+- ES6：`src/es6`文件下为ES6版本源码，打包后支持ES5语法 + UMD + ES6的导入方式（dist-es6文件下为打包压缩后的代码）
 
 ## 安装插件
 
 > npm install csdwheels --save-dev
 
 ## 引入方式
-
-> dist目录下为打包后的ES5代码，dist-es6目录为打包后的ES6代码（查看ES6版本源码请切换到csdwheels-es6分支）
 
 ### ES5
 
@@ -44,7 +40,9 @@
 
 ### ES6
 
-因为样式已打包进`dist-es6`目录下的源码中，所以只需要添加插件的DOM结构，然后在你的js文件中使用`import`引入插件即可：
+> ES6版本使用之前必须先使用命令安装对应的npm包
+
+因为样式已打包进`dist-es6`目录下的源码中，所以只需要添加插件的DOM结构，然后使用`import`引入插件即可：
 ```html
 <html>
 <head>
@@ -54,14 +52,20 @@
 </head>
 <body>
   <ol class="page-navigator" id="pagelist"></ol>
-  <script type="text/javascript">
-    import Pagination from 'csdwheels/pagination';
-  </script>
+  <script src="./test.js"></script>
 </body>
 </html>
 ```
 
-引入后，你就能在自己的js文件中初始化插件并使用它了。
+```javascript
+// test.js
+
+// 安装npm包后，直接引入对应的插件
+import Plugin from 'csdwheels';
+
+// 初始化插件
+new Plugin();
+```
 
 ## 使用说明
 
