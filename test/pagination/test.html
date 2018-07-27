@@ -5,8 +5,7 @@
   <meta charset="utf-8">
   <title></title>
   <link rel="stylesheet" href="../../style/base.css">
-  <link rel="stylesheet" href="../../style/test.min.css">
-  <link rel="stylesheet" href="../../style/pagination/pagination.min.css">
+  <link rel="stylesheet" href="./test.css">
 </head>
 
 <body>
@@ -18,9 +17,9 @@
     <p>带Hash参数：</p>
     <ol class="pagination" id="pagelist3"></ol>
   </div>
-  <!-- <script src="../../dist/pagination/pagination.min.js" charset="utf-8"></script> -->
-  <script src="../../src/pagination/pagination.js" charset="utf-8"></script>
   <script type="text/javascript">
+    import Pagination from 'csdwheels-es6/pagination'
+    
     // 显示省略号
     new Pagination('#pagelist1', {
       curr: 1,

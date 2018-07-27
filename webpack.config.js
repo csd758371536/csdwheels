@@ -10,7 +10,7 @@ module.exports = {
   },
   // 出口文件
   output: {
-    path: path.resolve('dist'),
+    path: path.resolve('lib'),
     filename: "[name].js"
   },
   // // 对应的插件
