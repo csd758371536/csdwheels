@@ -2,7 +2,7 @@
   "name": "csdwheels",
   "version": "1.2.3",
   "description": "some javascript wheels made by csdoker.",
-  "main": "index.js",
+  "main": "dist-es6/index.js",
   "scripts": {
     "lint": "jshint src/pagination/pagination.js",
     "test": "node test/test.js",

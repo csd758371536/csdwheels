@@ -17,17 +17,15 @@
 
 ## 安装插件
 
-ES5：
 > npm install csdwheels --save-dev
-
-ES6：
-> npm install csdwheels-es6 --save-dev
 
 ## 引入方式
 
+> dist目录下为打包后的ES5代码，dist-es6目录为打包后的ES6代码（查看ES6版本源码请切换到csdwheels-es6分支）
+
 ### ES5
 
-在dist文件目录下，找到某个插件的css、js文件，然后将它们引入HTML文档中，并添加插件的DOM结构：
+在`dist`文件目录下，找到某个插件的css、js文件，然后将它们引入HTML文档中，并添加插件的DOM结构：
 ```html
 <!DOCTYPE html>
 <html>
@@ -46,7 +44,7 @@ ES6：
 
 ### ES6
 
-因为样式已打包进源码中，所以只需要添加插件的DOM结构，然后在你的js文件中使用import引入插件的js即可：
+因为样式已打包进`dist-es6`目录下的源码中，所以只需要添加插件的DOM结构，然后在你的js文件中使用`import`引入插件即可：
 ```html
 <html>
 <head>
@@ -57,7 +55,7 @@ ES6：
 <body>
   <ol class="page-navigator" id="pagelist"></ol>
   <script type="text/javascript">
-    import Pagination from 'csdwheels-es6/pagination';
+    import Pagination from 'csdwheels/pagination';
   </script>
 </body>
 </html>
