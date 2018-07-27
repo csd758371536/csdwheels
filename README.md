@@ -128,7 +128,7 @@ new Pagination(selector, pageOption);
 
 #### 效果演示
 
-test/pagination/test.html
+[pagination](https://csdoker.github.io/csdemos/pagination/)
 
 ## 测试
 
