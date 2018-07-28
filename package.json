@@ -47,5 +47,8 @@
     "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
+  },
+  "dependencies": {
+    "hoek": "^5.0.3"
   }
 }
