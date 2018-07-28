@@ -33,6 +33,18 @@ module.exports = {
         include: path.join(__dirname , 'src/es6'),
         exclude: /node_modules/,
         use: ['babel-loader']
+      },
+      {
+        test: /\.scss$/,
+        // include: path.join(__dirname , 'style'),
+        // exclude: /node_modules/,
+        use: [{
+          loader: 'style-loader'
+        }, {
+          loader: 'css-loader'
+        }, {
+          loader: 'sass-loader'
+        }]
       }
     ]
   }

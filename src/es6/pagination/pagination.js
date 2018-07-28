@@ -1,25 +1,12 @@
-// 引入样式
+import '../../../style/pagination/pagination.scss'
 
 class Pagination {
-  constructor(selector, options = {}) {
-    // 默认配置
-    this.options = {
-      curr: 1,
-      pageShow: 2,
-      ellipsis: true,
-      hash: false
-    };
-    Object.assign(this.options, options);
-    this.init(selector);
-  }
-
-  // 元素类名
   static CLASS_NAME = {
     ITEM: 'pagination-item',
     LINK: 'pagination-link'
   }
 
-  static PageInfos = [{
+  static PAGE_INFOS = [{
       id: "first",
       content: "首页"
     },
@@ -41,107 +28,29 @@ class Pagination {
     }
   ]
 
-  // 跨浏览器事件对象
-  static EventUtil = {
-    addEvent(element, type, handler) {
-      // 添加绑定
-      if (element.addEventListener) {
-        // 使用DOM2级方法添加事件
-        element.addEventListener(type, handler, false);
-      } else if (element.attachEvent) {
-        // 使用IE方法添加事件
-        element.attachEvent("on" + type, handler);
-      } else {
-        // 使用DOM0级方法添加事件
-        element["on" + type] = handler;
-      }
-    },
-    // 移除事件
-    removeEvent(element, type, handler) {
-      if (element.removeEventListener) {
-        element.removeEventListener(type, handler, false);
-      } else if (element.datachEvent) {
-        element.detachEvent("on" + type, handler);
-      } else {
-        element["on" + type] = null;
-      }
-    },
-    getEvent(event) {
-      // 返回事件对象引用
-      return event ? event : window.event;
-    },
-    // 获取mouseover和mouseout相关元素
-    getRelatedTarget(event) {
-      if (event.relatedTarget) {
-        return event.relatedTarget;
-      } else if (event.toElement) {
-        // 兼容IE8-
-        return event.toElement;
-      } else if (event.formElement) {
-        return event.formElement;
-      } else {
-        return null;
-      }
-    },
-    getTarget(event) {
-      //返回事件源目标
-      return event.target || event.srcElement;
-    },
-    preventDefault(event) {
-      //取消默认事件
-      if (event.preventDefault) {
-        event.preventDefault();
-      } else {
-        event.returnValue = false;
-      }
-    },
-    stoppropagation(event) {
-      //阻止事件流
-      if (event.stoppropagation) {
-        event.stoppropagation();
-      } else {
-        event.canceBubble = false;
-      }
-    },
-    // 获取mousedown或mouseup按下或释放的按钮是鼠标中的哪一个
-    getButton(event) {
-      if (document.implementation.hasFeature("MouseEvents", "2.0")) {
-        return event.button;
-      } else {
-        //将IE模型下的button属性映射为DOM模型下的button属性
-        switch (event.button) {
-          case 0:
-          case 1:
-          case 3:
-          case 5:
-          case 7:
-            //按下的是鼠标主按钮（一般是左键）
-            return 0;
-          case 2:
-          case 6:
-            //按下的是中间的鼠标按钮
-            return 2;
-          case 4:
-            //鼠标次按钮（一般是右键）
-            return 1;
-        }
-      }
-    },
-    //获取表示鼠标滚轮滚动方向的数值
-    getWheelDelta(event) {
-      if (event.wheelDelta) {
-        return event.wheelDelta;
-      } else {
-        return -event.detail * 40;
-      }
-    },
-    // 以跨浏览器取得相同的字符编码，需在keypress事件中使用
-    getCharCode(event) {
-      if (typeof event.charCode == "number") {
-        return event.charCode;
-      } else {
-        return event.keyCode;
-      }
+  constructor(selector, options = {}) {
+    // 默认配置
+    this.options = {
+      curr: 1,
+      pageShow: 2,
+      ellipsis: true,
+      hash: false
+    };
+    Object.assign(this.options, options);
+    this.init(selector);
+  }
+
+  addEvent (element, type, handler) {
+    // 添加绑定
+    if (element.addEventListener) {
+      // 使用DOM2级方法添加事件
+      element.addEventListener(type, handler, false);
+    } else if (element.attachEvent) {
+      // 使用IE方法添加事件
+      element.attachEvent("on" + type, handler);
+    } else {
+      // 使用DOM0级方法添加事件
+      element["on" + type] = handler;
     }
   }
 
@@ -161,7 +70,7 @@ class Pagination {
 
   changePage () {
     let pageElement = this.pageElement;
-    EventUtil.addEvent(pageElement, "click", (ev) => {
+    this.addEvent(pageElement, "click", (ev) => {
       let e = ev || window.event;
       let target = e.target || e.srcElement;
       if (target.nodeName.toLocaleLowerCase() == "a") {
@@ -215,12 +124,12 @@ class Pagination {
     }
     if (this.pageNumber > 1) {
       this.addFragmentBefore(fragment, [
-        Pagination.PageInfos[0],
-        Pagination.PageInfos[1]
+        Pagination.PAGE_INFOS[0],
+        Pagination.PAGE_INFOS[1]
       ]);
     }
     if (this.pageNumber < this.pageCount) {
-      this.addFragmentAfter(fragment, [Pagination.PageInfos[2], Pagination.PageInfos[3]]);
+      this.addFragmentAfter(fragment, [Pagination.PAGE_INFOS[2], Pagination.PAGE_INFOS[3]]);
     }
     return fragment;
   }
@@ -243,23 +152,23 @@ class Pagination {
       }
     }
     if (this.pageNumber - (this.options.pageShow + 1) > 1) {
-      this.addFragmentBefore(fragment, [Pagination.PageInfos[4]]);
+      this.addFragmentBefore(fragment, [Pagination.PAGE_INFOS[4]]);
     }
     if (this.pageNumber > 1) {
       this.addFragmentBefore(fragment, [
-        Pagination.PageInfos[0],
-        Pagination.PageInfos[1],
+        Pagination.PAGE_INFOS[0],
+        Pagination.PAGE_INFOS[1],
         this.getPageInfos(Pagination.CLASS_NAME.LINK, 1)
       ]);
     }
     if (this.pageNumber + this.options.pageShow + 1 < this.pageCount) {
-      this.addFragmentAfter(fragment, [Pagination.PageInfos[4]]);
+      this.addFragmentAfter(fragment, [Pagination.PAGE_INFOS[4]]);
     }
     if (this.pageNumber < this.pageCount) {
       this.addFragmentAfter(fragment, [
         this.getPageInfos(Pagination.CLASS_NAME.LINK, this.pageCount),
-        Pagination.PageInfos[2],
-        Pagination.PageInfos[3]
+        Pagination.PAGE_INFOS[2],
+        Pagination.PAGE_INFOS[3]
       ]);
     }
     return fragment;
