@@ -32,7 +32,7 @@
   <link rel="stylesheet" href="pagination.min.css">
 </head>
 <body>
-  <ol class="page-navigator" id="pagelist"></ol>
+  <ol class="pagination" id="pagelist"></ol>
   <script type="text/javascript" src="pagination.min.js"></script>
 </body>
 </html>
@@ -51,7 +51,7 @@
   <title>pagination</title>
 </head>
 <body>
-  <ol class="page-navigator" id="pagelist"></ol>
+  <ol class="pagination" id="pagelist"></ol>
   <script src="./test.js"></script>
 </body>
 </html>
@@ -61,7 +61,7 @@
 // test.js
 
 // 安装npm包后，直接引入对应的插件
-import Plugin from 'csdwheels';
+import { Pagination } from 'csdwheels';
 ```
 
 ## 使用说明
@@ -71,7 +71,7 @@ import Plugin from 'csdwheels';
 #### 初始化
 
 ```html
-<ol class="page-navigator" id="pagelist"></ol>
+<ol class="pagination" id="pagelist"></ol>
 ```
 
 ```js
