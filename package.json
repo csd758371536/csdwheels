@@ -1,6 +1,6 @@
 {
   "name": "csdwheels",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "some javascript wheels made by csdoker.",
   "main": "dist-es6/csdwheels.min.js",
   "scripts": {
@@ -37,9 +37,9 @@
     "clean-webpack-plugin": "^0.1.19",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
-    "gulp": "^3.9.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-uglify": "^3.0.1",
     "node-sass": "^4.9.2",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",

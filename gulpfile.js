@@ -3,8 +3,8 @@ const gulp = require('gulp');
 const uglify = require('gulp-uglify');
 const rename = require("gulp-rename");
 
-gulp.task('page', function() {
-  gulp.src('src/es5/pagination/pagination.js')
+gulp.task('page', () => {
+  return gulp.src('src/es5/pagination/pagination.js')
   .pipe(uglify())    //uglify
   .pipe(rename("pagination.min.js"))
   .pipe(gulp.dest('dist/pagination'));
@@ -12,4 +12,4 @@ gulp.task('page', function() {
   .pipe(gulp.dest('dist/pagination'))
 });
 
-gulp.task('mini', ['page']);
+gulp.task('mini', gulp.parallel('page'));
