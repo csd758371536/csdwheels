@@ -13,6 +13,8 @@
 - ES5：`src/es5`文件下为ES5版本源码，ES5语法 + UMD（dist文件下为打包压缩后的代码）
 - ES6：`src/es6`文件下为ES6版本源码，打包后支持ES5语法 + UMD + ES6的导入方式（dist-es6文件下为打包压缩后的代码）
 
+> 本套插件的[Vue版本](https://github.com/csdoker/vue-wheels)
+
 ## 安装插件
 
 > npm install csdwheels --save-dev
