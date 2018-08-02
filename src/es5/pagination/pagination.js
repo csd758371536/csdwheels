@@ -69,12 +69,11 @@
         event.returnValue = false;
       }
     },
-    stoppropagation: function(event) {
-      //阻止事件流
-      if (event.stoppropagation) {
-        event.stoppropagation();
+    stopPropagation: function(event) {
+      if (event.stopPropagation) {
+        event.stopPropagation();
       } else {
-        event.canceBubble = false;
+        event.cancelBubble = true;
       }
     },
     // 获取mousedown或mouseup按下或释放的按钮是鼠标中的哪一个

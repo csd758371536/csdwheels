@@ -1,6 +1,6 @@
 {
   "name": "csdwheels",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "some javascript wheels made by csdoker.",
   "main": "dist-es6/csdwheels.min.js",
   "scripts": {
