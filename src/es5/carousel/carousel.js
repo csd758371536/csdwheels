@@ -73,4 +73,4 @@ for (var i = 0, len = dots.length; i < len; i++) {
       showCurrentDot();
     };
   })(i);
-}
+} 
