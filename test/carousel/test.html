@@ -1,102 +1,47 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>轮播图</title>
-    <style>
-        * {
-            margin:0;
-            padding:0;
-        }
-        a{
-            text-decoration: none;
-        }
-        .container {
-            position: relative;
-            width: 600px;
-            height: 400px;
-            margin:100px auto 0 auto;
-            box-shadow: 0 0 5px green;
-            overflow: hidden;
-        }
-        .container .wrap {
-            position: absolute;
-            width: 4200px;
-            height: 400px;
-            z-index: 1;
-        }
-        .container .wrap img {
-            float: left;
-            width: 600px;
-            height: 400px;
-        }
-        .container .buttons {
-            position: absolute;
-            right: 5px;
-            bottom:40px;
-            width: 150px;
-            height: 10px;
-            z-index: 2;
-        }
-        .container .buttons span {
-            margin-left: 5px;
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: green;
-            text-align: center;
-            color:white;
-            cursor: pointer;
-        }
-        .container .buttons span.on{
-            background-color: red;
-        }
-        .container .arrow {
-            position: absolute;
-            top: 35%;
-            color: green;
-            padding:0px 14px;
-            border-radius: 50%;
-            font-size: 50px;
-            z-index: 2;
-            display: none;
-        }
-        .container .arrow_left {
-            left: 10px;
-        }
-        .container .arrow_right {
-            right: 10px;
-        }
-        .container:hover .arrow {
-            display: block;
-        }
-        .container .arrow:hover {
-            background-color: rgba(0,0,0,0.2);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="../../style/base.css">
+  <link rel="stylesheet" href="../../style/carousel/test.min.css">
+  <link rel="stylesheet" href="../../style/carousel/carousel.min.css">
 </head>
+
 <body>
-    <div class="container">
-        <div class="wrap" style="left: -600px;">
-            <img src="http://sc.jb51.net/uploads/allimg/130112/2-1301122130215H.jpg" alt="5">
-            <img src="http://h.hiphotos.baidu.com/lvpics/w=600/sign=6570942cbf12c8fcb4f3f5cdcc0292b4/d01373f082025aafb3f498c7fdedab64024f1af3.jpg" alt="1">
-            <img src="http://img5.3lian.com/gaoqing/01/05/075.jpg" alt="2">
-            <img src="http://h.hiphotos.baidu.com/lvpics/w=600/sign=6570942cbf12c8fcb4f3f5cdcc0292b4/d01373f082025aafb3f498c7fdedab64024f1af3.jpg" alt="3">
-            <img src="http://f.hiphotos.baidu.com/lvpics/w=600/sign=4351b6aa8694a4c20a23e42b3ef51bac/024f78f0f736afc3ece868c0b219ebc4b64512aa.jpg" alt="4">
-            <img src="http://sc.jb51.net/uploads/allimg/130112/2-1301122130215H.jpg" alt="5">
-            <img src="http://h.hiphotos.baidu.com/lvpics/w=600/sign=6570942cbf12c8fcb4f3f5cdcc0292b4/d01373f082025aafb3f498c7fdedab64024f1af3.jpg" alt="1">
-        </div>
-        <div class="buttons">
-            <span class="on">1</span>
-            <span>2</span>
-            <span>3</span>
-            <span>4</span>
-            <span>5</span>
-        </div>
-        <a href="javascript:;" class="arrow arrow_left">&lt;</a>
-        <a href="javascript:;" class="arrow arrow_right">&gt;</a>
+  <div class="carousel-container" id="carousel">
+    <div class="carousel-wrap" id="carouselWrap" style="left: -600px;">
+      <!-- <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef52441.jpg" alt="5">
+      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef3a46c.jpg" alt="1">
+      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef509c9.jpg" alt="2">
+      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef51617.jpg" alt="3">
+      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef530a1.jpg" alt="4">
+      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef52441.jpg" alt="5">
+      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef3a46c.jpg" alt="1"> -->
     </div>
-    <script src="../../src/es5/carousel/carousel.js" charset="utf-8"></script>
+    <div id="carouselDots" class="carousel-buttons">
+      <span class="carousel-button on">1</span>
+      <span class="carousel-button">2</span>
+      <span class="carousel-button">3</span>
+      <span class="carousel-button">4</span>
+      <span class="carousel-button">5</span>
+    </div>
+    <a href="javascript:;" id="arrowLeft" class="carousel-arrow arrow-left">&lt;</a>
+    <a href="javascript:;" id="arrowRight" class="carousel-arrow arrow-right">&gt;</a>
+  </div>
+  <script src="../../src/es5/carousel/carousel.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    new Carousel('#carouselWrap', {
+      carouselImages: [
+        'https://i.loli.net/2018/08/04/5b657fef3a46c.jpg',
+        'https://i.loli.net/2018/08/04/5b657fef509c9.jpg',
+        'https://i.loli.net/2018/08/04/5b657fef51617.jpg',
+        'https://i.loli.net/2018/08/04/5b657fef530a1.jpg',
+        'https://i.loli.net/2018/08/04/5b657fef52441.jpg'
+      ]
+    });
+  </script>
 </body>
+
 </html>
