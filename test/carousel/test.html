@@ -10,36 +10,40 @@
 </head>
 
 <body>
-  <div class="carousel-container" id="carousel">
-    <div class="carousel-wrap" id="carouselWrap" style="left: -600px;">
-      <!-- <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef52441.jpg" alt="5">
-      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef3a46c.jpg" alt="1">
-      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef509c9.jpg" alt="2">
-      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef51617.jpg" alt="3">
-      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef530a1.jpg" alt="4">
-      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef52441.jpg" alt="5">
-      <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef3a46c.jpg" alt="1"> -->
+  <div class="main">
+    <div class="carousel-container" id="carousel" style="width: 600px; height: 400px;">
+      <div class="carousel-wrap" id="carouselWrap">
+        <!-- <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef52441.jpg" alt="5"> -->
+        <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef3a46c.jpg" alt="1">
+        <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef509c9.jpg" alt="2">
+        <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef51617.jpg" alt="3">
+        <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef530a1.jpg" alt="4">
+        <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef52441.jpg" alt="5">
+        <!-- <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef3a46c.jpg" alt="1"> -->
+      </div>
+      <div class="carousel-buttons-wrap">
+        <div id="carouselDots" class="carousel-buttons">
+          <span class="carousel-button on"></span>
+          <span class="carousel-button"></span>
+          <span class="carousel-button"></span>
+          <span class="carousel-button"></span>
+          <span class="carousel-button"></span>
+        </div>
+      </div>
+      <a href="javascript:;" id="arrowLeft" class="carousel-arrow arrow-left">&lt;</a>
+      <a href="javascript:;" id="arrowRight" class="carousel-arrow arrow-right">&gt;</a>
     </div>
-    <div id="carouselDots" class="carousel-buttons">
-      <span class="carousel-button on">1</span>
-      <span class="carousel-button">2</span>
-      <span class="carousel-button">3</span>
-      <span class="carousel-button">4</span>
-      <span class="carousel-button">5</span>
-    </div>
-    <a href="javascript:;" id="arrowLeft" class="carousel-arrow arrow-left">&lt;</a>
-    <a href="javascript:;" id="arrowRight" class="carousel-arrow arrow-right">&gt;</a>
   </div>
   <script src="../../src/es5/carousel/carousel.js" charset="utf-8"></script>
   <script type="text/javascript">
     new Carousel('#carouselWrap', {
-      carouselImages: [
-        'https://i.loli.net/2018/08/04/5b657fef3a46c.jpg',
-        'https://i.loli.net/2018/08/04/5b657fef509c9.jpg',
-        'https://i.loli.net/2018/08/04/5b657fef51617.jpg',
-        'https://i.loli.net/2018/08/04/5b657fef530a1.jpg',
-        'https://i.loli.net/2018/08/04/5b657fef52441.jpg'
-      ]
+      // carouselImages: [
+      //   'https://i.loli.net/2018/08/04/5b657fef3a46c.jpg',
+      //   'https://i.loli.net/2018/08/04/5b657fef509c9.jpg',
+      //   'https://i.loli.net/2018/08/04/5b657fef51617.jpg',
+      //   'https://i.loli.net/2018/08/04/5b657fef530a1.jpg',
+      //   'https://i.loli.net/2018/08/04/5b657fef52441.jpg'
+      // ]
     });
   </script>
 </body>
