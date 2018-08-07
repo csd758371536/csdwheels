@@ -225,11 +225,31 @@
               // 获取圆点序号
               var dotIndex = i + 1;
               // _this.setCarouselWrapLeft(-_this.carouselWidth * dotIndex);
+
+              var index = _this.carouselIndex === 1 ? _this.carouselIndex : _this.carouselIndex - 1;
+              var currentNode = _this.carouselWrap.children[index];
+              // var currentIndex = index;
+              var targetNode = _this.carouselWrap.children[i + 1];
               if (_this.carouselIndex < dotIndex) {
-                _this.moveCarousel(-_this.carouselWidth * dotIndex, -_this.carouselAnimateSpeed * 2);
-              } else {
-                _this.moveCarousel(-_this.carouselWidth * dotIndex, _this.carouselAnimateSpeed * 2);
+                // var nextNode = currentNode.nextSibling.cloneNode(true);
+                // 当目标元素在当前元素右边  1 2 3 4 5   1 5 3 4 2
+                swapNodes(currentNode.previousSibling, targetNode);
+                // currentNode.nextSibling = targetNode.cloneNode(true);
+                _this.moveCarousel(_this.getCarouselWrapLeft() - _this.carouselWidth, -_this.carouselAnimateSpeed);
+                if (!_this.isCarouselAnimate) {
+                  swapNodes(_this.carouselWrap.children[index].previousSibling, targetNode);
+                }
+                _this.setCarouselWrapLeft(-dotIndex * _this.carouselWidth);
+                // _this.carouselWrap.children(currentIndex - 1).nextSibling = targetNode.cloneNode(true);
               }
+              if (_this.carouselIndex > dotIndex) {
+                var previousNode = currentNode.previousSibling.cloneNode(true);
+                swapNodes(previousNode, targetNode);
+                // _this.moveCarousel(-_this.carouselWidth * dotIndex, _this.carouselAnimateSpeed * 2);
+                _this.moveCarousel(_this.getCarouselWrapLeft() + _this.carouselWidth, _this.carouselAnimateSpeed);
+                swapNodes(targetNode, previousNode);
+              }
+
               _this.carouselIndex = dotIndex;
               _this.setDot();
             }
@@ -311,7 +331,7 @@
       var _this = this;
       _this.isCarouselAnimate = true;
       function animateCarousel () {
-        if ((speed > 0 && _this.getCarouselWrapLeft() < target) || 
+        if ((speed > 0 && _this.getCarouselWrapLeft() < target) ||
             (speed < 0 && _this.getCarouselWrapLeft() > target)) {
           _this.setCarouselWrapLeft(_this.getCarouselWrapLeft() + speed);
           window.setTimeout(animateCarousel, _this.carouselAnimateInterval);
