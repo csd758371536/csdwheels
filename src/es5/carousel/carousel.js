@@ -50,6 +50,14 @@
     }
   }
 
+  // 交换DOM位置
+  function swapNodes(a, b) {
+    var aparent = a.parentNode;
+    var asibling = a.nextSibling === b ? a : a.nextSibling;
+    b.parentNode.insertBefore(a, b);
+    aparent.insertBefore(b, asibling);
+  }
+
   // 轮播-构造函数
   var Carousel = function (selector, userOptions) {
     // 初始化轮播
@@ -81,7 +89,7 @@
       // 初始化定时器
       this.carouselTimer = null;
       // 轮播动画总时间
-      this.carouselAnimateTime = 300;
+      this.carouselAnimateTime = 200;
       // 轮播动画间隔
       this.carouselAnimateInterval = 10;
       // 每次位移量 = 总偏移量 / 次数
@@ -218,9 +226,9 @@
               var dotIndex = i + 1;
               // _this.setCarouselWrapLeft(-_this.carouselWidth * dotIndex);
               if (_this.carouselIndex < dotIndex) {
-                _this.moveCarousel(-_this.carouselWidth * dotIndex, -_this.carouselAnimateSpeed * 3);
+                _this.moveCarousel(-_this.carouselWidth * dotIndex, -_this.carouselAnimateSpeed * 2);
               } else {
-                _this.moveCarousel(-_this.carouselWidth * dotIndex, _this.carouselAnimateSpeed * 3);
+                _this.moveCarousel(-_this.carouselWidth * dotIndex, _this.carouselAnimateSpeed * 2);
               }
               _this.carouselIndex = dotIndex;
               _this.setDot();
