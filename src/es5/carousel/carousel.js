@@ -9,6 +9,9 @@
 })(typeof self !== "undefined" ? self : this, function() {
   "use strict";
 
+  // 第一种 js动画
+  // 第二种 css动画 transform .6s ease-in-out  translate3d(0,0,0)
+
   // ID-NAMES
   var ID = {
     CAROUSEL: '#carousel',
@@ -63,7 +66,7 @@
       carouselHeight: 400,
       showArrow: true,
       showDot: true,
-      carouselTime: 2000,
+      carouselTime: 3000,
       carouselMode: 'pc'
     },
     initCarousel: function(selector, userOptions) {
@@ -77,6 +80,14 @@
       this.carouselIndex = 1;
       // 初始化定时器
       this.carouselTimer = null;
+      // 轮播动画总时间
+      this.carouselAnimateTime = 300;
+      // 轮播动画间隔
+      this.carouselAnimateInterval = 10;
+      // 每次位移量 = 总偏移量 / 次数
+      this.carouselAnimateSpeed = this.carouselWidth / (this.carouselAnimateTime / this.carouselAnimateInterval);
+      // 判断是否处于轮播动画状态
+      this.isCarouselAnimate = false;
       // 绑定轮播图事件
       this.bindCarousel();
       // 播放轮播
@@ -202,11 +213,18 @@
       for (var i = 0, len = this.carouselDots.children.length; i < len; i++) {
         (function(i) {
           addEvent(_this.carouselDots.children[i], 'click', function (ev) {
-            // 获取圆点序号
-            var dotIndex = i + 1;
-            _this.setCarouselWrapLeft(-_this.carouselWidth * dotIndex);
-            _this.carouselIndex = dotIndex;
-            _this.setDot();
+            if (!_this.isCarouselAnimate) {
+              // 获取圆点序号
+              var dotIndex = i + 1;
+              // _this.setCarouselWrapLeft(-_this.carouselWidth * dotIndex);
+              if (_this.carouselIndex < dotIndex) {
+                _this.moveCarousel(-_this.carouselWidth * dotIndex, -_this.carouselAnimateSpeed * 3);
+              } else {
+                _this.moveCarousel(-_this.carouselWidth * dotIndex, _this.carouselAnimateSpeed * 3);
+              }
+              _this.carouselIndex = dotIndex;
+              _this.setDot();
+            }
           });
         })(i);
       }
@@ -252,41 +270,68 @@
       return this.getCarouselWrapLeft() === left ? true : false;
     },
     prevCarousel: function () {
-      // 改变轮播序号
-      this.carouselIndex--;
-      if (this.carouselIndex < 1) {
-        this.carouselIndex = this.carouselCount;
-      }
-      // 设置轮播位置
-      this.moveCarousel(this.isFirstCarousel(), this.carouselWidth);
-      if (this.carouselOptions.showDot) {
-        // 显示当前圆点
-        this.setDot();
+      if (!this.isCarouselAnimate) {
+        // 改变轮播序号
+        this.carouselIndex--;
+        if (this.carouselIndex < 1) {
+          this.carouselIndex = this.carouselCount;
+        }
+        // 设置轮播位置
+        // this.moveCarousel(this.isFirstCarousel(), this.carouselWidth);
+        this.moveCarousel(this.getCarouselWrapLeft() + this.carouselWidth, this.carouselAnimateSpeed);
+        if (this.carouselOptions.showDot) {
+          // 显示当前圆点
+          this.setDot();
+        }
       }
     },
     nextCarousel: function () {
-      this.carouselIndex++;
-      if (this.carouselIndex > this.carouselCount) {
-        this.carouselIndex = 1;
-      }
-      this.moveCarousel(this.isLastCarousel(), -this.carouselWidth);
-      if (this.carouselOptions.showDot) {
-        // 显示当前圆点
-        this.setDot();
+      if (!this.isCarouselAnimate) {
+        this.carouselIndex++;
+        if (this.carouselIndex > this.carouselCount) {
+          this.carouselIndex = 1;
+        }
+        // this.moveCarousel(this.isLastCarousel(), -this.carouselWidth);
+        this.moveCarousel(this.getCarouselWrapLeft() - this.carouselWidth,  -this.carouselAnimateSpeed);
+        if (this.carouselOptions.showDot) {
+          // 显示当前圆点
+          this.setDot();
+        }
       }
     },
-    moveCarousel: function (status, carouselWidth) {
-      var left = 0;
-      if (status) {
-        left = -this.carouselIndex * this.carouselWidth;
-      } else {
-        left = this.getCarouselWrapLeft() + carouselWidth;
+    moveCarousel: function (target, speed) {
+      var _this = this;
+      _this.isCarouselAnimate = true;
+      function animateCarousel () {
+        if ((speed > 0 && _this.getCarouselWrapLeft() < target) || 
+            (speed < 0 && _this.getCarouselWrapLeft() > target)) {
+          _this.setCarouselWrapLeft(_this.getCarouselWrapLeft() + speed);
+          window.setTimeout(animateCarousel, _this.carouselAnimateInterval);
+        } else {
+          // 不符合位移条件，把当前left值置为目标值
+          _this.setCarouselWrapLeft(target);
+          //如当前在辅助图上，就归位到真的图上
+          if (target > -_this.carouselWidth ) {
+            _this.setCarouselWrapLeft(-_this.carouselCount * _this.carouselWidth);
+          }
+          if (target < (-_this.carouselWidth * _this.carouselCount)) {
+            _this.setCarouselWrapLeft(-_this.carouselWidth);
+          }
+          _this.isCarouselAnimate = false;
+        }
       }
-      this.setCarouselWrapLeft(left);
+      animateCarousel();
     },
+    // moveCarousel: function (status, carouselWidth) {
+    //   var left = 0;
+    //   if (status) {
+    //     left = -this.carouselIndex * this.carouselWidth;
+    //   } else {
+    //     left = this.getCarouselWrapLeft() + carouselWidth;
+    //   }
+    //   _this.setCarouselWrapLeft(left);
+    // }
     constructor: Carousel
   };
-  // 第一种 js动画
-  // 第二种 css动画 transform .6s ease-in-out  translate3d(0,0,0)
   return Carousel;
 });
