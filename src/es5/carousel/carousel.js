@@ -115,7 +115,7 @@
       // 初始化定时器
       this.carouselTimer = null;
       // 轮播动画总时间
-      this.carouselAnimateTime = 200;
+      this.carouselAnimateTime = 150;
       // 轮播动画间隔
       this.carouselAnimateInterval = 10;
       // 每次位移量 = 总偏移量 / 次数
@@ -360,17 +360,21 @@
     moveCarousel: function (target, speed) {
       var _this = this;
       _this.isCarouselAnimate = true;
+      var timer = null;
       function animateCarousel () {
         if ((speed > 0 && _this.getCarouselWrapLeft() < target) ||
             (speed < 0 && _this.getCarouselWrapLeft() > target)) {
           _this.setCarouselWrapLeft(_this.getCarouselWrapLeft() + speed);
-          window.setTimeout(animateCarousel, _this.carouselAnimateInterval);
+          // window.setTimeout(animateCarousel, _this.carouselAnimateInterval);
+          timer = window.requestAnimationFrame(animateCarousel);
         } else {
+          window.cancelAnimationFrame(timer);
           // 重置轮播状态
           _this.resetCarousel(target, speed);
         }
       }
-      animateCarousel();
+      // animateCarousel();
+      window.requestAnimationFrame(animateCarousel);
     },
     resetCarousel: function (target, speed) {
       // 判断圆点是否点击
