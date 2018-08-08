@@ -11,20 +11,18 @@
 
 <body>
   <div class="main">
-    <div class="carousel-container" id="carousel">
-      <div class="carousel-wrap" id="carouselWrap">
-        <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef3a46c.jpg" alt="1">
-        <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef509c9.jpg" alt="2">
-        <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef51617.jpg" alt="3">
-        <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef530a1.jpg" alt="4">
-        <img class="carousel-image" src="https://i.loli.net/2018/08/04/5b657fef52441.jpg" alt="5">
-      </div>
-    </div>
+    <div class="carousel-container" id="carousel"></div>
   </div>
   <script src="../../src/es5/carousel/carousel.js" charset="utf-8"></script>
   <script type="text/javascript">
-    new Carousel('#carouselWrap', {
-
+    new Carousel('#carousel', {
+      carouselImages: [
+        'https://i.loli.net/2018/08/04/5b657fef3a46c.jpg',
+        'https://i.loli.net/2018/08/04/5b657fef509c9.jpg',
+        'https://i.loli.net/2018/08/04/5b657fef51617.jpg',
+        'https://i.loli.net/2018/08/04/5b657fef530a1.jpg',
+        'https://i.loli.net/2018/08/04/5b657fef52441.jpg'
+      ]
     });
   </script>
 </body>

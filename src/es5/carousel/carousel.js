@@ -14,7 +14,6 @@
 
   // ID-NAMES
   var ID = {
-    CAROUSEL: '#carousel',
     CAROUSEL_WRAP: '#carouselWrap',
     CAROUSEL_DOTS: '#carouselDots',
     ARROW_LEFT: '#arrowLeft',
@@ -22,6 +21,7 @@
   };
 
   var CLASS = {
+    CAROUSEL_WRAP: 'carousel-wrap',
     CAROUSEL_IMG: 'carousel-image',
     CAROUSEL_DOTS_WRAP: 'carousel-buttons-wrap',
     CAROUSEL_DOTS: 'carousel-buttons',
@@ -60,12 +60,30 @@
 
   // 轮播-构造函数
   var Carousel = function (selector, userOptions) {
-    // 初始化轮播
-    this.initCarousel(selector, userOptions)
-    // 初始化圆点
-    this.initDots();
-    // 初识化箭头
-    this.initArrows();
+    var _this = this;
+    // 合并配置
+    extend(this.carouselOptions, userOptions, true);
+    // 获取轮播元素
+    _this.carousel = document.querySelector(selector);
+    // 初始化轮播列表
+    _this.carousel.appendChild(_this.getImgs());
+    // 获取轮播列表
+    _this.carouselWrap = document.querySelector(ID.CAROUSEL_WRAP);
+    // 每隔 50ms 检测一次轮播是否加载完成
+    var checkInterval = 50;
+    var checkTimer = setInterval(function () {
+      // 检测轮播是否加载完成
+      if (_this.isCarouselComplete()) {
+        // 加载完成后清除定时器
+        clearInterval(checkTimer);
+        // 初始化轮播
+        _this.initCarousel();
+        // 初始化圆点
+        _this.initDots();
+        // 初识化箭头
+        _this.initArrows();
+      }
+    }, checkInterval);
   };
   // 轮播-原型对象
   Carousel.prototype = {
@@ -77,11 +95,19 @@
       carouselTime: 3000,
       carouselMode: 'pc'
     },
+    isCarouselComplete: function () {
+      // 检测页面图片是否加载完成
+      var completeCount = 0;
+      for (var i = 0; i < this.carouselWrap.children.length; i++) {
+        if (this.carouselWrap.children[i].complete) {
+          completeCount++;
+        }
+      }
+      return completeCount === this.carouselWrap.children.length ? true : false;
+    },
     initCarousel: function(selector, userOptions) {
-      // 合并配置
-      extend(this.carouselOptions, userOptions, true);
-      // 获取轮播属性
-      this.getCarousel();
+      // 获取轮播数量
+      this.carouselCount = this.carouselWrap.children.length;
       // 设置轮播
       this.setCarousel();
       // 初始化轮播序号
@@ -103,31 +129,24 @@
       // 播放轮播
       this.playCarousel();
     },
-    getCarousel: function () {
-      // 获取轮播元素
-      this.carousel = document.querySelector(ID.CAROUSEL);
-      this.carouselWrap = document.querySelector(ID.CAROUSEL_WRAP);
-      // 获取轮播数量
-      this.carouselCount = this.carouselWrap.children.length;
-      // 初始化图片
-      // this.carousel.appendChild(this.getImgs());
-    },
     setCarousel: function () {
-      var first = this.carouselWrap.children[0].cloneNode(true);
-      var last = this.carouselWrap.children[this.carouselCount - 1].cloneNode(true);
+      var _this = this;
+      // 复制首尾节点
+      var first = _this.carouselWrap.children[0].cloneNode(true);
+      var last = _this.carouselWrap.children[_this.carouselCount - 1].cloneNode(true);
       // 添加过渡元素
-      this.carouselWrap.insertBefore(last, this.carouselWrap.children[0]);
-      this.carouselWrap.appendChild(first);
+      _this.carouselWrap.insertBefore(last, _this.carouselWrap.children[0]);
+      _this.carouselWrap.appendChild(first);
       // 设置轮播宽度
-      this.setCarouselWidth(this.carouselOptions.carouselWidth);
+      _this.setCarouselWidth(_this.carouselOptions.carouselWidth);
       // 设置轮播高度
-      this.setCarouselHeight(this.carouselOptions.carouselHeight);
+      _this.setCarouselHeight(_this.carouselOptions.carouselHeight);
       // 获取轮播宽度
-      this.carouselWidth = this.getCarouselWidth();
+      _this.carouselWidth = _this.getCarouselWidth();
       // 设置初始位置
-      this.setCarouselWrapLeft(-this.carouselWidth);
+      _this.setCarouselWrapLeft(-_this.carouselWidth);
       // 设置轮播长度
-      this.setCarouselWrapWidth(this.carouselWidth * this.carouselWrap.children.length);
+      _this.setCarouselWrapWidth(_this.carouselWidth * _this.carouselWrap.children.length);
     },
     setCarouselWidth: function (widthValue) {
       this.carousel.style.width = widthValue + 'px';
@@ -151,26 +170,30 @@
       return parseInt(this.carouselWrap.style.width);
     },
     getImgs: function () {
+      var carouselWrapEle = document.createElement("div");
+      carouselWrapEle.setAttribute("class", CLASS.CAROUSEL_WRAP);
+      carouselWrapEle.setAttribute('id', ID.CAROUSEL_WRAP.substring(1, ID.CAROUSEL_WRAP.length));
       var fragment = document.createDocumentFragment();
       var imgEle = document.createElement("img");
       this.carouselOptions.carouselImages.forEach(function(carouselImage, index) {
         imgEle = imgEle.cloneNode(false);
         imgEle.setAttribute("class", CLASS.CAROUSEL_IMG);
         imgEle.setAttribute("src", carouselImage);
-        imgEle.setAttribute("alt", index);
+        imgEle.setAttribute("alt", index + 1);
         fragment.appendChild(imgEle);
       });
-      return fragment;
+      carouselWrapEle.appendChild(fragment);
+      return carouselWrapEle;
     },
     initArrows: function () {
       if (this.carouselOptions.showArrow) {
-          // 初始化箭头
-          this.carousel.appendChild(this.getArrows());
-          // 获取箭头
-          this.arrowLeft = document.querySelector(ID.ARROW_LEFT);
-          this.arrowRight = document.querySelector(ID.ARROW_RIGHT);
-          // 绑定箭头事件
-          this.bindArrows();
+        // 初始化箭头
+        this.carousel.appendChild(this.getArrows());
+        // 获取箭头
+        this.arrowLeft = document.querySelector(ID.ARROW_LEFT);
+        this.arrowRight = document.querySelector(ID.ARROW_RIGHT);
+        // 绑定箭头事件
+        this.bindArrows();
       }
     },
     getArrows: function () {
