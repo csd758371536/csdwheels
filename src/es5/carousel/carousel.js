@@ -96,6 +96,8 @@
       this.carouselAnimateSpeed = this.carouselWidth / (this.carouselAnimateTime / this.carouselAnimateInterval);
       // 判断是否处于轮播动画状态
       this.isCarouselAnimate = false;
+      // 判断圆点是否点击
+      this.isDotClick = false;
       // 绑定轮播图事件
       this.bindCarousel();
       // 播放轮播
@@ -222,39 +224,44 @@
         (function(i) {
           addEvent(_this.carouselDots.children[i], 'click', function (ev) {
             if (!_this.isCarouselAnimate) {
-              // 获取圆点序号
-              var dotIndex = i + 1;
+              // 改变圆点点击状态
+              _this.isDotClick = true;
+              // 获取点击的圆点序号
+              _this.dotIndex = i + 1;
+              // 改变圆点位置
+              _this.moveDot();
               // _this.setCarouselWrapLeft(-_this.carouselWidth * dotIndex);
-
-              var index = _this.carouselIndex === 1 ? _this.carouselIndex : _this.carouselIndex - 1;
-              var currentNode = _this.carouselWrap.children[index];
-              // var currentIndex = index;
-              var targetNode = _this.carouselWrap.children[i + 1];
-              if (_this.carouselIndex < dotIndex) {
-                // var nextNode = currentNode.nextSibling.cloneNode(true);
-                // 当目标元素在当前元素右边  1 2 3 4 5   1 5 3 4 2
-                swapNodes(currentNode.previousSibling, targetNode);
-                // currentNode.nextSibling = targetNode.cloneNode(true);
-                _this.moveCarousel(_this.getCarouselWrapLeft() - _this.carouselWidth, -_this.carouselAnimateSpeed);
-                if (!_this.isCarouselAnimate) {
-                  swapNodes(_this.carouselWrap.children[index].previousSibling, targetNode);
-                }
-                _this.setCarouselWrapLeft(-dotIndex * _this.carouselWidth);
-                // _this.carouselWrap.children(currentIndex - 1).nextSibling = targetNode.cloneNode(true);
-              }
-              if (_this.carouselIndex > dotIndex) {
-                var previousNode = currentNode.previousSibling.cloneNode(true);
-                swapNodes(previousNode, targetNode);
-                // _this.moveCarousel(-_this.carouselWidth * dotIndex, _this.carouselAnimateSpeed * 2);
-                _this.moveCarousel(_this.getCarouselWrapLeft() + _this.carouselWidth, _this.carouselAnimateSpeed);
-                swapNodes(targetNode, previousNode);
-              }
-
-              _this.carouselIndex = dotIndex;
-              _this.setDot();
+              // _this.carouselIndex = _this.dotIndex;
+              // _this.setDot();
             }
           });
         })(i);
+      }
+    },
+    moveDot: function () {
+      this.changeCarousel();
+      this.carouselIndex = this.dotIndex;
+      this.setDot();
+    },
+    changeCarousel: function () {
+      // 保存当前节点位置
+      this.currentNode = this.carouselWrap.children[this.carouselIndex];
+      // 获取目标节点位置
+      var targetNode = this.carouselWrap.children[this.dotIndex];
+      // 判断点击圆点与当前的相对位置
+      if (this.carouselIndex < this.dotIndex) {
+        // 在当前元素右边插入目标节点
+        var nextNode = this.currentNode.nextElementSibling;
+        this.carouselWrap.insertBefore(targetNode.cloneNode(true), nextNode);
+        this.moveCarousel(this.getCarouselWrapLeft() - this.carouselWidth, -this.carouselAnimateSpeed);
+      }
+      if (this.carouselIndex > this.dotIndex) {
+        // _this.moveCarousel(-_this.carouselWidth * dotIndex, _this.carouselAnimateSpeed * 2);
+        // 在当前元素左边插入目标节点
+        this.carouselWrap.insertBefore(targetNode.cloneNode(true), this.currentNode);
+        // 因为向左边插入节点后，当前元素的位置被改变，导致画面有抖动现象，这里重置为新的位置
+        this.setCarouselWrapLeft(-(this.carouselIndex + 1) * this.carouselWidth);
+        this.moveCarousel(this.getCarouselWrapLeft() + this.carouselWidth, this.carouselAnimateSpeed);
       }
     },
     setDot: function () {
@@ -336,19 +343,44 @@
           _this.setCarouselWrapLeft(_this.getCarouselWrapLeft() + speed);
           window.setTimeout(animateCarousel, _this.carouselAnimateInterval);
         } else {
-          // 不符合位移条件，把当前left值置为目标值
-          _this.setCarouselWrapLeft(target);
-          //如当前在辅助图上，就归位到真的图上
-          if (target > -_this.carouselWidth ) {
-            _this.setCarouselWrapLeft(-_this.carouselCount * _this.carouselWidth);
-          }
-          if (target < (-_this.carouselWidth * _this.carouselCount)) {
-            _this.setCarouselWrapLeft(-_this.carouselWidth);
-          }
-          _this.isCarouselAnimate = false;
+          // 重置轮播状态
+          _this.resetCarousel(target, speed);
         }
       }
       animateCarousel();
+    },
+    resetCarousel: function (target, speed) {
+      // 判断圆点是否点击
+      if (this.isDotClick) {
+        // 重置圆点点击后的状态
+        this.resetMoveDot(speed);
+      } else {
+        // 重置箭头或者自动轮播后的状态
+        this.resetMoveCarousel(target);
+      }
+      this.isDotClick = false;
+      this.isCarouselAnimate = false;
+    },
+    resetMoveDot: function (speed) {
+      // 如果是圆点点击触发动画，需要删除新增的过度节点并将轮播位置重置到实际位置
+      this.setCarouselWrapLeft(-this.dotIndex * this.carouselWidth);
+      // 判断点击圆点和当前圆点的相对位置
+      if (speed < 0) {
+        this.carouselWrap.removeChild(this.currentNode.nextElementSibling);
+      } else {
+        this.carouselWrap.removeChild(this.currentNode.previousElementSibling);
+      }
+    },
+    resetMoveCarousel: function (target) {
+      // 不符合位移条件，把当前left值置为目标值
+      this.setCarouselWrapLeft(target);
+      //如当前在辅助图上，就归位到真的图上
+      if (target > -this.carouselWidth ) {
+        this.setCarouselWrapLeft(-this.carouselCount * this.carouselWidth);
+      }
+      if (target < (-this.carouselWidth * this.carouselCount)) {
+        this.setCarouselWrapLeft(-this.carouselWidth);
+      }
     },
     // moveCarousel: function (status, carouselWidth) {
     //   var left = 0;
