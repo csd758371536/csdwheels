@@ -9,8 +9,10 @@
 })(typeof self !== "undefined" ? self : this, function() {
   "use strict";
 
-  // 第一种 js动画
+  // 第一种实现 js动画 用settimeout+left or requestAnimationFrame+transform
   // 第二种 css动画 transform .6s ease-in-out  translate3d(0,0,0)
+
+  // 实现移动端轮播，响应式，支持手势滑动
 
   // ID-NAMES
   var ID = {
@@ -41,6 +43,33 @@
       element["on" + type] = handler;
     }
   }
+
+  // requestAnimationFrame兼容到IE6
+  (function() {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || // Webkit中此取消方法的名字变了
+            window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
+    if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
+            var id = window.setTimeout(function() {
+                callback(currTime + timeToCall);
+            }, timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+    }
+    if (!window.cancelAnimationFrame) {
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+    }
+  }());
 
   // 合并对象
   function extend(o, n, override) {
@@ -246,11 +275,11 @@
       for (var i = 0, len = this.carouselDots.children.length; i < len; i++) {
         (function(i) {
           addEvent(_this.carouselDots.children[i], 'click', function (ev) {
-            if (!_this.isCarouselAnimate) {
+            // 获取点击的圆点序号
+            _this.dotIndex = i + 1;
+            if (!_this.isCarouselAnimate && _this.carouselIndex !== _this.dotIndex) {
               // 改变圆点点击状态
               _this.isDotClick = true;
-              // 获取点击的圆点序号
-              _this.dotIndex = i + 1;
               // 改变圆点位置
               _this.moveDot();
               // _this.setCarouselWrapLeft(-_this.carouselWidth * dotIndex);
@@ -360,7 +389,6 @@
     moveCarousel: function (target, speed) {
       var _this = this;
       _this.isCarouselAnimate = true;
-      var timer = null;
       function animateCarousel () {
         if ((speed > 0 && _this.getCarouselWrapLeft() < target) ||
             (speed < 0 && _this.getCarouselWrapLeft() > target)) {
@@ -374,7 +402,7 @@
         }
       }
       // animateCarousel();
-      window.requestAnimationFrame(animateCarousel);
+      var timer = window.requestAnimationFrame(animateCarousel);
     },
     resetCarousel: function (target, speed) {
       // 判断圆点是否点击
