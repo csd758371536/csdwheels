@@ -1,5 +1,8 @@
 .main {
-  padding-top: 300px;
+  position: absolute;
+  transform: translateX(-50%) translateY(-50%);
+  top: 50%;
+  left: 50%;
   .carousel-container {
     margin: 0 auto;
   }
