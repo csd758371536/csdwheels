@@ -16,10 +16,18 @@ gulp.task('page', gulp.parallel(() => {
 gulp.task('carousel', gulp.parallel(() => {
   return gulp.src('src/es5/carousel/carousel.js')
   .pipe(uglify())    //uglify
-  .pipe(rename("carousel.min.js"))
+  .pipe(rename('carousel.min.js'))
+  .pipe(gulp.dest('dist/carousel'))
+}, () => {
+  return gulp.src('src/es5/carousel/carousel-mobile.js')
+  .pipe(uglify())    //uglify
+  .pipe(rename('carousel-mobile.min.js'))
   .pipe(gulp.dest('dist/carousel'))
 }, () => {
   return gulp.src('style/carousel/carousel.min.css')
+  .pipe(gulp.dest('dist/carousel'))
+}, () => {
+  return gulp.src('style/carousel/carousel-mobile.min.css')
   .pipe(gulp.dest('dist/carousel'))
 }));
 

@@ -12,6 +12,7 @@
   // 第一种实现 js动画 用settimeout+left or requestAnimationFrame+transform
   // 第二种 css动画 transform .6s ease-in-out  translate3d(0,0,0)
 
+  // 参考vue-swiper   transform + transition-duration
   // 实现移动端轮播，响应式，支持手势滑动
 
   // ID-NAMES
@@ -121,8 +122,7 @@
       carouselHeight: 400,
       showArrow: true,
       showDot: true,
-      carouselTime: 3000,
-      carouselMode: 'pc'
+      carouselTime: 3000
     },
     isCarouselComplete: function () {
       // 检测页面图片是否加载完成
@@ -396,6 +396,7 @@
           // window.setTimeout(animateCarousel, _this.carouselAnimateInterval);
           timer = window.requestAnimationFrame(animateCarousel);
         } else {
+          // window.clearTimeout(timer);
           window.cancelAnimationFrame(timer);
           // 重置轮播状态
           _this.resetCarousel(target, speed);
