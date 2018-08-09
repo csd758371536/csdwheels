@@ -121,20 +121,20 @@
       // 获取轮播宽度
       _this.carouselWidth = _this.getCarouselWidth();
       // 设置初始位置
-      _this.setCarouselWrapLeft(-_this.carouselWidth);
+      _this.setTransform(_this.carouselWrap, -_this.carouselWidth);
     },
     getCarouselWidth: function() {
       return parseInt(this.carousel.offsetWidth);
     },
-    setCarouselWrapLeft: function(leftValue) {
-      this.carouselWrap.style.transform =
-        "translate3d(" + leftValue + "px, 0px, 0px)";
-      this.carouselWrap.style["-webkit-transform"] =
-        "translate3d(" + leftValue + "px, 0px, 0px)";
-      this.carouselWrap.style["-ms-transform"] =
-        "translate3d(" + leftValue + "px, 0px, 0px)";
+    setTransform: function(elem ,value) {
+      elem.style.transform =
+        "translate3d(" + value + "px, 0px, 0px)";
+      elem.style["-webkit-transform"] =
+        "translate3d(" + value + "px, 0px, 0px)";
+      elem.style["-ms-transform"] =
+        "translate3d(" + value + "px, 0px, 0px)";
     },
-    getCarouselWrapLeft: function() {
+    getTransform: function() {
       var x =
         this.carouselWrap.style.transform ||
         this.carouselWrap.style["-webkit-transform"] ||
@@ -142,12 +142,6 @@
       x = x.substring(12);
       x = x.match(/(\S*)px/)[1];
       return Number(x);
-    },
-    setCarouselWrapWidth: function(widthValue) {
-      this.carouselWrap.style.width = widthValue + "%";
-    },
-    getCarouselWrapWidth: function() {
-      return parseInt(this.carouselWrap.style.width);
     },
     getImgs: function() {
       var carouselWrapEle = document.createElement("div");
@@ -183,7 +177,7 @@
       addEvent(this.carousel, "touchstart", function(e) {
         if (!_this.isCarouselAnimate) {
           clearInterval(_this.carouselTimer);
-          _this.t.sx = _this.getCarouselWrapLeft();
+          _this.t.sx = _this.getTransform();
           _this.t.s = e.changedTouches[e.changedTouches.length - 1].clientX;
         }
       });
@@ -192,14 +186,14 @@
           clearInterval(_this.carouselTimer);
           _this.t.m =
             e.changedTouches[e.changedTouches.length - 1].clientX - _this.t.s;
-          _this.setCarouselWrapLeft(_this.t.m + _this.t.sx);
+          _this.setTransform(_this.carouselWrap, _this.t.m + _this.t.sx);
         }
       });
       addEvent(this.carousel, "touchend", function(e) {
         if (!_this.isCarouselAnimate && _this.t.s != -1) {
           clearInterval(_this.carouselTimer);
-          _this.setCarouselWrapLeft(_this.t.m + _this.t.sx);
-          var x = _this.getCarouselWrapLeft();
+          _this.setTransform(_this.carouselWrap, _this.t.m + _this.t.sx);
+          var x = _this.getTransform();
           x +=
             _this.t.m > 0
               ? _this.carouselWidth * 0.3
@@ -218,27 +212,6 @@
         }
       });
     },
-    isFirstCarousel: function() {
-      var left = 0;
-      return this.getCarouselWrapLeft() === left ? true : false;
-    },
-    isLastCarousel: function() {
-      var left = this.carouselWidth - this.getCarouselWrapWidth();
-      return this.getCarouselWrapLeft() === left ? true : false;
-    },
-    prevCarousel: function() {
-      if (!this.isCarouselAnimate) {
-        // 改变轮播序号
-        this.carouselIndex--;
-        if (this.carouselIndex < 1) {
-          this.carouselIndex = this.carouselCount;
-        }
-        // 设置轮播位置
-        this.moveCarousel(
-          this.getCarouselWrapLeft() + this.carouselWidth
-        );
-      }
-    },
     nextCarousel: function() {
       if (!this.isCarouselAnimate) {
         this.carouselIndex++;
@@ -246,7 +219,7 @@
           this.carouselIndex = 1;
         }
         this.moveCarousel(
-          this.getCarouselWrapLeft() - this.carouselWidth
+          this.getTransform() - this.carouselWidth
         );
       }
     },
@@ -254,7 +227,7 @@
       var _this = this;
       _this.isCarouselAnimate = true;
       this.carouselWrap.style.transition = "350ms";
-      _this.setCarouselWrapLeft(target);
+      _this.setTransform(_this.carouselWrap, target);
       _this.resetCarousel(target);
     },
     resetCarousel: function(target) {
@@ -268,13 +241,13 @@
     resetMoveCarousel: function(target) {
       this.carouselWrap.style.transition = "0s";
       // 不符合位移条件，把当前left值置为目标值
-      this.setCarouselWrapLeft(target);
+      this.setTransform(this.carouselWrap, target);
       //如当前在辅助图上，就归位到真的图上
       if (target > -this.carouselWidth) {
-        this.setCarouselWrapLeft(-this.carouselCount * this.carouselWidth);
+        this.setTransform(this.carouselWrap, -this.carouselCount * this.carouselWidth);
       }
       if (target < -this.carouselWidth * this.carouselCount) {
-        this.setCarouselWrapLeft(-this.carouselWidth);
+        this.setTransform(this.carouselWrap, -this.carouselWidth);
       }
     },
     constructor: CarouselMobile
