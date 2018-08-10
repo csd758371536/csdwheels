@@ -118,11 +118,16 @@
   // 轮播-原型对象
   Carousel.prototype = {
     carouselOptions: {
-      carouselWidth: 600,
-      carouselHeight: 400,
-      showArrow: true,
-      showDot: true,
-      carouselTime: 3000
+      // 是否显示轮播箭头
+      showCarouselArrow: true,
+      // 是否显示轮播圆点
+      showCarouselDot: true,
+      // 轮播自动播放间隔
+      carouselInterval: 3000,
+      // 轮播动画总时间
+      carouselAnimateTime: 150,
+      // 轮播动画间隔
+      carouselAnimateInterval: 10
     },
     isCarouselComplete: function () {
       // 检测页面图片是否加载完成
@@ -142,13 +147,9 @@
       // 初始化轮播序号
       this.carouselIndex = 1;
       // 初始化定时器
-      this.carouselTimer = null;
-      // 轮播动画总时间
-      this.carouselAnimateTime = 150;
-      // 轮播动画间隔
-      this.carouselAnimateInterval = 10;
+      this.carouselIntervalr = null;
       // 每次位移量 = 总偏移量 / 次数
-      this.carouselAnimateSpeed = this.carouselWidth / (this.carouselAnimateTime / this.carouselAnimateInterval);
+      this.carouselAnimateSpeed = this.carouselWidth / (this.carouselOptions.carouselAnimateTime / this.carouselOptions.carouselAnimateInterval);
       // 判断是否处于轮播动画状态
       this.isCarouselAnimate = false;
       // 判断圆点是否点击
@@ -159,46 +160,40 @@
       this.playCarousel();
     },
     setCarousel: function () {
-      var _this = this;
       // 复制首尾节点
-      var first = _this.carouselWrap.children[0].cloneNode(true);
-      var last = _this.carouselWrap.children[_this.carouselCount - 1].cloneNode(true);
+      var first = this.carouselWrap.children[0].cloneNode(true);
+      var last = this.carouselWrap.children[this.carouselCount - 1].cloneNode(true);
       // 添加过渡元素
-      _this.carouselWrap.insertBefore(last, _this.carouselWrap.children[0]);
-      _this.carouselWrap.appendChild(first);
+      this.carouselWrap.insertBefore(last, this.carouselWrap.children[0]);
+      this.carouselWrap.appendChild(first);
       // 设置轮播宽度
-      _this.setCarouselWidth(_this.carouselOptions.carouselWidth);
+      this.setWidth(this.carousel, this.carouselOptions.carouselWidth);
       // 设置轮播高度
-      _this.setCarouselHeight(_this.carouselOptions.carouselHeight);
+      this.setHeight(this.carousel, this.carouselOptions.carouselHeight);
       // 获取轮播宽度
-      _this.carouselWidth = _this.getCarouselWidth();
+      this.carouselWidth = this.getWidth(this.carousel);
       // 设置初始位置
-      _this.setCarouselWrapLeft(-_this.carouselWidth);
+      this.setLeft(this.carouselWrap, -this.carouselWidth);
       // 设置轮播长度
-      _this.setCarouselWrapWidth(_this.carouselWidth * _this.carouselWrap.children.length);
+      this.setWidth(this.carouselWrap, this.carouselWidth * this.carouselWrap.children.length);
     },
-    setCarouselWidth: function (widthValue) {
-      this.carousel.style.width = widthValue + 'px';
+    setWidth: function (elem, value) {
+      elem.style.width = value + 'px';
     },
-    setCarouselHeight: function (heightValue) {
-      this.carousel.style.height = heightValue + 'px';
+    setHeight: function (elem, value) {
+      elem.style.height = value + 'px';
     },
-    getCarouselWidth: function () {
-      return parseInt(this.carousel.style.width);
+    getWidth: function (elem) {
+      return parseInt(elem.style.width);
     },
-    setCarouselWrapLeft: function (leftValue) {
-      this.carouselWrap.style.left = leftValue + 'px';
+    setLeft: function (elem, value) {
+      elem.style.left = value + 'px';
     },
-    getCarouselWrapLeft: function () {
-      return parseInt(this.carouselWrap.style.left);
-    },
-    setCarouselWrapWidth: function (widthValue) {
-      this.carouselWrap.style.width = widthValue + 'px';
-    },
-    getCarouselWrapWidth: function () {
-      return parseInt(this.carouselWrap.style.width);
+    getLeft: function (elem) {
+      return parseInt(elem.style.left);
     },
     getImgs: function () {
+      // 生成轮播图片DOM
       var carouselWrapEle = document.createElement("div");
       carouselWrapEle.setAttribute("class", CLASS.CAROUSEL_WRAP);
       carouselWrapEle.setAttribute('id', ID.CAROUSEL_WRAP.substring(1, ID.CAROUSEL_WRAP.length));
@@ -215,7 +210,7 @@
       return carouselWrapEle;
     },
     initArrows: function () {
-      if (this.carouselOptions.showArrow) {
+      if (this.carouselOptions.showCarouselArrow) {
         // 初始化箭头
         this.carousel.appendChild(this.getArrows());
         // 获取箭头
@@ -226,6 +221,7 @@
       }
     },
     getArrows: function () {
+      // 生成轮播箭头DOM
       var fragment = document.createDocumentFragment();
       var arrowLeftEle = document.createElement("a");
       var arrowRightEle = document.createElement("a");
@@ -242,7 +238,7 @@
       return fragment;
     },
     initDots: function () {
-      if (this.carouselOptions.showDot) {
+      if (this.carouselOptions.showCarouselDot) {
         // 初始化圆点DOM
         this.carousel.appendChild(this.getDots());
         // 获取圆点
@@ -254,6 +250,7 @@
       }
     },
     getDots: function () {
+      // 生成轮播圆点DOM
       var dotsWrap = document.createElement('div');
       dotsWrap.setAttribute('class', CLASS.CAROUSEL_DOTS_WRAP);
       var dots = document.createElement('div');
@@ -282,7 +279,7 @@
               _this.isDotClick = true;
               // 改变圆点位置
               _this.moveDot();
-              // _this.setCarouselWrapLeft(-_this.carouselWidth * dotIndex);
+              // _this.setLeft(_this.carouselWrap, -_this.carouselWidth * dotIndex);
               // _this.carouselIndex = _this.dotIndex;
               // _this.setDot();
             }
@@ -291,8 +288,11 @@
       }
     },
     moveDot: function () {
+      // 改变轮播DOM，增加过渡效果
       this.changeCarousel();
+      // 改变当前轮播序号
       this.carouselIndex = this.dotIndex;
+      // 重设当前圆点样式
       this.setDot();
     },
     changeCarousel: function () {
@@ -305,15 +305,15 @@
         // 在当前元素右边插入目标节点
         var nextNode = this.currentNode.nextElementSibling;
         this.carouselWrap.insertBefore(targetNode.cloneNode(true), nextNode);
-        this.moveCarousel(this.getCarouselWrapLeft() - this.carouselWidth, -this.carouselAnimateSpeed);
+        this.moveCarousel(this.getLeft(this.carouselWrap) - this.carouselWidth, -this.carouselAnimateSpeed);
       }
       if (this.carouselIndex > this.dotIndex) {
         // _this.moveCarousel(-_this.carouselWidth * dotIndex, _this.carouselAnimateSpeed * 2);
         // 在当前元素左边插入目标节点
         this.carouselWrap.insertBefore(targetNode.cloneNode(true), this.currentNode);
         // 因为向左边插入节点后，当前元素的位置被改变，导致画面有抖动现象，这里重置为新的位置
-        this.setCarouselWrapLeft(-(this.carouselIndex + 1) * this.carouselWidth);
-        this.moveCarousel(this.getCarouselWrapLeft() + this.carouselWidth, this.carouselAnimateSpeed);
+        this.setLeft(this.carouselWrap, -(this.carouselIndex + 1) * this.carouselWidth);
+        this.moveCarousel(this.getLeft(this.carouselWrap) + this.carouselWidth, this.carouselAnimateSpeed);
       }
     },
     setDot: function () {
@@ -324,15 +324,15 @@
     },
     playCarousel: function () {
       var _this = this;
-      this.carouselTimer = window.setInterval(function() {
+      this.carouselIntervalr = window.setInterval(function() {
         _this.nextCarousel();
-      }, this.carouselOptions.carouselTime);
+      }, this.carouselOptions.carouselInterval);
     },
     bindCarousel: function () {
       var _this = this;
       // 鼠标移入移出事件
       addEvent(this.carousel, 'mouseenter', function(e) {
-        clearInterval(_this.carouselTimer);
+        clearInterval(_this.carouselIntervalr);
       });
       addEvent(this.carousel, 'mouseleave', function(e) {
         _this.playCarousel();
@@ -350,11 +350,11 @@
     },
     isFirstCarousel: function () {
       var left = 0;
-      return this.getCarouselWrapLeft() === left ? true : false;
+      return this.getLeft(this.carouselWrap) === left ? true : false;
     },
     isLastCarousel: function () {
-      var left = this.carouselWidth - this.getCarouselWrapWidth();
-      return this.getCarouselWrapLeft() === left ? true : false;
+      var left = this.carouselWidth - this.getWidth(this.carouselWrap);
+      return this.getLeft(this.carouselWrap) === left ? true : false;
     },
     prevCarousel: function () {
       if (!this.isCarouselAnimate) {
@@ -365,8 +365,8 @@
         }
         // 设置轮播位置
         // this.moveCarousel(this.isFirstCarousel(), this.carouselWidth);
-        this.moveCarousel(this.getCarouselWrapLeft() + this.carouselWidth, this.carouselAnimateSpeed);
-        if (this.carouselOptions.showDot) {
+        this.moveCarousel(this.getLeft(this.carouselWrap) + this.carouselWidth, this.carouselAnimateSpeed);
+        if (this.carouselOptions.showCarouselDot) {
           // 显示当前圆点
           this.setDot();
         }
@@ -379,8 +379,8 @@
           this.carouselIndex = 1;
         }
         // this.moveCarousel(this.isLastCarousel(), -this.carouselWidth);
-        this.moveCarousel(this.getCarouselWrapLeft() - this.carouselWidth,  -this.carouselAnimateSpeed);
-        if (this.carouselOptions.showDot) {
+        this.moveCarousel(this.getLeft(this.carouselWrap) - this.carouselWidth,  -this.carouselAnimateSpeed);
+        if (this.carouselOptions.showCarouselDot) {
           // 显示当前圆点
           this.setDot();
         }
@@ -390,10 +390,10 @@
       var _this = this;
       _this.isCarouselAnimate = true;
       function animateCarousel () {
-        if ((speed > 0 && _this.getCarouselWrapLeft() < target) ||
-            (speed < 0 && _this.getCarouselWrapLeft() > target)) {
-          _this.setCarouselWrapLeft(_this.getCarouselWrapLeft() + speed);
-          // window.setTimeout(animateCarousel, _this.carouselAnimateInterval);
+        if ((speed > 0 && _this.getLeft(_this.carouselWrap) < target) ||
+            (speed < 0 && _this.getLeft(_this.carouselWrap) > target)) {
+          _this.setLeft(_this.carouselWrap, _this.getLeft(_this.carouselWrap) + speed);
+          // window.setTimeout(animateCarousel, _this.carouselOptions.carouselAnimateInterval);
           timer = window.requestAnimationFrame(animateCarousel);
         } else {
           // window.clearTimeout(timer);
@@ -419,7 +419,7 @@
     },
     resetMoveDot: function (speed) {
       // 如果是圆点点击触发动画，需要删除新增的过度节点并将轮播位置重置到实际位置
-      this.setCarouselWrapLeft(-this.dotIndex * this.carouselWidth);
+      this.setLeft(this.carouselWrap, -this.dotIndex * this.carouselWidth);
       // 判断点击圆点和当前圆点的相对位置
       if (speed < 0) {
         this.carouselWrap.removeChild(this.currentNode.nextElementSibling);
@@ -429,13 +429,13 @@
     },
     resetMoveCarousel: function (target) {
       // 不符合位移条件，把当前left值置为目标值
-      this.setCarouselWrapLeft(target);
+      this.setLeft(this.carouselWrap, target);
       //如当前在辅助图上，就归位到真的图上
       if (target > -this.carouselWidth ) {
-        this.setCarouselWrapLeft(-this.carouselCount * this.carouselWidth);
+        this.setLeft(this.carouselWrap, -this.carouselCount * this.carouselWidth);
       }
       if (target < (-this.carouselWidth * this.carouselCount)) {
-        this.setCarouselWrapLeft(-this.carouselWidth);
+        this.setLeft(this.carouselWrap, -this.carouselWidth);
       }
     },
     // moveCarousel: function (status, carouselWidth) {
@@ -443,9 +443,9 @@
     //   if (status) {
     //     left = -this.carouselIndex * this.carouselWidth;
     //   } else {
-    //     left = this.getCarouselWrapLeft() + carouselWidth;
+    //     left = this.getLeft(this.carouselWrap) + carouselWidth;
     //   }
-    //   _this.setCarouselWrapLeft(left);
+    //   _this.setLeft(this.carouselWrap, left);
     // }
     constructor: Carousel
   };

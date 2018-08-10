@@ -131,6 +131,104 @@ new Pagination(selector, pageOption);
 
 [pagination](https://csdoker.github.io/csdemos/pagination/)
 
+### 轮播（Web）
+
+#### 初始化
+
+```html
+<div class="carousel-container" id="carousel"></div>
+```
+
+```js
+// 轮播元素ID（必填）
+var selector = '#carousel';
+
+// 轮播设置
+var carouselOption = {
+  // 轮播宽度（必填，一般和图片宽度保持一致）
+  carouselWidth: 600,
+  // 轮播高度（必填，一般和图片高度保持一致）
+  carouselHeight: 400,
+  // 轮播图片列表（必填，不填你显示什么。。）
+  carouselImages: [
+    'https://i.loli.net/2018/08/04/5b657fef3a46c.jpg',
+    'https://i.loli.net/2018/08/04/5b657fef509c9.jpg',
+    'https://i.loli.net/2018/08/04/5b657fef51617.jpg',
+    'https://i.loli.net/2018/08/04/5b657fef530a1.jpg',
+    'https://i.loli.net/2018/08/04/5b657fef52441.jpg'
+  ],
+  // 是否显示轮播箭头（选填，默认显示）
+  showCarouselArrow: true,
+  // 是否显示轮播圆点 （选填，默认显示）
+  showCarouselDot: true,
+  // 轮播自动播放间隔（选填，默认3000ms）
+  carouselInterval: 3000,
+  // 轮播动画总时间（选填，默认150ms）
+  carouselAnimateTime: 150,
+  // 轮播动画间隔（选填，默认10ms）
+  carouselAnimateInterval: 10
+  // 通过 轮播宽度 / (轮播动画总时间 / 轮播动画间隔) 这个公式可以计算出每次轮播动画的移动速度
+};
+
+// 初始化轮播
+new Carousel(selector, carouselOption);
+```
+
+#### 使用场景
+
+Web版轮播无自适应，在固定宽度和高度的容器元素中使用即可
+
+#### 效果演示
+
+[carousel](https://csdoker.github.io/csdemos/carousel/pc/)
+
+### 轮播（H5）
+
+#### 初始化
+
+```html
+<head>
+  <!-- 在H5页面的head标签中需要设置viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+</head>
+
+<div class="carousel-container" id="carousel"></div>
+```
+
+```js
+// 轮播元素ID（必填）
+var selector = '#carousel';
+
+// 轮播设置
+var carouselOption = {
+  // 轮播图片列表（必填）
+  carouselImages: [
+    'https://i.loli.net/2018/08/04/5b657fef3a46c.jpg',
+    'https://i.loli.net/2018/08/04/5b657fef509c9.jpg',
+    'https://i.loli.net/2018/08/04/5b657fef51617.jpg',
+    'https://i.loli.net/2018/08/04/5b657fef530a1.jpg',
+    'https://i.loli.net/2018/08/04/5b657fef52441.jpg'
+  ],
+  // 轮播自动播放间隔（选填，默认3000ms）
+  carouselInterval: 3000,
+  // 轮播滑动一次的时间
+  carouselDuration: 300
+};
+
+// 初始化轮播
+new CarouselMobile(selector, carouselOption);
+```
+
+#### 使用场景
+
+> H5版只能在移动端环境使用，不支持PC Web环境，如果想直接在Web下测试效果，可以使用浏览器自带的设备模拟环境查看（比如Chrome下查看方式为：F12 -> Ctrl+Shift+M）
+
+H5版轮播可自动适应屏幕宽度，在固定高宽的容器元素中也可使用。（考虑到用户使用及移动端布局的特点，取消了圆点和箭头，增加了触摸功能）
+
+#### 效果演示
+
+[carousel](https://csdoker.github.io/csdemos/carousel/mobile/)
+
 ## 测试
 
 > npm install

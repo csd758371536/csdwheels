@@ -72,7 +72,10 @@
   // 轮播-原型对象
   CarouselMobile.prototype = {
     carouselOptions: {
-      carouselTime: 3000
+      // 轮播自动播放间隔
+      carouselInterval: 3000,
+      // 轮播滑动一次的时间
+      carouselDuration: 300
     },
     isCarouselComplete: function() {
       // 检测页面图片是否加载完成
@@ -92,16 +95,16 @@
       // 初始化轮播序号
       this.carouselIndex = 1;
       // 初始化定时器
-      this.carouselTimer = null;
-      // 轮播一次滑动的时间
-      this.carouselDuration = 300;
+      this.carouselIntervalr = null;
       // 判断是否处于轮播动画状态
       this.isCarouselAnimate = false;
-      this.t = {
-        sx: 0,
-        s: 0,
-        m: 0,
-        e: 0
+      // 保存轮播触摸状态
+      this.carouselTouch = {
+        startX: 0,
+        start: 0,
+        move: 0,
+        end: 0,
+        offset: 0.3
       };
       // 绑定轮播图事件
       this.bindCarousel();
@@ -125,6 +128,9 @@
     },
     getCarouselWidth: function() {
       return parseInt(this.carousel.offsetWidth);
+    },
+    setTransition: function(elem, value) {
+      elem.style.transition = value + 'ms';
     },
     setTransform: function(elem ,value) {
       elem.style.transform =
@@ -167,37 +173,37 @@
     },
     playCarousel: function() {
       var _this = this;
-      this.carouselTimer = window.setInterval(function() {
+      this.carouselIntervalr = window.setInterval(function() {
         _this.nextCarousel();
-      }, this.carouselOptions.carouselTime);
+      }, this.carouselOptions.carouselInterval);
     },
     bindCarousel: function() {
       var _this = this;
       // 鼠标移入移出事件
       addEvent(this.carousel, "touchstart", function(e) {
         if (!_this.isCarouselAnimate) {
-          clearInterval(_this.carouselTimer);
-          _this.t.sx = _this.getTransform();
-          _this.t.s = e.changedTouches[e.changedTouches.length - 1].clientX;
+          clearInterval(_this.carouselIntervalr);
+          _this.carouselTouch.startX = _this.getTransform();
+          _this.carouselTouch.start = e.changedTouches[e.changedTouches.length - 1].clientX;
         }
       });
       addEvent(this.carousel, "touchmove", function(e) {
-        if (!_this.isCarouselAnimate && _this.t.s != -1) {
-          clearInterval(_this.carouselTimer);
-          _this.t.m =
-            e.changedTouches[e.changedTouches.length - 1].clientX - _this.t.s;
-          _this.setTransform(_this.carouselWrap, _this.t.m + _this.t.sx);
+        if (!_this.isCarouselAnimate && _this.carouselTouch.start != -1) {
+          clearInterval(_this.carouselIntervalr);
+          _this.carouselTouch.move =
+            e.changedTouches[e.changedTouches.length - 1].clientX - _this.carouselTouch.start;
+          _this.setTransform(_this.carouselWrap, _this.carouselTouch.move + _this.carouselTouch.startX);
         }
       });
       addEvent(this.carousel, "touchend", function(e) {
-        if (!_this.isCarouselAnimate && _this.t.s != -1) {
-          clearInterval(_this.carouselTimer);
-          _this.setTransform(_this.carouselWrap, _this.t.m + _this.t.sx);
+        if (!_this.isCarouselAnimate && _this.carouselTouch.start != -1) {
+          clearInterval(_this.carouselIntervalr);
+          _this.setTransform(_this.carouselWrap, _this.carouselTouch.move + _this.carouselTouch.startX);
           var x = _this.getTransform();
           x +=
-            _this.t.m > 0
-              ? _this.carouselWidth * 0.3
-              : _this.carouselWidth * -0.3;
+            _this.carouselTouch.move > 0
+              ? _this.carouselWidth * _this.carouselTouch.offset
+              : _this.carouselWidth * -_this.carouselTouch.offset;
           _this.carouselIndex = Math.round(x / _this.carouselWidth) * -1;
           _this.moveCarousel(
             _this.carouselIndex * -_this.carouselWidth
@@ -224,11 +230,10 @@
       }
     },
     moveCarousel: function(target) {
-      var _this = this;
-      _this.isCarouselAnimate = true;
-      this.carouselWrap.style.transition = "350ms";
-      _this.setTransform(_this.carouselWrap, target);
-      _this.resetCarousel(target);
+      this.isCarouselAnimate = true;
+      this.setTransition(this.carouselWrap, this.carouselOptions.carouselDuration);
+      this.setTransform(this.carouselWrap, target);
+      this.resetCarousel(target);
     },
     resetCarousel: function(target) {
       var _this = this;
@@ -236,10 +241,10 @@
         // 重置箭头或者自动轮播后的状态
         _this.resetMoveCarousel(target);
         _this.isCarouselAnimate = false;
-      }, _this.carouselDuration);
+      }, _this.carouselOptions.carouselDuration);
     },
     resetMoveCarousel: function(target) {
-      this.carouselWrap.style.transition = "0s";
+      this.setTransition(this.carouselWrap, 0);
       // 不符合位移条件，把当前left值置为目标值
       this.setTransform(this.carouselWrap, target);
       //如当前在辅助图上，就归位到真的图上
