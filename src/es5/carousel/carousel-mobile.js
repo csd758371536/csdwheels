@@ -173,6 +173,9 @@
     },
     playCarousel: function() {
       var _this = this;
+      if (this.carouselIntervalr) {
+        clearInterval(this.carouselIntervalr);
+      }
       this.carouselIntervalr = window.setInterval(function() {
         _this.nextCarousel();
       }, this.carouselOptions.carouselInterval);
@@ -214,6 +217,13 @@
           if (_this.carouselIndex < 1) {
             _this.carouselIndex = _this.carouselCount;
           }
+          _this.playCarousel();
+        }
+      });
+      addEvent(document, 'visibilitychange', function(e) {
+        if (document.hidden) {
+          clearInterval(_this.carouselIntervalr);
+        } else {
           _this.playCarousel();
         }
       });
