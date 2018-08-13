@@ -324,6 +324,9 @@
     },
     playCarousel: function () {
       var _this = this;
+      if (this.carouselIntervalr) {
+        clearInterval(this.carouselIntervalr);
+      }
       this.carouselIntervalr = window.setInterval(function() {
         _this.nextCarousel();
       }, this.carouselOptions.carouselInterval);
@@ -336,6 +339,13 @@
       });
       addEvent(this.carousel, 'mouseleave', function(e) {
         _this.playCarousel();
+      });
+      addEvent(document, 'visibilitychange', function(e) {
+        if (document.hidden) {
+          clearInterval(_this.carouselIntervalr);
+        } else {
+          _this.playCarousel();
+        }
       });
     },
     bindArrows: function () {
