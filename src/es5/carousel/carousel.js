@@ -279,9 +279,6 @@
               _this.isDotClick = true;
               // 改变圆点位置
               _this.moveDot();
-              // _this.setLeft(_this.carouselWrap, -_this.carouselWidth * dotIndex);
-              // _this.carouselIndex = _this.dotIndex;
-              // _this.setDot();
             }
           });
         })(i);
@@ -308,7 +305,6 @@
         this.moveCarousel(this.getLeft(this.carouselWrap) - this.carouselWidth, -this.carouselAnimateSpeed);
       }
       if (this.carouselIndex > this.dotIndex) {
-        // _this.moveCarousel(-_this.carouselWidth * dotIndex, _this.carouselAnimateSpeed * 2);
         // 在当前元素左边插入目标节点
         this.carouselWrap.insertBefore(targetNode.cloneNode(true), this.currentNode);
         // 因为向左边插入节点后，当前元素的位置被改变，导致画面有抖动现象，这里重置为新的位置
@@ -374,7 +370,6 @@
           this.carouselIndex = this.carouselCount;
         }
         // 设置轮播位置
-        // this.moveCarousel(this.isFirstCarousel(), this.carouselWidth);
         this.moveCarousel(this.getLeft(this.carouselWrap) + this.carouselWidth, this.carouselAnimateSpeed);
         if (this.carouselOptions.showCarouselDot) {
           // 显示当前圆点
@@ -388,7 +383,6 @@
         if (this.carouselIndex > this.carouselCount) {
           this.carouselIndex = 1;
         }
-        // this.moveCarousel(this.isLastCarousel(), -this.carouselWidth);
         this.moveCarousel(this.getLeft(this.carouselWrap) - this.carouselWidth,  -this.carouselAnimateSpeed);
         if (this.carouselOptions.showCarouselDot) {
           // 显示当前圆点
@@ -403,16 +397,13 @@
         if ((speed > 0 && _this.getLeft(_this.carouselWrap) < target) ||
             (speed < 0 && _this.getLeft(_this.carouselWrap) > target)) {
           _this.setLeft(_this.carouselWrap, _this.getLeft(_this.carouselWrap) + speed);
-          // window.setTimeout(animateCarousel, _this.carouselOptions.carouselAnimateInterval);
           timer = window.requestAnimationFrame(animateCarousel);
         } else {
-          // window.clearTimeout(timer);
           window.cancelAnimationFrame(timer);
           // 重置轮播状态
           _this.resetCarousel(target, speed);
         }
       }
-      // animateCarousel();
       var timer = window.requestAnimationFrame(animateCarousel);
     },
     resetCarousel: function (target, speed) {
@@ -448,15 +439,6 @@
         this.setLeft(this.carouselWrap, -this.carouselWidth);
       }
     },
-    // moveCarousel: function (status, carouselWidth) {
-    //   var left = 0;
-    //   if (status) {
-    //     left = -this.carouselIndex * this.carouselWidth;
-    //   } else {
-    //     left = this.getLeft(this.carouselWrap) + carouselWidth;
-    //   }
-    //   _this.setLeft(this.carouselWrap, left);
-    // }
     constructor: Carousel
   };
   return Carousel;
