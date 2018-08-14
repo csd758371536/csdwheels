@@ -401,7 +401,7 @@ class Carousel {
   moveCarousel(target, speed) {
     this.isCarouselAnimate = true;
     let timer = window.requestAnimationFrame(() => {
-      animateCarousel(target, speed);
+      this.animateCarousel(target, speed);
     });
   }
   animateCarousel(target, speed) {
@@ -411,7 +411,7 @@ class Carousel {
     ) {
       this.setLeft(this.carouselWrap, this.getLeft(this.carouselWrap) + speed);
       timer = window.requestAnimationFrame(() => {
-        animateCarousel(target, speed);
+        this.animateCarousel(target, speed);
       });
     } else {
       window.cancelAnimationFrame(timer);
