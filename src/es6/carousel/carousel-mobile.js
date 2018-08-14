@@ -37,7 +37,7 @@ class CarouselMobile {
     // 初始化轮播列表
     this.carousel.appendChild(this.getImgs());
     // 获取轮播列表
-    this.carouselWrap = document.querySelector(ID.CAROUSEL_WRAP);
+    this.carouselWrap = document.querySelector(CarouselMobile.ID.CAROUSEL_WRAP);
     // 每隔 50ms 检测一次轮播是否加载完成
     let checkInterval = 50;
     let checkTimer = setInterval(() => {
@@ -129,10 +129,10 @@ class CarouselMobile {
 
   getImgs () {
     let carouselWrapEle = document.createElement("div");
-    carouselWrapEle.setAttribute("class", CLASS.CAROUSEL_WRAP);
+    carouselWrapEle.setAttribute("class", CarouselMobile.CLASS.CAROUSEL_WRAP);
     carouselWrapEle.setAttribute(
       "id",
-      ID.CAROUSEL_WRAP.substring(1, ID.CAROUSEL_WRAP.length)
+      CarouselMobile.ID.CAROUSEL_WRAP.substring(1, CarouselMobile.ID.CAROUSEL_WRAP.length)
     );
     let fragment = document.createDocumentFragment();
     let imgEle = document.createElement("img");
@@ -141,7 +141,7 @@ class CarouselMobile {
       index
     ) => {
       imgEle = imgEle.cloneNode(false);
-      imgEle.setAttribute("class", CLASS.CAROUSEL_IMG);
+      imgEle.setAttribute("class", CarouselMobile.CLASS.CAROUSEL_IMG);
       imgEle.setAttribute("src", carouselImage);
       imgEle.setAttribute("alt", index + 1);
       fragment.appendChild(imgEle);

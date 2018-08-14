@@ -83,7 +83,7 @@ class Carousel {
     // 初始化轮播列表
     this.carousel.appendChild(this.getImgs());
     // 获取轮播列表
-    this.carouselWrap = document.querySelector(ID.CAROUSEL_WRAP);
+    this.carouselWrap = document.querySelector(Carousel.ID.CAROUSEL_WRAP);
     // 每隔 50ms 检测一次轮播是否加载完成
     let checkInterval = 50;
     let checkTimer = setInterval(() => {
@@ -176,16 +176,16 @@ class Carousel {
   getImgs() {
     // 生成轮播图片DOM
     let carouselWrapEle = document.createElement("div");
-    carouselWrapEle.setAttribute("class", CLASS.CAROUSEL_WRAP);
+    carouselWrapEle.setAttribute("class", Carousel.CLASS.CAROUSEL_WRAP);
     carouselWrapEle.setAttribute(
       "id",
-      ID.CAROUSEL_WRAP.substring(1, ID.CAROUSEL_WRAP.length)
+      Carousel.ID.CAROUSEL_WRAP.substring(1, Carousel.ID.CAROUSEL_WRAP.length)
     );
     let fragment = document.createDocumentFragment();
     let imgEle = document.createElement("img");
     this.carouselOptions.carouselImages.forEach((carouselImage, index) => {
       imgEle = imgEle.cloneNode(false);
-      imgEle.setAttribute("class", CLASS.CAROUSEL_IMG);
+      imgEle.setAttribute("class", Carousel.CLASS.CAROUSEL_IMG);
       imgEle.setAttribute("src", carouselImage);
       imgEle.setAttribute("alt", index + 1);
       fragment.appendChild(imgEle);
@@ -198,8 +198,8 @@ class Carousel {
       // 初始化箭头
       this.carousel.appendChild(this.getArrows());
       // 获取箭头
-      this.arrowLeft = document.querySelector(ID.ARROW_LEFT);
-      this.arrowRight = document.querySelector(ID.ARROW_RIGHT);
+      this.arrowLeft = document.querySelector(Carousel.ID.ARROW_LEFT);
+      this.arrowRight = document.querySelector(Carousel.ID.ARROW_RIGHT);
       // 绑定箭头事件
       this.bindArrows();
     }
@@ -210,17 +210,17 @@ class Carousel {
     let arrowLeftEle = document.createElement("a");
     let arrowRightEle = document.createElement("a");
     arrowLeftEle.setAttribute("href", "javascript:;");
-    arrowLeftEle.setAttribute("class", CLASS.CAROUSEL_ARROW_LEFT);
+    arrowLeftEle.setAttribute("class", Carousel.CLASS.CAROUSEL_ARROW_LEFT);
     arrowLeftEle.setAttribute(
       "id",
-      ID.ARROW_LEFT.substring(1, ID.ARROW_LEFT.length)
+      Carousel.ID.ARROW_LEFT.substring(1, Carousel.ID.ARROW_LEFT.length)
     );
     arrowLeftEle.innerHTML = "&lt;";
     arrowRightEle.setAttribute("href", "javascript:;");
-    arrowRightEle.setAttribute("class", CLASS.CAROUSEL_ARROW_RIGHT);
+    arrowRightEle.setAttribute("class", Carousel.CLASS.CAROUSEL_ARROW_RIGHT);
     arrowRightEle.setAttribute(
       "id",
-      ID.ARROW_RIGHT.substring(1, ID.ARROW_RIGHT.length)
+      Carousel.ID.ARROW_RIGHT.substring(1, Carousel.ID.ARROW_RIGHT.length)
     );
     arrowRightEle.innerHTML = "&gt;";
     fragment.appendChild(arrowLeftEle);
@@ -232,7 +232,7 @@ class Carousel {
       // 初始化圆点DOM
       this.carousel.appendChild(this.getDots());
       // 获取圆点
-      this.carouselDots = document.querySelector(ID.CAROUSEL_DOTS);
+      this.carouselDots = document.querySelector(Carousel.ID.CAROUSEL_DOTS);
       // 设置圆点位置
       this.setDot();
       // 绑定圆点事件
@@ -242,18 +242,18 @@ class Carousel {
   getDots() {
     // 生成轮播圆点DOM
     let dotsWrap = document.createElement("div");
-    dotsWrap.setAttribute("class", CLASS.CAROUSEL_DOTS_WRAP);
+    dotsWrap.setAttribute("class", Carousel.CLASS.CAROUSEL_DOTS_WRAP);
     let dots = document.createElement("div");
-    dots.setAttribute("class", CLASS.CAROUSEL_DOTS);
+    dots.setAttribute("class", Carousel.CLASS.CAROUSEL_DOTS);
     dots.setAttribute(
       "id",
-      ID.CAROUSEL_DOTS.substring(1, ID.CAROUSEL_DOTS.length)
+      Carousel.ID.CAROUSEL_DOTS.substring(1, Carousel.ID.CAROUSEL_DOTS.length)
     );
     let fragment = document.createDocumentFragment();
     let spanEle = document.createElement("span");
     for (let i = 0, len = this.carouselCount; i < len; i++) {
       spanEle = spanEle.cloneNode(false);
-      spanEle.setAttribute("class", CLASS.CAROUSEL_DOT);
+      spanEle.setAttribute("class", Carousel.CLASS.CAROUSEL_DOT);
       fragment.appendChild(spanEle);
     }
     dots.appendChild(fragment);
@@ -316,11 +316,11 @@ class Carousel {
   }
   setDot() {
     for (let i = 0, len = this.carouselDots.children.length; i < len; i++) {
-      this.carouselDots.children[i].setAttribute("class", CLASS.CAROUSEL_DOT);
+      this.carouselDots.children[i].setAttribute("class", Carousel.CLASS.CAROUSEL_DOT);
     }
     this.carouselDots.children[this.carouselIndex - 1].setAttribute(
       "class",
-      CLASS.CAROUSEL_DOT_ON
+      Carousel.CLASS.CAROUSEL_DOT_ON
     );
   }
   playCarousel() {
