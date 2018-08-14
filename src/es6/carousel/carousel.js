@@ -120,7 +120,9 @@ class Carousel {
     // 初始化轮播序号
     this.carouselIndex = 1;
     // 初始化定时器
-    this.carouselIntervalr = null;
+    this.carouselInterval = null;
+    // 初始化动画
+    this.animateTimer = null;
     // 每次位移量 = 总偏移量 / 次数
     this.carouselAnimateSpeed =
       this.carouselWidth /
@@ -324,24 +326,24 @@ class Carousel {
     );
   }
   playCarousel() {
-    if (this.carouselIntervalr) {
-      clearInterval(this.carouselIntervalr);
+    if (this.carouselInterval) {
+      clearInterval(this.carouselInterval);
     }
-    this.carouselIntervalr = window.setInterval(() => {
+    this.carouselInterval = window.setInterval(() => {
       this.nextCarousel();
     }, this.carouselOptions.carouselInterval);
   }
   bindCarousel() {
     // 鼠标移入移出事件
     addEvent(this.carousel, "mouseenter", e => {
-      clearInterval(this.carouselIntervalr);
+      clearInterval(this.carouselInterval);
     });
     addEvent(this.carousel, "mouseleave", e => {
       this.playCarousel();
     });
     addEvent(document, "visibilitychange", e => {
       if (document.hidden) {
-        clearInterval(this.carouselIntervalr);
+        clearInterval(this.carouselInterval);
       } else {
         this.playCarousel();
       }
@@ -400,7 +402,7 @@ class Carousel {
   }
   moveCarousel(target, speed) {
     this.isCarouselAnimate = true;
-    let timer = window.requestAnimationFrame(() => {
+    this.animateTimer = window.requestAnimationFrame(() => {
       this.animateCarousel(target, speed);
     });
   }
@@ -410,11 +412,11 @@ class Carousel {
       (speed < 0 && this.getLeft(this.carouselWrap) > target)
     ) {
       this.setLeft(this.carouselWrap, this.getLeft(this.carouselWrap) + speed);
-      timer = window.requestAnimationFrame(() => {
+      this.animateTimer = window.requestAnimationFrame(() => {
         this.animateCarousel(target, speed);
       });
     } else {
-      window.cancelAnimationFrame(timer);
+      window.cancelAnimationFrame(this.animateTimer);
       // 重置轮播状态
       this.resetCarousel(target, speed);
     }

@@ -192,7 +192,7 @@ Web版轮播无自适应，在固定宽度和高度的容器元素中使用即�
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
 </head>
 
-<div class="carousel-container" id="carousel"></div>
+<div class="carousel-mobile-container" id="carousel"></div>
 ```
 
 ```js

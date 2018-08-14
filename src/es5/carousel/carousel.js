@@ -147,7 +147,7 @@
       // 初始化轮播序号
       this.carouselIndex = 1;
       // 初始化定时器
-      this.carouselIntervalr = null;
+      this.carouselInterval = null;
       // 每次位移量 = 总偏移量 / 次数
       this.carouselAnimateSpeed = this.carouselWidth / (this.carouselOptions.carouselAnimateTime / this.carouselOptions.carouselAnimateInterval);
       // 判断是否处于轮播动画状态
@@ -320,10 +320,10 @@
     },
     playCarousel: function () {
       var _this = this;
-      if (this.carouselIntervalr) {
-        clearInterval(this.carouselIntervalr);
+      if (this.carouselInterval) {
+        clearInterval(this.carouselInterval);
       }
-      this.carouselIntervalr = window.setInterval(function() {
+      this.carouselInterval = window.setInterval(function() {
         _this.nextCarousel();
       }, this.carouselOptions.carouselInterval);
     },
@@ -331,14 +331,14 @@
       var _this = this;
       // 鼠标移入移出事件
       addEvent(this.carousel, 'mouseenter', function(e) {
-        clearInterval(_this.carouselIntervalr);
+        clearInterval(_this.carouselInterval);
       });
       addEvent(this.carousel, 'mouseleave', function(e) {
         _this.playCarousel();
       });
       addEvent(document, 'visibilitychange', function(e) {
         if (document.hidden) {
-          clearInterval(_this.carouselIntervalr);
+          clearInterval(_this.carouselInterval);
         } else {
           _this.playCarousel();
         }
