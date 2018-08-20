@@ -8,16 +8,16 @@
 
 项目地址：[https://project.csdoker.com/csdwheels](https://project.csdoker.com/csdwheels)
 
+> 本套插件的[Vue版本](https://github.com/csdoker/vue-wheels)
+
 ## 版本说明
 
 - ES5：`src/es5`文件下为ES5版本源码，ES5语法 + UMD（dist文件下为打包压缩后的代码）
 - ES6：`src/es6`文件下为ES6版本源码，打包后支持ES5语法 + UMD + ES6的导入方式（dist-es6文件下为打包压缩后的代码）
 
-> 本套插件的[Vue版本](https://github.com/csdoker/vue-wheels)
-
 ## 安装插件
 
-> npm install csdwheels --save-dev
+> npm install csdwheels -D
 
 ## 引入方式
 
@@ -118,14 +118,14 @@ new Pagination(selector, pageOption);
 
 > 此分页器不仅能应用在一般的异步分页上，还可直接对一段已知数据进行分页展现，更可以取代传统的超链接分页
 
-前端分页：
+##### 前端分页
 
 在`callback`里对总数据进行处理，然后取出当前页需要展示的数据即可
 
-后端分页：
+##### 后端分页
 
 利用url上的页码参数，可以在页面载入时就定位到指定页码，并且可以同时请求后端指定页码下对应的数据
-在`callback`回调函数里取得当前页码，可以使用`window.location.href`改变url，并将当前页码作为url参数，然后进行页面跳转，例如"./test.html?page="
+在`callback`回调函数里取得当前页码，可以使用`window.location.href`改变url，并将当前页码作为url参数，然后进行页面跳转，例如`./test.html?page=`这种格式
 
 #### 效果演示
 
