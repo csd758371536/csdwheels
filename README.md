@@ -125,7 +125,8 @@ new Pagination(selector, pageOption);
 ##### 后端分页
 
 利用url上的页码参数，可以在页面载入时就定位到指定页码，并且可以同时请求后端指定页码下对应的数据
-在`callback`回调函数里取得当前页码，可以使用`window.location.href`改变url，并将当前页码作为url参数，然后进行页面跳转，例如`./test.html?page=`这种格式
+在`callback`回调函数里取得当前页码，可以使用`window.location.href`改变url，并将当前页码作为url参数，然后进行页面跳转
+（例如`./test.html?page=`这种格式）
 
 #### 效果演示
 
