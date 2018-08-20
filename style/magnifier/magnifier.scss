@@ -1,0 +1,34 @@
+.magnifier {
+  position: relative;
+  .magnifier-small {
+    position: relative;
+    width: 352px;
+    height: 352px;
+    border: 1px solid #ccc;
+    .magnifier-mask {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: rgba(255, 255, 0, 0.4);
+      top: 0;
+      left: 0;
+      cursor: move;
+      display: none;
+    }
+  }
+  .magnifier-big {
+    position: absolute;
+    width: 452px;
+    height: 452px;
+    top: 0;
+    left: 360px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    display: none;
+    .magnifier-big-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+  }
+}

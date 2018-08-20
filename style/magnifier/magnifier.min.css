@@ -1,0 +1,2 @@
+.magnifier{position:relative}.magnifier .magnifier-small{position:relative;width:352px;height:352px;border:1px solid #ccc}.magnifier .magnifier-small .magnifier-mask{position:absolute;width:100px;height:100px;background:rgba(255,255,0,0.4);top:0;left:0;cursor:move;display:none}.magnifier .magnifier-big{position:absolute;width:452px;height:452px;top:0;left:360px;border:1px solid #ccc;overflow:hidden;display:none}.magnifier .magnifier-big .magnifier-big-img{position:absolute;top:0;left:0}
+/*# sourceMappingURL=magnifier.min.css.map */
