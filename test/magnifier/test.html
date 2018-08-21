@@ -11,20 +11,17 @@
 </head>
 <body>
     <div class="main">
-        <div class="magnifier" id="magnifier">
-            <div class="magnifier-small">
-                <img src="../../image/magnifier/small.jpg" alt="">
-                <div class="magnifier-mask"></div>
-            </div>
-            <div class="magnifier-big">
-                <img class="magnifier-big-img" src="../../image/magnifier/big.jpg" alt="">
-            </div>
-        </div>
+        <div class="magnifier" id="magnifier"></div>
     </div>
     <script src="../../src/es5/magnifier/magnifier.js" charset="utf-8"></script>
     <script type="text/javascript">
         new Magnifier('#magnifier', {
-            // smallPicWidth: 
+            smallImgWidth: 350,
+            smallImgHeight: 350,
+            bigImgWidth: 450,
+            bigImgHeight: 450,
+            smallImgSrc: 'https://i.loli.net/2018/08/21/5b7b70c3b3cbd.jpg',
+            bigImgSrc: 'https://i.loli.net/2018/08/21/5b7b70c3b94f5.jpg'
         });
     </script>
 </body>

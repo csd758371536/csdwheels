@@ -9,6 +9,13 @@
 })(typeof self !== "undefined" ? self : this, function() {
   "use strict";
 
+  var CLASS = {
+    MAGNIFIER_SMALL: 'magnifier-small',
+    MAGNIFIER_MASK: 'magnifier-mask',
+    MAGNIFIER_BIG: 'magnifier-big',
+    MAGNIFIER_BIG_IMG: 'magnifier-big-img'
+  };
+
   // Polyfills
   function addEvent(element, type, handler) {
     if (element.addEventListener) {
@@ -40,12 +47,31 @@
     magnifierOptions: {},
     initMagnifier: function(selector) {
       this.magnifier = document.querySelector(selector);
-      this.magnifierSmall = this.magnifier.children[0];
-      this.magnifierSmallMask = this.magnifierSmall.children[1];
-      this.magnifierBig = this.magnifier.children[1];
-      this.magnifierBigImg = this.magnifierBig.children[0];
+      this.setMagnifier();
+      this.setElemWidth(this.magnifierSmall, this.magnifierOptions.smallImgWidth);
+      this.setElemHeight(this.magnifierSmall,this.magnifierOptions.smallImgHeight);
+      this.setElemWidth(this.magnifierBig, this.magnifierOptions.bigImgWidth);
+      this.setElemHeight(this.magnifierBig, this.magnifierOptions.bigImgHeight);
       this.magnifierSmallMaskLeft = 0;
       this.magnifierSmallMaskTop = 0;
+    },
+    setMagnifier: function() {
+      this.magnifierSmall = document.createElement("div");
+      this.magnifierSmall.setAttribute('class', CLASS.MAGNIFIER_SMALL);
+      this.magnifierSmallImg = document.createElement("img");
+      this.magnifierSmallImg.setAttribute('src', this.magnifierOptions.smallImgSrc);
+      this.magnifierSmallMask = document.createElement("div");
+      this.magnifierSmallMask.setAttribute("class", CLASS.MAGNIFIER_MASK);
+      this.magnifierSmall.appendChild(this.magnifierSmallImg);
+      this.magnifierSmall.appendChild(this.magnifierSmallMask);
+      this.magnifierBig = document.createElement("div");
+      this.magnifierBig.setAttribute('class', CLASS.MAGNIFIER_BIG);
+      this.magnifierBigImg = document.createElement("img");
+      this.magnifierBigImg.setAttribute('class', CLASS.MAGNIFIER_BIG_IMG);
+      this.magnifierBigImg.setAttribute('src', this.magnifierOptions.bigImgSrc);
+      this.magnifierBig.appendChild(this.magnifierBigImg);
+      this.magnifier.appendChild(this.magnifierSmall);
+      this.magnifier.appendChild(this.magnifierBig);
     },
     bindMagnifier: function() {
       var _this = this;
@@ -62,6 +88,12 @@
         _this.setMaskPosition();
         _this.setImgPosition();
       });
+    },
+    setElemWidth: function(elem, width) {
+      elem.style.width = width + "px";
+    },
+    setElemHeight: function(elem, height) {
+      elem.style.height = height + "px";
     },
     setElemDisplay: function(elem, type) {
       elem.style.display = type;
