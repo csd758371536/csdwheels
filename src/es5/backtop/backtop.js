@@ -32,8 +32,10 @@
   // 获取滚动条距顶部的距离
   function getScrollTop() {
     return (
-      (document.documentElement && document.documentElement.scrollTop) ||
-      document.body.scrollTop
+      window.pageYOffset ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop ||
+      0
     );
   }
 
@@ -51,21 +53,21 @@
    */
   function scrollTo(to, duration) {
     if (duration < 0) {
-      this.setScrollTop(to);
+      setScrollTop(to);
       return;
     }
-    var diff = to - this.getScrollTop();
+    var diff = to - getScrollTop();
     if (diff === 0) return;
     var step = (diff / duration) * 10;
     requestAnimationFrame(function() {
       if (Math.abs(step) > Math.abs(diff)) {
-        this.setScrollTop(this.getScrollTop() + diff);
+        setScrollTop(getScrollTop() + diff);
         return;
       }
-      this.setScrollTop(this.getScrollTop() + step);
+      setScrollTop(getScrollTop() + step);
       if (
-        (diff > 0 && this.getScrollTop() >= to) ||
-        (diff < 0 && this.getScrollTop() <= to)
+        (diff > 0 && getScrollTop() >= to) ||
+        (diff < 0 && getScrollTop() <= to)
       ) {
         return;
       }
@@ -73,10 +75,53 @@
     });
   }
 
-  var BackTop = function(selector, userOptions) {};
+  var BackTop = function(selector, userOptions) {
+    // 合并配置
+    extend(this.backTopOptions, userOptions, true);
+    // 初始化
+    this.initBackTop();
+    this.bindBackTop();
+  };
   BackTop.prototype = {
-    backTopOptions: {},
-    initBackTop: function() {},
+    backTopOptions: {
+      elem: document.body
+    },
+    initBackTop: function() {
+      this.timer = null;
+      this.isTop = true;
+      this.isShowScroll = false;
+      this.initScroll();
+    },
+    bindBackTop: function() {
+      var _this = this;
+      addEvent(document.querySelector("#backTop"), "click", function(e) {
+        _this.timer = setInterval(function() {
+          var osTop = _this.backTopOptions.elem.scrollTop;
+          var ispeed = Math.floor(-osTop / 5);
+          _this.backTopOptions.elem.scrollTop = osTop + ispeed;
+          _this.isTop = true;
+          if (osTop === 0) {
+            clearInterval(_this.timer);
+          }
+        }, 30);
+      });
+    },
+    initScroll: function() {
+      var clientHeight = this.backTopOptions.elem.clientHeight;
+      var _this = this;
+      addEvent(document, "scroll", function(e) {
+        var osTop = _this.backTopOptions.elem.scrollTop;
+        if (osTop >= clientHeight) {
+          _this.isShowScroll = true;
+        } else {
+          _this.isShowScroll = false;
+        }
+        if (!_this.isTop) {
+          clearInterval(_this.timer);
+        }
+        _this.isTop = false;
+      });
+    },
     constructor: BackTop
   };
 
