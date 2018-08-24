@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="../../style/base.css">
+    <link rel="stylesheet" href="../../style/calendar/test.min.css">
+    <link rel="stylesheet" href="../../style/calendar/calendar.min.css">
+</head>
+<body>
+    <div class="main">
+        <div class="calendar" id="calendar">
+            <div class="calendar-wrap" id="calendarDay">
+                <div class="calendar-title">
+                    <span class="calendar-prev"></span>
+                    <span class="calendar-data"></span>
+                    <span class="calendar-next"></span>
+                </div>
+                <div class="calendar-week"></div>
+                <div class="calendar-content">
+                    <ul>
+                        <li></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="calendar-wrap" id="calendarMonth">
+
+            </div>
+        </div>
+    </div>
+    <script src="../../src/es5/calendar/calendar.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        new Calendar('#calendar', {});
+    </script>
+</body>
+</html>
