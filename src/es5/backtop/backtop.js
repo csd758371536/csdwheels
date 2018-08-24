@@ -21,14 +21,6 @@
     }
   }
 
-  // 合并对象
-  function extend(o, n, override) {
-    for (var p in n) {
-      if (n.hasOwnProperty(p) && (!o.hasOwnProperty(p) || override))
-        o[p] = n[p];
-    }
-  }
-
   // 获取滚动条距顶部的距离
   function getScrollTop() {
     return (
@@ -41,83 +33,68 @@
 
   // 设置滚动条距顶部的距离
   function setScrollTop(value) {
-    window.scrollTo(0, value);
-    return value;
+    window.pageYOffset = document.documentElement.scrollTop = document.body.scrollTop = value;
   }
 
-  /**
-   *
-   * @desc  在${duration}时间内，滚动条平滑滚动到${to}指定位置
-   * @param {Number} to
-   * @param {Number} duration
-   */
-  function scrollTo(to, duration) {
-    if (duration < 0) {
-      setScrollTop(to);
-      return;
-    }
-    var diff = to - getScrollTop();
-    if (diff === 0) return;
-    var step = (diff / duration) * 10;
-    requestAnimationFrame(function() {
-      if (Math.abs(step) > Math.abs(diff)) {
-        setScrollTop(getScrollTop() + diff);
-        return;
-      }
-      setScrollTop(getScrollTop() + step);
-      if (
-        (diff > 0 && getScrollTop() >= to) ||
-        (diff < 0 && getScrollTop() <= to)
-      ) {
-        return;
-      }
-      scrollTo(to, duration - 16);
-    });
+  // 获取窗口高度
+  function getClientHeight() {
+    return (
+      window.innerHeight ||
+      document.documentElement.clientHeight ||
+      document.body.clientHeight
+    );
   }
 
-  var BackTop = function(selector, userOptions) {
-    // 合并配置
-    extend(this.backTopOptions, userOptions, true);
-    // 初始化
-    this.initBackTop();
+  var BackTop = function(selector) {
+    // 初始化属性
+    this.initBackTop(selector);
+    // 绑定点击事件
     this.bindBackTop();
   };
   BackTop.prototype = {
-    backTopOptions: {
-      elem: document.body
-    },
-    initBackTop: function() {
-      this.timer = null;
+    initBackTop: function(selector) {
+      // 初始化定时器
+      this.scrollTimer = null;
+      // 判断是否到顶部
       this.isTop = true;
+      // 判断是否显示按钮
       this.isShowScroll = false;
-      this.initScroll();
+      // 滚动间隔
+      this.scrollInterval = 30;
+      // 滚动步长
+      this.scrollStep = 5;
+      // 获取按钮元素
+      this.backTop = document.querySelector(selector);
+      // 绑定滚动事件
+      this.bindScroll();
     },
     bindBackTop: function() {
       var _this = this;
-      addEvent(document.querySelector("#backTop"), "click", function(e) {
-        _this.timer = setInterval(function() {
-          var osTop = _this.backTopOptions.elem.scrollTop;
-          var ispeed = Math.floor(-osTop / 5);
-          _this.backTopOptions.elem.scrollTop = osTop + ispeed;
+      addEvent(this.backTop, "click", function(e) {
+        if (_this.scrollTimer) {
+          clearInterval(_this.scrollTimer);
+        }
+        _this.scrollTimer = setInterval(function() {
+          var osTop = getScrollTop();
+          var ispeed = Math.floor(-osTop / _this.scrollStep);
+          setScrollTop(osTop + ispeed);
           _this.isTop = true;
           if (osTop === 0) {
-            clearInterval(_this.timer);
+            clearInterval(_this.scrollTimer);
           }
-        }, 30);
+        }, _this.scrollInterval);
       });
     },
-    initScroll: function() {
-      var clientHeight = this.backTopOptions.elem.clientHeight;
+    bindScroll: function() {
       var _this = this;
-      addEvent(document, "scroll", function(e) {
-        var osTop = _this.backTopOptions.elem.scrollTop;
-        if (osTop >= clientHeight) {
+      addEvent(window, "scroll", function(e) {
+        if (getScrollTop() >= getClientHeight()) {
           _this.isShowScroll = true;
         } else {
           _this.isShowScroll = false;
         }
         if (!_this.isTop) {
-          clearInterval(_this.timer);
+          clearInterval(_this.scrollTimer);
         }
         _this.isTop = false;
       });

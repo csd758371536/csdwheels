@@ -23,7 +23,7 @@ html {
 html,
 body {
   /*body 宽度大 html 度时，某些浏览器会出现内部滚动条；所以设置「html、body」宽度相同且「overflow-x: hidden」*/
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   width: 100%;
   /*取消部分浏览器点击有阴影*/
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
