@@ -1,0 +1,67 @@
+.calendar {
+    width: 300px;
+    border: 1px solid #666;
+    .calendar-wrap {
+        .calendar-title {
+            text-align: center;
+            color: #666;    
+            font-size: 0;
+            .calendar-prev, .calendar-data, .calendar-next {
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 30px;
+                line-height: 42px;
+                font-size: 16px;
+                cursor: pointer;
+                &:last-child {
+                    margin-right: 0;
+                }
+                &:hover {
+                    color: #42b983;
+                }
+            }
+        }
+        .calendar-content {
+            width: 100%;
+            border-spacing: 0;
+            border-collapse: collapse;
+            .calendar-week {
+                color: lightsalmon;
+                margin-bottom: 10px;
+                .calendar-day {
+                    display: inline-block;
+                    width: calc(100% / 7);
+                    font-size: 16px;
+                    font-weight: normal;
+                    text-align: center;
+                    line-height: 40px;
+                    &:last-child {
+                        margin-right: 0;
+                    }
+                }
+            }
+            .calendar-list {
+                color: #999;
+                margin-bottom: 10px;
+                .calendar-item {
+                    display: inline-block;
+                    width: calc(100% / 7);
+                    font-size: 16px;
+                    text-align: center;
+                    line-height: 36px;
+                    cursor: pointer;
+                    &:last-child {
+                        margin-right: 0;
+                    }
+                    &:hover {
+                        background-color: #eee;
+                        color: #42b983;
+                    }
+                    &.current {
+                        color: #42b983;
+                    }
+                }
+            }
+        }
+    }
+}

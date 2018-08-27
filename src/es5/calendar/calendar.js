@@ -40,12 +40,10 @@
   };
   Calendar.prototype = {
     calendarOptions: {},
-    initCalendar: function() {
-        this.calendar = document.querySelector(selector);
+    initCalendar: function(selector) {
+      this.calendar = document.querySelector(selector);
     },
-    bindCalendar: function() {
-
-    },
+    bindCalendar: function() {},
     constructor: Calendar
   };
 
