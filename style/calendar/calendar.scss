@@ -6,7 +6,7 @@
             text-align: center;
             color: #666;    
             font-size: 0;
-            .calendar-prev, .calendar-data, .calendar-next {
+            .calendar-prev, .calendar-time, .calendar-next {
                 display: inline-block;
                 vertical-align: middle;
                 margin-right: 30px;
@@ -25,10 +25,10 @@
             width: 100%;
             border-spacing: 0;
             border-collapse: collapse;
-            .calendar-week {
+            .calendar-weeks {
                 color: lightsalmon;
                 margin-bottom: 10px;
-                .calendar-day {
+                .calendar-week {
                     display: inline-block;
                     width: calc(100% / 7);
                     font-size: 16px;
@@ -40,24 +40,28 @@
                     }
                 }
             }
-            .calendar-list {
-                color: #999;
+            .calendar-days {
                 margin-bottom: 10px;
-                .calendar-item {
+                .calendar-day {
                     display: inline-block;
                     width: calc(100% / 7);
                     font-size: 16px;
                     text-align: center;
                     line-height: 36px;
                     cursor: pointer;
+                    color: #ccc;
                     &:last-child {
                         margin-right: 0;
                     }
-                    &:hover {
+                    &.current {
+                        color: #666;
+                    }
+                    &.now {
                         background-color: #eee;
                         color: #42b983;
                     }
-                    &.current {
+                    &:hover {
+                        background-color: #eee;
                         color: #42b983;
                     }
                 }
