@@ -92,7 +92,13 @@
     </div>
     <script src="../../src/es5/calendar/calendar.js" charset="utf-8"></script>
     <script type="text/javascript">
-        new Calendar('#calendar', {});
+        var calendar = new Calendar('#calendar', {
+            time: '2018-01-01',
+            callback: function(calendarTime) {
+                document.querySelector('#test').innerHTML = calendarTime;
+            }
+        });
+        // document.querySelector('#test').innerHTML = calendar.calendarTime;
     </script>
 </body>
 </html>
