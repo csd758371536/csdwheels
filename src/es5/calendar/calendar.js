@@ -76,7 +76,6 @@
     this.calendarShowTime = this.obtainDate(new Date(this.calendarOptions.time), false);
     this.refreshCalendar(new Date(this.calendarOptions.time));
     this.calendarOptions.callback && this.calendarOptions.callback(this.calendarTime);
-    console.log(this.calendarDays);
   };
   Calendar.prototype = {
     calendarOptions: {},
@@ -87,6 +86,10 @@
       this.calendarWeeks = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
       // 每个月最大天数
       this.calendarMaxDay = 31;
+      // 最大日期
+      this.calendarMax = this.obtainDate(new Date(8640000000000000), true);
+      // 最小日期
+      this.calendarMin = '100-01-01';
       // 日历行数
       this.calendarRow = Math.floor(this.calendarMaxDay / this.calendarWeeks.length) + 2;
       // 要显示的日期数
@@ -113,40 +116,49 @@
     setCalendarDays: function(date) {
       // 保存所有要显示的日期
       this.calendarDays = [];
+      // 设置上个月显示日期
+      this.setCalendarDaysInPrevMonth(date);
+      // 设置当前月的显示日期
+      this.setCalendarDaysInCurrentMonth(date);
+      // 设置下个月显示日期
+      this.setCalendarDaysInNextMonth(date);
+    },
+    setCalendarDaysInPrevMonth: function(date) {
       // 获取当前月第一天是星期几
       var week = this.getFirstDateInMonth(date).getDay();
       // 获取上个月最后一天的日期
-      var lastDateInPrevMonth = this.getLastDateInPrevMonth(date).getDate();
-      // 判断第一天是否是星期日
-      if (week != 0) {
-        // 设置上个月显示日期
-        this.setCalendarDaysInMonth(
-          date.getMonth() < 1 ? date.getFullYear() - 1 : date.getFullYear(),
-          date.getMonth() < 1 ? 12 : date.getMonth(),
-          lastDateInPrevMonth - week + 1,
-          lastDateInPrevMonth, false
-        );
-      } else {
-        // 设置上个月显示日期
-        this.setCalendarDaysInMonth(
-          date.getMonth() < 1 ? date.getFullYear() - 1 : date.getFullYear(),
-          date.getMonth() < 1 ? 12 : date.getMonth(),
-          lastDateInPrevMonth - this.calendarWeeks.length + 1,
-          lastDateInPrevMonth, false
-        );
-      }
+      var end = this.getLastDateInPrevMonth(date).getDate();
+      // 判断第一天是否是星期日 设置起始日期
+      var start = week === 0 ? end - this.calendarWeeks.length + 1 : end - week + 1;
+      this.setCalendarDaysInMonth(
+        date.getMonth() < 1 ? date.getFullYear() - 1 : date.getFullYear(),
+        date.getMonth() < 1 ? 12 : date.getMonth(),
+        start,
+        end, false
+      );
+    },
+    setCalendarDaysInCurrentMonth: function(date) {
       // 获取当前月最后一天的日期
-      var lastDateInCurrentMonth = this.getLastDateInMonth(date).getDate();
-      // 设置当前月份的显示日期
-      this.setCalendarDaysInMonth(date.getFullYear(), date.getMonth() + 1, 1, lastDateInCurrentMonth, true);
-      if (this.calendarDays.length != this.calendarDaysCount) {
-        // 设置下个月显示日期
-        this.setCalendarDaysInMonth(
-          date.getMonth() + 2 > 12 ? date.getFullYear() + 1 : date.getFullYear(),
-          date.getMonth() + 2 > 12 ? 1 : date.getMonth() + 2,
-          1,
-          this.calendarDaysCount - this.calendarDays.length, false
-        );
+      var end;
+      // 判断是否是最后一个月的日期
+      if (this.isLastDate(date.getFullYear(), date.getMonth() + 1)) {
+        end = new Date(this.calendarMax).getDate();
+      } else {
+        end = this.getLastDateInMonth(date).getDate();
+      }
+      this.setCalendarDaysInMonth(date.getFullYear(), date.getMonth() + 1, 1, end, true);
+    },
+    setCalendarDaysInNextMonth: function(date) {
+      // 判断是否是最后一个月的日期
+      if (!this.isLastDate(date.getFullYear(), date.getMonth() + 1)) {
+        if (this.calendarDays.length != this.calendarDaysCount) {
+          this.setCalendarDaysInMonth(
+            date.getMonth() + 2 > 12 ? date.getFullYear() + 1 : date.getFullYear(),
+            date.getMonth() + 2 > 12 ? 1 : date.getMonth() + 2,
+            1,
+            this.calendarDaysCount - this.calendarDays.length, false
+          );
+        }
       }
     },
     setCalendarDaysInMonth: function(year, month, start, end, isCurrent) {
@@ -260,8 +272,8 @@
               arr.forEach(function(item, index) {
                 arr[index] = item < 10 ? "0" + item : item;
               });
-              _this.calendarTime = _this.calendarDays[i].year + '-' + arr[0] + '-' + arr[1];
-              _this.calendarShowTime = _this.calendarDays[i].year + '-' + arr[0];
+              _this.calendarTime = new Date(_this.calendarDays[i].year.toString()).getFullYear() + '-' + arr[0] + '-' + arr[1];
+              _this.calendarShowTime = new Date(_this.calendarDays[i].year.toString()).getFullYear() + '-' + arr[0];
               _this.refreshCalendar(new Date(_this.calendarTime));
             }
           }
@@ -278,11 +290,14 @@
           year--;
         }
         month = month < 10 ? "0" + month : month;
-        _this.calendarShowTime = year + '-' + month;
+        _this.calendarShowTime = new Date(year.toString()).getFullYear() + '-' + month;
         _this.refreshCalendar(new Date(_this.calendarShowTime));
       });
     },
     bindCalendarNext: function(year, month) {
+      if (this.isLastDate(year, month)) {
+        return;
+      }
       var _this = this;
       addEvent(this.calendarDateNext, 'click', function (ev) {
         month++;
@@ -294,6 +309,13 @@
         _this.calendarShowTime = year + '-' + month;
         _this.refreshCalendar(new Date(_this.calendarShowTime));
       });
+    },
+    // 判断是否是最后一月
+    isLastDate: function(year, month) {
+      return year === new Date(this.calendarMax).getFullYear() && month === new Date(this.calendarMax).getMonth() + 1;
+    },
+    isFirstDate: function(year, month) {
+      return year === new Date(this.calendarMin).getFullYear() && month === new Date(this.calendarMin).getMonth() + 1;
     },
     /**
      * @description 求当前日期所在月的第一天
