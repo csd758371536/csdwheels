@@ -13,6 +13,8 @@
   // 用mvvm重构目前的代码 再加入选择月份和年限的功能
   // 最小和最大年份限制
 
+  // 用发布订阅模式重构
+
   // var monthMax = 31;
   // var rowMax = 0;
   // if (this.monthMax % this.calendarWeeks.length === 0) {
@@ -23,6 +25,14 @@
   //   rowMax = this.monthMax / this.calendarWeeks.length + 2;
   // }
   // this.calendarDaysCount = this.calendarWeeks.length * rowMax;
+
+
+  // new Date(8640000000000000)
+  // Sat Sep 13 275760 08:00:00 GMT+0800 (中国标准时间)
+  // new Date(-8640000000000000)
+  // Tue Apr 20 -271821 08:05:43 GMT+0805 (中国标准时间)
+  // new Date('99-5-20')
+  // Thu May 20 1999 00:00:00 GMT+0800 (中国标准时间)
 
   var CLASS = {
     CALENDAR_WRAP: 'calendar-wrap',
@@ -82,6 +92,8 @@
     initCalendar: function(selector) {
       // 获取日历元素
       this.calendar = document.querySelector(selector);
+      // 避免出现选中效果
+      this.calendar.onselectstart = function() { return false };
       // 因为一周有7天，一个月最多有31天，一个月最多能横跨6行，所以至少要7*6=42个格子，其余的格子用前后月份日期补足
       this.calendarWeeks = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
       // 每个月最大天数
