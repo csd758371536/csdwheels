@@ -54,7 +54,7 @@
     CALENDAR_DATE_PREV: "calendarDatePrev",
     CALENDAR_DATE_NEXT: "calendarDateNext"
   };
-                    
+
   // Polyfills
   function addEvent(element, type, handler) {
     if (element.addEventListener) {
@@ -74,50 +74,21 @@
     }
   }
 
-  // 自定义模板引擎
-  function templateEngine(html, data) {
-    var re = /<%([^%>]+)?%>/g,
-        reExp = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g,
-        code = 'var r=[];\n',
-        cursor = 0;
-    var match;
-    var add = function(line, js) {
-        js ? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
-            (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
-        return add;
-    }
-    while (match = re.exec(html)) {
-        add(html.slice(cursor, match.index))(match[1], true);
-        cursor = match.index + match[0].length;
-    }
-    add(html.substr(cursor, html.length - cursor));
-    code += 'return r.join("");';
-    return new Function(code.replace(/[\r\t\n]/g, '')).apply(data);
-  }
-
-  function parseToDom(str) { // 将字符串转为dom
-    var div = document.createElement('div');
-    if(typeof str == 'string') {
-        div.innerHTML = str;
-    }
-    return div.childNodes;
-  }
-
   var Calendar = function(selector, userOptions) {
     // 合并配置
     extend(this.calendarOptions, userOptions, true);
     // 初始化
     this._initCalendar(selector);
     // 日历设置时间（默认为当前时间）
-    this.calendarTime = this.obtainDate(
-      new Date(this.calendarOptions.time),
-      true
-    );
+    this.calendarTime = this.formatDate(
+      this.calendarOptions.time,
+      "yyyy-MM-dd"
+    ).date;
     // 日历显示时间
-    this.calendarShowTime = this.obtainDate(
-      new Date(this.calendarOptions.time),
-      false
-    );
+    this.calendarShowTime = this.formatDate(
+      this.calendarOptions.time,
+      "yyyy-MM"
+    ).date;
     this.refreshCalendar(new Date(this.calendarOptions.time));
     this.calendarOptions.callback &&
       this.calendarOptions.callback(this.calendarTime);
@@ -136,7 +107,10 @@
       // 每个月最大天数
       this.calendarMaxDay = 31;
       // 最大日期
-      this.calendarMax = this.obtainDate(new Date(8640000000000000), true);
+      this.calendarMax = this.formatDate(
+        new Date(8640000000000000),
+        "yyyy-MM-dd"
+      ).date;
       // 最小日期
       this.calendarMin = "100-01-01";
       // 日历行数
@@ -147,15 +121,15 @@
     },
     refreshCalendar: function(date) {
       // 设置所有要显示的日期
-      this.setCalendarDays(date);
+      this._setCalendarDays(date);
       // 渲染DOM
-      this.renderCalendar();
+      this._renderCalendar();
       // 获取日历元素
-      this.getCalendar();
+      this._getCalendar();
       // 绑定事件
-      this.bindCalendar();
+      this._bindCalendar();
     },
-    getCalendar: function() {
+    _getCalendar: function() {
       this.calendarDateElem = document.querySelector("#" + ID.CALENDAR_DATE);
       this.calendarDayElems = document.querySelectorAll(
         "." + CLASS.CALENDAR_DAY
@@ -173,17 +147,17 @@
         "#" + ID.CALENDAR_DATE_NEXT
       );
     },
-    setCalendarDays: function(date) {
+    _setCalendarDays: function(date) {
       // 保存所有要显示的日期
       this.calendarDays = [];
       // 设置上个月显示日期
-      this.setCalendarDaysInPrevMonth(date);
+      this._setCalendarDaysInPrevMonth(date);
       // 设置当前月的显示日期
-      this.setCalendarDaysInCurrentMonth(date);
+      this._setCalendarDaysInCurrentMonth(date);
       // 设置下个月显示日期
-      this.setCalendarDaysInNextMonth(date);
+      this._setCalendarDaysInNextMonth(date);
     },
-    setCalendarDaysInPrevMonth: function(date) {
+    _setCalendarDaysInPrevMonth: function(date) {
       // 获取当前月第一天是星期几
       var week = this.getFirstDateInMonth(date).getDay();
       // 获取上个月最后一天的日期
@@ -191,7 +165,7 @@
       // 判断第一天是否是星期日 设置起始日期
       var start =
         week === 0 ? end - this.calendarWeeks.length + 1 : end - week + 1;
-      this.setCalendarDaysInMonth(
+      this._setCalendarDaysInMonth(
         date.getMonth() < 1 ? date.getFullYear() - 1 : date.getFullYear(),
         date.getMonth() < 1 ? 12 : date.getMonth(),
         start,
@@ -199,7 +173,7 @@
         false
       );
     },
-    setCalendarDaysInCurrentMonth: function(date) {
+    _setCalendarDaysInCurrentMonth: function(date) {
       // 获取当前月最后一天的日期
       var end;
       // 判断是否是最后一个月的日期
@@ -208,7 +182,7 @@
       } else {
         end = this.getLastDateInMonth(date).getDate();
       }
-      this.setCalendarDaysInMonth(
+      this._setCalendarDaysInMonth(
         date.getFullYear(),
         date.getMonth() + 1,
         1,
@@ -216,11 +190,11 @@
         true
       );
     },
-    setCalendarDaysInNextMonth: function(date) {
+    _setCalendarDaysInNextMonth: function(date) {
       // 判断是否是最后一个月的日期
       if (!this.isLastDate(date.getFullYear(), date.getMonth() + 1)) {
         if (this.calendarDays.length != this.calendarDaysCount) {
-          this.setCalendarDaysInMonth(
+          this._setCalendarDaysInMonth(
             date.getMonth() + 2 > 12
               ? date.getFullYear() + 1
               : date.getFullYear(),
@@ -232,7 +206,7 @@
         }
       }
     },
-    setCalendarDaysInMonth: function(year, month, start, end, isCurrent) {
+    _setCalendarDaysInMonth: function(year, month, start, end, isCurrent) {
       for (var day = start, len = end; day <= len; day++) {
         this.calendarDays.push({
           year: year,
@@ -242,150 +216,87 @@
         });
       }
     },
-    // renderCalendar: function() {
-    //   this.calendar.innerHTML = "";
-    //   // 第一种模式：显示天数
-    //   var calendarWrapElem = document.createElement("div");
-    //   calendarWrapElem.setAttribute("class", CLASS.CALENDAR_WRAP);
-    //   calendarWrapElem.setAttribute("id", ID.CALENDAR_DATE);
-    //   calendarWrapElem.appendChild(this.renderCalendarTitle());
-    //   calendarWrapElem.appendChild(this.renderCalendarContent());
-    //   this.calendar.appendChild(calendarWrapElem);
-    // },
-    renderCalendar: function() {
-      var templateStr = 
-      '<div class="calendar-wrap" id="calendarDate">' +
-        '<div class="calendar-title">' + 
-          '<span class="calendar-prev" id="calendarDatePrev">&lt;</span>' + 
-          '<span class="calendar-time" id="calendarDateTime"><% this.calendarShowTime %></span>' + 
-          '<span class="calendar-next" id="calendarDateNext">&gt;</span>' + 
-        '</div>' + 
-        '<table class="calendar-content">' + 
-          '<tr class="calendar-weeks">' + 
-            '<% for (var i = 0; i < this.calendarWeeks.length; i++) { %>' + 
-              '<th class="calendar-week"><% this.calendarWeeks[i] %></th>' + 
-            '<% } %>' + 
-          '</tr>' + 
-          '<% for (var j = 0; j < this.calendarRow; j++) { %>' + 
-            '<tr class="calendar-days">' + 
-              '<% for (var k = 0; k < this.calendarDays[j].length; k++) { %>' + 
-                '<% if (this.calendarDays[j][k].isCurrent) { %>' + 
-                  '<% if (this.calendarDays[j][k].year === this.calendarTime.getFullYear() && this.calendarDays[j][k].month === this.calendarTime.getMonth() + 1 && this.calendarDays[j][k].day === this.calendarTime.getDate()) { %>' + 
-                    '<td class="calendar-day select"><% this.calendarDays[j][k].day %></td>' + 
-                  '<% } else { %>' +
-                    '<td class="calendar-day current"><% this.calendarDays[j][k].day %></td>' + 
-                  '<% } %>' +
-                '<% } else { %>' +
-                  '<td class="calendar-day"><% this.calendarDays[j][k].day %></td>' + 
-                '<% } %>' + 
-              '<% } %>' + 
-            '</tr>' + 
-          '<% } %>' + 
-        '</table>' + 
-      '</div>';
-      // 生成执行函数
-      var calendarDays = [];
-      var len = this.calendarWeeks.length;
-      for (var i = 0; i < this.calendarRow; i++) {
-        calendarDays.push(this.calendarDays.slice(i * len, i * len + len));
+    _renderCalendar: function() {
+      var template =
+        '<div class="calendar-wrap" id="calendarDate">' +
+        "{{calendarShowTime}}" +
+        '<table class="calendar-content">' +
+        "{{calendarWeeks}}" +
+        "{{calendarDays}}" +
+        "</table>" +
+        "</div>";
+      this.calendar.innerHTML = template
+        .replace("{{calendarShowTime}}", this._renderCalendarTitle())
+        .replace("{{calendarWeeks}}", this._renderCalendarWeeks())
+        .replace("{{calendarDays}}", this._renderCalendarDays());
+      // // 第一种模式：显示天数
+    },
+    _renderCalendarTitle: function() {
+      return (
+        '<div class="calendar-title">' +
+        '<span class="calendar-prev" id="calendarDatePrev">&lt;</span>' +
+        '<span class="calendar-time" id="calendarDateTime">' +
+        this.calendarShowTime +
+        "</span>" +
+        '<span class="calendar-next" id="calendarDateNext">&gt;</span>' +
+        "</div>"
+      );
+    },
+    _renderCalendarWeeks: function() {
+      var html = "";
+      for (var i = 0; i < this.calendarWeeks.length; i++) {
+        html += '<th class="calendar-week">' + this.calendarWeeks[i] + "</th>";
       }
-      console.log(calendarDays)
-      this.calendar.innerHTML = templateEngine(templateStr, {
-        calendarShowTime: this.calendarShowTime,
-        calendarWeeks: this.calendarWeeks,
-        calendarRow: this.calendarRow,
-        calendarDays: calendarDays,
-        calendarTime: new Date(this.calendarTime)
-      });
+      return '<tr class="calendar-weeks">' + html + "</tr>";
     },
-    renderCalendarTitle: function(calendarShowTime) {
-      
-      // parseToDom(templateStr);
-      
-    },
-    // renderCalendarTitle: function() {
-    //   var calendarTitleElem = document.createElement("div");
-    //   calendarTitleElem.setAttribute("class", CLASS.CALENDAR_TITLE);
-    //   var calendarPrevElem = document.createElement("span");
-    //   calendarPrevElem.setAttribute("class", CLASS.CALENDAR_PREV);
-    //   calendarPrevElem.setAttribute("id", ID.CALENDAR_DATE_PREV);
-    //   calendarPrevElem.innerHTML = "&lt;";
-    //   var calendarTimeElem = document.createElement("span");
-    //   calendarTimeElem.setAttribute("class", CLASS.CALENDAR_TIME);
-    //   calendarTimeElem.setAttribute("id", ID.CALENDAR_DATE_TIME);
-    //   calendarTimeElem.innerHTML = this.calendarShowTime;
-    //   var calendarNextElem = document.createElement("span");
-    //   calendarNextElem.setAttribute("class", CLASS.CALENDAR_NEXT);
-    //   calendarNextElem.setAttribute("id", ID.CALENDAR_DATE_NEXT);
-    //   calendarNextElem.innerHTML = "&gt;";
-    //   calendarTitleElem.appendChild(calendarPrevElem);
-    //   calendarTitleElem.appendChild(calendarTimeElem);
-    //   calendarTitleElem.appendChild(calendarNextElem);
-    //   return calendarTitleElem;
-    // },
-    // renderCalendarContent: function() {
-    //   var calendarContentElem = document.createElement("table");
-    //   calendarContentElem.setAttribute("class", CLASS.CALENDAR_CONTENT);
-    //   calendarContentElem.appendChild(this.renderCalendarWeeks());
-    //   calendarContentElem.appendChild(this.renderCalendarDays());
-    //   return calendarContentElem;
-    // },
-    // renderCalendarWeeks: function() {
-    //   var calendarWeeksElem = document.createElement("tr");
-    //   calendarWeeksElem.setAttribute("class", CLASS.CALENDAR_WEEKS);
-    //   var fragment = document.createDocumentFragment();
-    //   var calendarWeekElem = document.createElement("th");
-    //   this.calendarWeeks.forEach(function(calendarWeek, index) {
-    //     calendarWeekElem = calendarWeekElem.cloneNode(false);
-    //     calendarWeekElem.setAttribute("class", CLASS.CALENDAR_WEEK);
-    //     calendarWeekElem.innerHTML = calendarWeek;
-    //     fragment.appendChild(calendarWeekElem);
-    //   });
-    //   calendarWeeksElem.appendChild(fragment);
-    //   return calendarWeeksElem;
-    // },
-    renderCalendarDays: function() {
-      var calendarDaysFragment = document.createDocumentFragment();
+    _renderCalendarDays: function() {
+      var html = "",
+        dom = [],
+        calendarDays = [];
       var len = this.calendarWeeks.length;
       for (var i = 0; i < this.calendarRow; i++) {
-        var calendarDaysElem = document.createElement("tr");
-        calendarDaysElem.setAttribute("class", CLASS.CALENDAR_DAYS);
-        var calendarDays = this.calendarDays.slice(i * len, i * len + len);
-        var fragment = document.createDocumentFragment();
-        var calendarDayElem = document.createElement("td");
+        html = "";
+        html += '<tr class="calendar-days">';
+        calendarDays = this.calendarDays.slice(i * len, i * len + len);
         for (var j = 0; j < calendarDays.length; j++) {
-          calendarDayElem = calendarDayElem.cloneNode(false);
           if (calendarDays[j].isCurrent) {
             if (
-              calendarDays[j].day === new Date(this.calendarTime).getDate() &&
-              calendarDays[j].year ===
-                new Date(this.calendarTime).getFullYear() &&
-              calendarDays[j].month ===
-                new Date(this.calendarTime).getMonth() + 1
+              this.formatDate(
+                new Date(
+                  calendarDays[j].year,
+                  calendarDays[j].month - 1,
+                  calendarDays[j].day
+                ),
+                "yyyy-MM-dd"
+              ).date === this.calendarTime
             ) {
-              calendarDayElem.setAttribute("class", CLASS.CALENDAR_DAY_SELECT);
+              html +=
+                '<td class="calendar-day select">' +
+                calendarDays[j].day +
+                "</td>";
             } else {
-              calendarDayElem.setAttribute("class", CLASS.CALENDAR_DAY_CURRENT);
+              html +=
+                '<td class="calendar-day current">' +
+                calendarDays[j].day +
+                "</td>";
             }
           } else {
-            calendarDayElem.setAttribute("class", CLASS.CALENDAR_DAY);
+            html += '<td class="calendar-day">' + calendarDays[j].day + "</td>";
           }
-          calendarDayElem.innerHTML = calendarDays[j].day;
-          fragment.appendChild(calendarDayElem);
         }
-        calendarDaysElem.appendChild(fragment);
-        calendarDaysFragment.appendChild(calendarDaysElem);
+        html += "</tr>";
+        dom.push(html);
       }
-      return calendarDaysFragment;
+      return dom.join("");
     },
-    bindCalendar: function() {
+    _bindCalendar: function() {
       var year = new Date(this.calendarShowTime).getFullYear();
       var month = new Date(this.calendarShowTime).getMonth() + 1;
-      this.bindCalendarContent();
-      this.bindCalendarPrev(year, month);
-      this.bindCalendarNext(year, month);
+      this._bindCalendarContent();
+      this._bindCalendarPrev(year, month);
+      this._bindCalendarNext(year, month);
     },
-    bindCalendarContent: function() {
+    _bindCalendarContent: function() {
       var _this = this;
       var arr = [];
       addEvent(this.calendarContentElem, "click", function(ev) {
@@ -394,20 +305,22 @@
         if (target.nodeName.toLocaleLowerCase() == "td") {
           for (var i = 0; i < _this.calendarDayElems.length; i++) {
             if (_this.calendarDayElems[i] === target) {
-              arr = [_this.calendarDays[i].month, _this.calendarDays[i].day];
-              arr.forEach(function(item, index) {
-                arr[index] = item < 10 ? "0" + item : item;
-              });
-              _this.calendarTime =
-                new Date(_this.calendarDays[i].year.toString()).getFullYear() +
-                "-" +
-                arr[0] +
-                "-" +
-                arr[1];
-              _this.calendarShowTime =
-                new Date(_this.calendarDays[i].year.toString()).getFullYear() +
-                "-" +
-                arr[0];
+              _this.calendarTime = _this.formatDate(
+                new Date(
+                  _this.calendarDays[i].year,
+                  _this.calendarDays[i].month - 1,
+                  _this.calendarDays[i].day
+                ),
+                "yyyy-MM-dd"
+              ).date;
+              _this.calendarShowTime = _this.formatDate(
+                new Date(
+                  _this.calendarDays[i].year,
+                  _this.calendarDays[i].month - 1,
+                  _this.calendarDays[i].day
+                ),
+                "yyyy-MM"
+              ).date;
               _this.refreshCalendar(new Date(_this.calendarTime));
             }
           }
@@ -416,7 +329,7 @@
         }
       });
     },
-    bindCalendarPrev: function(year, month) {
+    _bindCalendarPrev: function(year, month) {
       var _this = this;
       addEvent(this.calendarDatePrev, "click", function(ev) {
         month--;
@@ -424,13 +337,14 @@
           month = 12;
           year--;
         }
-        month = month < 10 ? "0" + month : month;
-        _this.calendarShowTime =
-          new Date(year.toString()).getFullYear() + "-" + month;
+        _this.calendarShowTime = _this.formatDate(
+          new Date(year, month - 1, new Date(_this.calendarTime).getDate()),
+          "yyyy-MM"
+        ).date;
         _this.refreshCalendar(new Date(_this.calendarShowTime));
       });
     },
-    bindCalendarNext: function(year, month) {
+    _bindCalendarNext: function(year, month) {
       if (this.isLastDate(year, month)) {
         return;
       }
@@ -441,8 +355,10 @@
           month = 1;
           year++;
         }
-        month = month < 10 ? "0" + month : month;
-        _this.calendarShowTime = year + "-" + month;
+        _this.calendarShowTime = _this.formatDate(
+          new Date(year, month - 1, new Date(_this.calendarTime).getDate()),
+          "yyyy-MM"
+        ).date;
         _this.refreshCalendar(new Date(_this.calendarShowTime));
       });
     },
@@ -494,23 +410,35 @@
       d.setFullYear(year, month == 12 ? 1 : month, 0);
       return d.getDate();
     },
-    /**
-     * new Date()格式化为yyyy-MM-dd
-     */
-    obtainDate: function(date, isShowDay) {
-      var year = date.getFullYear();
-      var month = date.getMonth() + 1;
-      var day = date.getDate();
-      // 判断是否满10
-      var arr = [month, day];
-      arr.forEach(function(item, index) {
-        arr[index] = item < 10 ? "0" + item : item;
-      });
-      if (isShowDay) {
-        return year + "-" + arr[0] + "-" + arr[1];
-      } else {
-        return year + "-" + arr[0];
-      }
+    timeFormat: function(i) {
+      i = typeof i == "string" ? parseInt(i) : i;
+      return (i < 10 ? "0" : "") + i;
+    },
+    formatDate: function(time, format) {
+      time = typeof time == "string" ? new Date(time) : time;
+      var getFullYear = this.timeFormat(time.getFullYear()),
+        getMonth = this.timeFormat(time.getMonth() + 1),
+        getDate = this.timeFormat(time.getDate()),
+        getDay = this.timeFormat(time.getDay());
+      return {
+        getFullYear: parseInt(getFullYear),
+        getMonth: parseInt(getMonth),
+        getDate: parseInt(getDate),
+        getDay: parseInt(getDay),
+        date: format.replace(/yyyy|MM|dd/g, function(a) {
+          switch (a) {
+            case "yyyy":
+              return getFullYear;
+              break;
+            case "MM":
+              return getMonth;
+              break;
+            case "dd":
+              return getDate;
+              break;
+          }
+        })
+      };
     },
     constructor: Calendar
   };
