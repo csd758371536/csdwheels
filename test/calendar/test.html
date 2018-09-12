@@ -94,12 +94,11 @@
     <script type="text/javascript">
         var calendar = new Calendar('#calendar', {
             // time: '275760-09-01',
-            time: '2018-09-07',
-            callback: function(calendarTime) {
-                document.querySelector('#test').innerHTML = calendarTime;
-            }
+            time: '2018-09-07'
         });
-        // document.querySelector('#test').innerHTML = calendar.calendarTime;
+        calendar.on('click', function(calendarTime) {
+            document.querySelector('#test').innerHTML = calendarTime;
+        });
     </script>
 </body>
 </html>
