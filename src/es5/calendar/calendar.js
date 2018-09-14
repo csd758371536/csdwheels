@@ -407,11 +407,11 @@
   proto._renderCalendarTitle = function() {
     return (
       '<div class="calendar-title">' +
-      '<span class="calendar-prev" id="calendarDatePrev">&lt;</span>' +
+      '<a href="javascript:;" class="calendar-btn calendar-btn-prev" id="calendarDatePrev">&lt;</a>' +
       '<span class="calendar-time" id="calendarDateTime">' +
       this.calendarShowTime +
       "</span>" +
-      '<span class="calendar-next" id="calendarDateNext">&gt;</span>' +
+      '<a href="javascript:;" class="calendar-btn calendar-btn-next" id="calendarDateNext">&gt;</a>' +
       "</div>"
     );
   };
@@ -421,7 +421,7 @@
     for (var i = 0; i < this.calendarWeeks.length; i++) {
       html += '<th class="calendar-week">' + this.calendarWeeks[i] + "</th>";
     }
-    return '<tr class="calendar-weeks">' + html + "</tr>";
+    return '<thead><tr class="calendar-weeks">' + html + "</tr></thead>";
   };
 
   proto._renderCalendarDays = function() {
