@@ -31,4 +31,14 @@ gulp.task('carousel', gulp.parallel(() => {
   .pipe(gulp.dest('dist/carousel'))
 }));
 
-gulp.task('mini', gulp.parallel('page', 'carousel'));
+gulp.task('calendar', gulp.parallel(() => {
+  return gulp.src('src/es5/calendar/calendar.js')
+  .pipe(uglify())    //uglify
+  .pipe(rename("calendar.min.js"))
+  .pipe(gulp.dest('dist/calendar'))
+}, () => {
+  return gulp.src('style/calendar/calendar.min.css')
+  .pipe(gulp.dest('dist/calendar'))
+}));
+
+gulp.task('mini', gulp.parallel('page', 'carousel', 'calendar'));

@@ -34,19 +34,12 @@
   // Thu May 20 1999 00:00:00 GMT+0800 (中国标准时间)
 
   var CLASS = {
+    CALENDAR_INPUT: "calendar-input",
     CALENDAR_WRAP: "calendar-wrapper",
-    CALENDAR_TITLE: "calendar-title",
     CALENDAR_PREV: "calendar-btn-prev",
-    CALENDAR_TIME: "calendar-time",
     CALENDAR_NEXT: "calendar-btn-next",
     CALENDAR_BTN: "calendar-btn",
-    CALENDAR_CONTENT: "calendar-content",
-    CALENDAR_WEEKS: "calendar-weeks",
-    CALENDAR_WEEK: "calendar-week",
-    CALENDAR_DAYS: "calendar-days",
     CALENDAR_DAY: "calendar-day",
-    CALENDAR_DAY_CURRENT: "calendar-day current",
-    CALENDAR_DAY_SELECT: "calendar-day select"
   };
 
   var ID = {
@@ -64,6 +57,13 @@
         element.attachEvent("on" + type, handler);
       } else {
         element["on" + type] = handler;
+      }
+    },
+    stopPropagation: function(event) {
+      if (event.stopPropagation) {
+        event.stopPropagation();
+      } else {
+        event.cancelBubble = true;
       }
     },
     extend: function(target) {
@@ -384,6 +384,14 @@
   };
 
   proto._renderCalendar = function() {
+    // 生成日历框
+    var $input = document.querySelector('.' + CLASS.CALENDAR_INPUT);
+    if (!$input) {
+      $input = '<input type="text" class="calendar-input" readonly placeholder="点击选择日期" />';
+      this.calendar.innerHTML = $input;
+    }
+
+    // 生成日历表格
     var template =
       "{{calendarShowTime}}" +
       '<table class="calendar-content">' +
@@ -465,16 +473,42 @@
   };
 
   proto._bindCalendar = function() {
+    this._bindCalendarInput();
     this._bindCalendarContent();
     this._bindCalendarBtn();
   };
 
+  proto._bindCalendarInput = function() {
+    var _this = this;
+    var $input = document.querySelector('.' + CLASS.CALENDAR_INPUT);
+    var $wrapper = document.querySelector('.' + CLASS.CALENDAR_WRAP);
+    this.calendarIsOpen = false;
+    util.addEvent($input, "click", function(ev) {
+      var e = ev || window.event;
+      var $target = e.target || e.srcElement;
+      if (_this.calendarIsOpen) {
+        $wrapper.classList.remove('calendar-wrapper-show');
+        _this.calendarIsOpen = false;
+      } else {
+        $wrapper.classList.add('calendar-wrapper-show');
+        var left = _this.calendar.offsetLeft;
+        var top = _this.calendar.offsetTop;
+        var height = $input.offsetHeight;
+        $wrapper.style.top = top + height + 2 + 'px';
+        $wrapper.style.left = left + 'px';
+        _this.calendarIsOpen = true;
+      }
+    });
+  };
+
   proto._bindCalendarContent = function() {
     var _this = this;
+    var $input = document.querySelector('.' + CLASS.CALENDAR_INPUT);
     var $wrapper = document.querySelector('.' + CLASS.CALENDAR_WRAP);
     util.addEvent($wrapper, "click", function(ev) {
       var e = ev || window.event;
       var $target = e.target || e.srcElement;
+      // util.stopPropagation(e);
       var $days = document.querySelectorAll("." + CLASS.CALENDAR_DAY);
       if ($target.tagName.toLowerCase() !== 'td') {
         return;
@@ -498,9 +532,13 @@
             "yyyy-MM"
           ).date;
           _this._refreshCalendar(new Date(_this.calendarTime));
+          break;
         }
       }
       _this.emit("click", [_this.calendarTime]);
+      $input.value = _this.calendarTime;
+      $wrapper.classList.remove('calendar-wrapper-show');
+      _this.calendarIsOpen = false;
     });
   };
 
