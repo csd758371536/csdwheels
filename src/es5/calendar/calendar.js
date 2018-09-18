@@ -34,11 +34,12 @@
   // Thu May 20 1999 00:00:00 GMT+0800 (中国标准时间)
 
   var CLASS = {
-    CALENDAR_WRAP: "calendar-wrap",
+    CALENDAR_WRAP: "calendar-wrapper",
     CALENDAR_TITLE: "calendar-title",
-    CALENDAR_PREV: "calendar-prev",
+    CALENDAR_PREV: "calendar-btn-prev",
     CALENDAR_TIME: "calendar-time",
-    CALENDAR_NEXT: "calendar-next",
+    CALENDAR_NEXT: "calendar-btn-next",
+    CALENDAR_BTN: "calendar-btn",
     CALENDAR_CONTENT: "calendar-content",
     CALENDAR_WEEKS: "calendar-weeks",
     CALENDAR_WEEK: "calendar-week",
@@ -255,6 +256,10 @@
       "yyyy-MM"
     ).date;
     this._refreshCalendar(new Date(this.options.time));
+    // 获取日历元素
+    this._getCalendar();
+    // 绑定事件
+    this._bindCalendar();
     // this.calendarOptions.callback &&
     //   this.calendarOptions.callback(this.calendarTime);
   }
@@ -295,23 +300,13 @@
     this._setCalendarDays(date);
     // 渲染DOM
     this._renderCalendar();
-    // 获取日历元素
-    this._getCalendar();
-    // 绑定事件
-    this._bindCalendar();
   };
 
   proto._getCalendar = function() {
-    this.calendarDateElem = document.querySelector("#" + ID.CALENDAR_DATE);
-    this.calendarDayElems = document.querySelectorAll("." + CLASS.CALENDAR_DAY);
-    this.calendarContentElem = document.querySelector(
-      "." + CLASS.CALENDAR_CONTENT
-    );
-    this.calendarDateTimeElem = document.querySelector(
-      "#" + ID.CALENDAR_DATE_TIME
-    );
-    this.calendarDatePrev = document.querySelector("#" + ID.CALENDAR_DATE_PREV);
-    this.calendarDateNext = document.querySelector("#" + ID.CALENDAR_DATE_NEXT);
+    // this.calendarDateElem = document.querySelector("#" + ID.CALENDAR_DATE);
+    // this.calendarDateTimeElem = document.querySelector(
+    //   "#" + ID.CALENDAR_DATE_TIME
+    // );
   };
 
   proto._setCalendarDays = function(date) {
@@ -390,14 +385,18 @@
 
   proto._renderCalendar = function() {
     var template =
-      '<div class="calendar-wrap" id="calendarDate">' +
       "{{calendarShowTime}}" +
       '<table class="calendar-content">' +
       "{{calendarWeeks}}" +
       "{{calendarDays}}" +
-      "</table>" +
-      "</div>";
-    this.calendar.innerHTML = template
+      "</table>";
+    var $wrapper = document.querySelector('.' + CLASS.CALENDAR_WRAP);
+    if (!$wrapper) {
+      $wrapper = document.createElement('div');
+      this.calendar.appendChild($wrapper);
+      $wrapper.className = CLASS.CALENDAR_WRAP;
+    }
+    $wrapper.innerHTML = template
       .replace("{{calendarShowTime}}", this._renderCalendarTitle())
       .replace("{{calendarWeeks}}", this._renderCalendarWeeks())
       .replace("{{calendarDays}}", this._renderCalendarDays());
@@ -446,17 +445,17 @@
             ).date === this.calendarTime
           ) {
             html +=
-              '<td class="calendar-day select">' +
+              '<td class="calendar-day select" data-date="'+ calendarDays[j].day + '">' +
               calendarDays[j].day +
               "</td>";
           } else {
             html +=
-              '<td class="calendar-day current">' +
+              '<td class="calendar-day current" data-date="' + calendarDays[j].day + '">' +
               calendarDays[j].day +
               "</td>";
           }
         } else {
-          html += '<td class="calendar-day">' + calendarDays[j].day + "</td>";
+          html += '<td class="calendar-day" data-date="' + calendarDays[j].day + '">' + calendarDays[j].day + "</td>";
         }
       }
       html += "</tr>";
@@ -466,79 +465,91 @@
   };
 
   proto._bindCalendar = function() {
-    var year = new Date(this.calendarShowTime).getFullYear();
-    var month = new Date(this.calendarShowTime).getMonth() + 1;
     this._bindCalendarContent();
-    this._bindCalendarPrev(year, month);
-    this._bindCalendarNext(year, month);
+    this._bindCalendarBtn();
   };
 
   proto._bindCalendarContent = function() {
     var _this = this;
-    var arr = [];
-    util.addEvent(this.calendarContentElem, "click", function(ev) {
+    var $wrapper = document.querySelector('.' + CLASS.CALENDAR_WRAP);
+    util.addEvent($wrapper, "click", function(ev) {
       var e = ev || window.event;
-      var target = e.target || e.srcElement;
-      if (target.nodeName.toLocaleLowerCase() == "td") {
-        for (var i = 0; i < _this.calendarDayElems.length; i++) {
-          if (_this.calendarDayElems[i] === target) {
-            _this.calendarTime = util.formatDate(
-              new Date(
-                _this.calendarDays[i].year,
-                _this.calendarDays[i].month - 1,
-                _this.calendarDays[i].day
-              ),
-              "yyyy-MM-dd"
-            ).date;
-            _this.calendarShowTime = util.formatDate(
-              new Date(
-                _this.calendarDays[i].year,
-                _this.calendarDays[i].month - 1,
-                _this.calendarDays[i].day
-              ),
-              "yyyy-MM"
-            ).date;
-            _this._refreshCalendar(new Date(_this.calendarTime));
-          }
+      var $target = e.target || e.srcElement;
+      var $days = document.querySelectorAll("." + CLASS.CALENDAR_DAY);
+      if ($target.tagName.toLowerCase() !== 'td') {
+        return;
+      }
+      for (var i = 0; i < $days.length; i++) {
+        if ($days[i] === $target) {
+          _this.calendarTime = util.formatDate(
+            new Date(
+              _this.calendarDays[i].year,
+              _this.calendarDays[i].month - 1,
+              _this.calendarDays[i].day
+            ),
+            "yyyy-MM-dd"
+          ).date;
+          _this.calendarShowTime = util.formatDate(
+            new Date(
+              _this.calendarDays[i].year,
+              _this.calendarDays[i].month - 1,
+              _this.calendarDays[i].day
+            ),
+            "yyyy-MM"
+          ).date;
+          _this._refreshCalendar(new Date(_this.calendarTime));
         }
-        _this.emit("click", [_this.calendarTime]);
+      }
+      _this.emit("click", [_this.calendarTime]);
+    });
+  };
+
+  proto._bindCalendarBtn = function() {
+    var _this = this;
+    var $wrapper = document.querySelector('.' + CLASS.CALENDAR_WRAP);
+    util.addEvent($wrapper, "click", function(ev) {
+      var e = ev || window.event;
+      var $target = e.target || e.srcElement;
+      var year = new Date(_this.calendarShowTime).getFullYear();
+      var month = new Date(_this.calendarShowTime).getMonth() + 1;
+      if (!$target.classList.contains(CLASS.CALENDAR_BTN)) {
+        return;
+      }
+      if ($target.classList.contains(CLASS.CALENDAR_PREV)) {
+        _this._bindCalendarPrev(year, month);
+      } else if ($target.classList.contains(CLASS.CALENDAR_NEXT)) {
+        _this._bindCalendarNext(year, month);
       }
     });
   };
 
   proto._bindCalendarPrev = function(year, month) {
-    var _this = this;
-    util.addEvent(this.calendarDatePrev, "click", function(ev) {
-      month--;
-      if (month < 1) {
-        month = 12;
-        year--;
-      }
-      _this.calendarShowTime = util.formatDate(
-        new Date(year, month - 1, new Date(_this.calendarTime).getDate()),
-        "yyyy-MM"
-      ).date;
-      _this._refreshCalendar(new Date(_this.calendarShowTime));
-    });
+    month--;
+    if (month < 1) {
+      month = 12;
+      year--;
+    }
+    this.calendarShowTime = util.formatDate(
+      new Date(year, month - 1, new Date(this.calendarTime).getDate()),
+      "yyyy-MM"
+    ).date;
+    this._refreshCalendar(new Date(this.calendarShowTime));
   };
 
   proto._bindCalendarNext = function(year, month) {
     if (util.isLastDate(year, month)) {
       return;
     }
-    var _this = this;
-    util.addEvent(this.calendarDateNext, "click", function(ev) {
-      month++;
-      if (month > 12) {
-        month = 1;
-        year++;
-      }
-      _this.calendarShowTime = util.formatDate(
-        new Date(year, month - 1, new Date(_this.calendarTime).getDate()),
-        "yyyy-MM"
-      ).date;
-      _this._refreshCalendar(new Date(_this.calendarShowTime));
-    });
+    month++;
+    if (month > 12) {
+      month = 1;
+      year++;
+    }
+    this.calendarShowTime = util.formatDate(
+      new Date(year, month - 1, new Date(this.calendarTime).getDate()),
+      "yyyy-MM"
+    ).date;
+    this._refreshCalendar(new Date(this.calendarShowTime));
   };
 
   return Calendar;
