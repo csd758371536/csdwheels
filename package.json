@@ -49,6 +49,7 @@
     "webpack-dev-server": "^3.1.5"
   },
   "dependencies": {
+    "cryptiles": "^4.1.2",
     "hoek": "^5.0.3",
     "url-parse": "^1.4.3"
   }
