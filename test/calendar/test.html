@@ -17,10 +17,11 @@
     <script type="text/javascript">
         var calendar = new Calendar('#calendar', {
             // time: '275760-09-01',
-            time: '2018-09-07'
+            // time: new Date('2018-09-07')
+            // time: '1970-1-1'
         });
         calendar.on('click', function(calendarTime) {
-            // document.querySelector('#test').innerHTML = calendarTime;
+            console.log(calendarTime);
         });
     </script>
 </body>

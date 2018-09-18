@@ -264,7 +264,9 @@
     //   this.calendarOptions.callback(this.calendarTime);
   }
 
-  Calendar.calendarOptions = {};
+  Calendar.calendarOptions = {
+    time: new Date()
+  };
 
   var proto = (Calendar.prototype = new EventEmitter());
 

@@ -230,6 +230,42 @@ H5版轮播可自动适应屏幕宽度，在固定高宽的容器元素中也可
 
 [carousel](https://csdoker.github.io/csdemos/carousel/mobile/)
 
+### 日历
+
+#### 初始化
+
+```html
+<div class="calendar" id="calendar"></div>
+```
+
+```js
+// 日历元素ID（必填）
+var selector = '#calendar';
+
+// 日历设置
+var calendarOption = {
+  // 日期，支持new Date格式、字符串格式（选填，默认为当前时间）
+  time: '1970-1-1'
+  // time: new Date('1970-1-1');
+};
+
+// 初始化日历
+new Calendar('#calendar', calendarOption);
+
+// 监听日历点击事件，获取选中日期的值
+calendar.on('click', function(calendarTime) {
+    console.log(calendarTime);
+});
+```
+
+#### 使用场景
+
+只支持PC端，暂时只支持日期选择，后续会考虑加入年份及月份选择
+
+#### 效果演示
+
+[calendar](https://csdoker.github.io/csdemos/calendar/)
+
 ## 测试
 
 > npm install
