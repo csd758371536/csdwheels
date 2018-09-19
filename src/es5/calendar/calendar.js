@@ -260,8 +260,6 @@
     this._getCalendar();
     // 绑定事件
     this._bindCalendar();
-    // this.calendarOptions.callback &&
-    //   this.calendarOptions.callback(this.calendarTime);
   }
 
   Calendar.calendarOptions = {
@@ -570,7 +568,7 @@
       year--;
     }
     this.calendarShowTime = util.formatDate(
-      new Date(year, month - 1, new Date(this.calendarTime).getDate()),
+      new Date(year, month - 1),
       "yyyy-MM"
     ).date;
     this._refreshCalendar(new Date(this.calendarShowTime));
@@ -586,7 +584,7 @@
       year++;
     }
     this.calendarShowTime = util.formatDate(
-      new Date(year, month - 1, new Date(this.calendarTime).getDate()),
+      new Date(year, month - 1),
       "yyyy-MM"
     ).date;
     this._refreshCalendar(new Date(this.calendarShowTime));
