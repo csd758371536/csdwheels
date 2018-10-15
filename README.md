@@ -6,7 +6,7 @@
 
 [![Build Status](https://travis-ci.org/csdoker/csdwheels.svg?branch=master)](https://travis-ci.org/csdoker/csdwheels) [![npm](https://img.shields.io/npm/v/csdwheels.svg?style=flat-square)](https://www.npmjs.com/package/csdwheels) [![npm](https://img.shields.io/npm/dt/csdwheels.svg?style=flat-square)](https://www.npmjs.com/package/csdwheels) [![npm](https://img.shields.io/npm/l/csdwheels.svg?style=flat-square)](https://www.npmjs.com/package/csdwheels)
 
-项目地址：[https://project.csdoker.com/csdwheels](https://project.csdoker.com/csdwheels)
+项目地址：[csdwheels](https://csdoker.github.io/csdwheels-docs/)
 
 > 本套插件的[Vue版本](https://github.com/csdoker/vue-wheels)
 
