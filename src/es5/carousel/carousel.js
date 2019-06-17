@@ -101,19 +101,25 @@
     _this.carouselWrap = document.querySelector(ID.CAROUSEL_WRAP);
     // 每隔 50ms 检测一次轮播是否加载完成
     var checkInterval = 50;
-    var checkTimer = setInterval(function () {
+
+    // var checkTimer = setInterval(function () {
       // 检测轮播是否加载完成
-      if (_this.isCarouselComplete()) {
+      // if (_this.isCarouselComplete()) {
         // 加载完成后清除定时器
-        clearInterval(checkTimer);
-        // 初始化轮播
-        _this.initCarousel();
-        // 初始化圆点
-        _this.initDots();
-        // 初识化箭头
-        _this.initArrows();
-      }
-    }, checkInterval);
+        // clearInterval(checkTimer);
+
+        // 确保图片全部加载完成 防止闪烁
+        window.onload = function() {
+          // 初始化轮播
+          _this.initCarousel();
+          // 初始化圆点
+          _this.initDots();
+          // 初识化箭头
+          _this.initArrows();
+        }
+
+      // }
+    // }, checkInterval);
   };
   // 轮播-原型对象
   Carousel.prototype = {
@@ -198,12 +204,18 @@
       carouselWrapEle.setAttribute("class", CLASS.CAROUSEL_WRAP);
       carouselWrapEle.setAttribute('id', ID.CAROUSEL_WRAP.substring(1, ID.CAROUSEL_WRAP.length));
       var fragment = document.createDocumentFragment();
-      var imgEle = document.createElement("img");
+      var imgEle = document.createElement("div");
+      var _this = this;
       this.carouselOptions.carouselImages.forEach(function(carouselImage, index) {
         imgEle = imgEle.cloneNode(false);
         imgEle.setAttribute("class", CLASS.CAROUSEL_IMG);
-        imgEle.setAttribute("src", carouselImage);
-        imgEle.setAttribute("alt", index + 1);
+        // imgEle.setAttribute("src", carouselImage);
+        // 由于设置无缓存模式后 img的src在节点重新加载后会重新加载图片 导致闪烁问题 换用css background属性设置图片
+        // 圆点切换动画也可以采用传统主流做法 直接显示两张图片之间的所有图片  不做过渡处理
+        imgEle.style.background = 'url('+ carouselImage + ')';
+        imgEle.style.width = _this.carouselOptions.carouselWidth + 'px';
+        // imgEle.style.height = _this.carouselOptions.carouselHeight + 'px';
+        // imgEle.setAttribute("alt", index + 1);
         fragment.appendChild(imgEle);
       });
       carouselWrapEle.appendChild(fragment);
