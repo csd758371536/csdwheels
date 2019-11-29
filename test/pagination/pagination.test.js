@@ -6,13 +6,14 @@ chai.should();
 //初始化Nightmare对象
 const nightmare = new Nightmare({
   show: true, //是否显示图形化界面
-  // openDevTools: {
-  //   //配置此项后可显示开发者工具，不配置即不显示
-  //   mode: 'detach',
-  // },
+  openDevTools: {
+    //配置此项后可显示开发者工具，不配置即不显示
+    mode: 'detach',
+  },
 });
 
 describe('pagination test', function() {
+  this.timeout(5000);
   it('http connection', function(done) {
     nightmare
       .goto('http://127.0.0.1:3000/pagination') //打开某网页

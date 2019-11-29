@@ -9,6 +9,7 @@ const nightmare = new Nightmare({
 });
 
 describe('eventemitter test', function() {
+  this.timeout(5000);
   it('http connection', function(done) {
     nightmare
       .goto('http://127.0.0.1:3000/eventemitter') //打开某网页
