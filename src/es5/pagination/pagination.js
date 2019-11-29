@@ -1,18 +1,18 @@
 (function(root, factory) {
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     define([], factory);
-  } else if (typeof module === "object" && module.exports) {
+  } else if (typeof module === 'object' && module.exports) {
     module.exports = factory();
   } else {
     root.Pagination = factory();
   }
-})(typeof self !== "undefined" ? self : this, function() {
-  "use strict";
+})(typeof self !== 'undefined' ? self : this, function() {
+  'use strict';
 
   // 元素类名
   var CLASS_NAME = {
     ITEM: 'pagination-item',
-    LINK: 'pagination-link'
+    LINK: 'pagination-link',
   };
 
   // 跨浏览器事件对象
@@ -24,10 +24,10 @@
         element.addEventListener(type, handler, false);
       } else if (element.attachEvent) {
         // 使用IE方法添加事件
-        element.attachEvent("on" + type, handler);
+        element.attachEvent('on' + type, handler);
       } else {
         // 使用DOM0级方法添加事件
-        element["on" + type] = handler;
+        element['on' + type] = handler;
       }
     },
     // 移除事件
@@ -35,9 +35,9 @@
       if (element.removeEventListener) {
         element.removeEventListener(type, handler, false);
       } else if (element.datachEvent) {
-        element.detachEvent("on" + type, handler);
+        element.detachEvent('on' + type, handler);
       } else {
-        element["on" + type] = null;
+        element['on' + type] = null;
       }
     },
     getEvent: function(event) {
@@ -78,7 +78,7 @@
     },
     // 获取mousedown或mouseup按下或释放的按钮是鼠标中的哪一个
     getButton: function(event) {
-      if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+      if (document.implementation.hasFeature('MouseEvents', '2.0')) {
         return event.button;
       } else {
         //将IE模型下的button属性映射为DOM模型下的button属性
@@ -110,12 +110,12 @@
     },
     // 以跨浏览器取得相同的字符编码，需在keypress事件中使用
     getCharCode: function(event) {
-      if (typeof event.charCode == "number") {
+      if (typeof event.charCode == 'number') {
         return event.charCode;
       } else {
         return event.keyCode;
       }
-    }
+    },
   };
 
   // 浅拷贝一个对象的属性
@@ -138,7 +138,7 @@
       curr: 1,
       pageShow: 2,
       ellipsis: true,
-      hash: false
+      hash: false,
     };
     // 合并配置
     extend(this.options, pageOption, true);
@@ -153,71 +153,74 @@
     // 渲染
     this.renderPages();
     // 执行回调函数
-    this.options.callback && this.options.callback({
-      curr: this.pageNumber,
-      limit: this.options.limit,
-      isFirst: true
-    });
+    this.options.callback &&
+      this.options.callback({
+        curr: this.pageNumber,
+        limit: this.options.limit,
+        isFirst: true,
+      });
     // 改变页数并触发事件
     this.changePage();
   };
 
   Pagination.prototype = {
     constructor: Pagination,
-    pageInfos: [{
-        id: "first",
-        content: "首页"
+    pageInfos: [
+      {
+        id: 'first',
+        content: '首页',
       },
       {
-        id: "prev",
-        content: "前一页"
+        id: 'prev',
+        content: '前一页',
       },
       {
-        id: "next",
-        content: "后一页"
+        id: 'next',
+        content: '后一页',
       },
       {
-        id: "last",
-        content: "尾页"
+        id: 'last',
+        content: '尾页',
       },
       {
-        id: "",
-        content: "..."
-      }
+        id: '',
+        content: '...',
+      },
     ],
     getPageInfos: function(className, content) {
       return {
-        id: "page",
+        id: 'page',
         className: className,
-        content: content
+        content: content,
       };
     },
     changePage: function() {
       var self = this;
       var pageElement = self.pageElement;
-      EventUtil.addEvent(pageElement, "click", function(ev) {
+      EventUtil.addEvent(pageElement, 'click', function(ev) {
         var e = ev || window.event;
         var target = e.target || e.srcElement;
-        if (target.nodeName.toLocaleLowerCase() == "a") {
-          if (target.id === "prev") {
+        if (target.nodeName.toLocaleLowerCase() == 'a') {
+          if (target.id === 'prev') {
             self.prevPage();
-          } else if (target.id === "next") {
+          } else if (target.id === 'next') {
             self.nextPage();
-          } else if (target.id === "first") {
+          } else if (target.id === 'first') {
             self.firstPage();
-          } else if (target.id === "last") {
+          } else if (target.id === 'last') {
             self.lastPage();
-          } else if (target.id === "page") {
+          } else if (target.id === 'page') {
             self.goPage(parseInt(target.innerHTML));
           } else {
             return;
           }
           self.renderPages();
-          self.options.callback && self.options.callback({
-            curr: self.pageNumber,
-            limit: self.options.limit,
-            isFirst: false
-          });
+          self.options.callback &&
+            self.options.callback({
+              curr: self.pageNumber,
+              limit: self.options.limit,
+              isFirst: false,
+            });
           self.pageHash();
         }
       });
@@ -228,7 +231,7 @@
       }
     },
     renderPages: function() {
-      this.pageElement.innerHTML = "";
+      this.pageElement.innerHTML = '';
       if (this.options.ellipsis) {
         this.pageElement.appendChild(this.renderEllipsis());
       } else {
@@ -240,14 +243,24 @@
       if (this.pageNumber < this.options.pageShow + 1) {
         fragment.appendChild(this.renderDom(1, this.options.pageShow * 2 + 1));
       } else if (this.pageNumber > this.pageCount - this.options.pageShow) {
-        fragment.appendChild(this.renderDom(this.pageCount - this.options.pageShow * 2, this.pageCount));
+        fragment.appendChild(
+          this.renderDom(
+            this.pageCount - this.options.pageShow * 2,
+            this.pageCount,
+          ),
+        );
       } else {
-        fragment.appendChild(this.renderDom(this.pageNumber - this.options.pageShow, this.pageNumber + this.options.pageShow));
+        fragment.appendChild(
+          this.renderDom(
+            this.pageNumber - this.options.pageShow,
+            this.pageNumber + this.options.pageShow,
+          ),
+        );
       }
       if (this.pageNumber > 1) {
         this.addFragmentBefore(fragment, [
           this.pageInfos[0],
-          this.pageInfos[1]
+          this.pageInfos[1],
         ]);
       }
       if (this.pageNumber < this.pageCount) {
@@ -258,17 +271,17 @@
     renderEllipsis: function() {
       var fragment = document.createDocumentFragment();
       this.addFragmentAfter(fragment, [
-        this.getPageInfos(CLASS_NAME.LINK + " current", this.pageNumber)
+        this.getPageInfos(CLASS_NAME.LINK + ' current', this.pageNumber),
       ]);
       for (var i = 1; i <= this.options.pageShow; i++) {
         if (this.pageNumber - i > 1) {
           this.addFragmentBefore(fragment, [
-            this.getPageInfos(CLASS_NAME.LINK, this.pageNumber - i)
+            this.getPageInfos(CLASS_NAME.LINK, this.pageNumber - i),
           ]);
         }
         if (this.pageNumber + i < this.pageCount) {
           this.addFragmentAfter(fragment, [
-            this.getPageInfos(CLASS_NAME.LINK, this.pageNumber + i)
+            this.getPageInfos(CLASS_NAME.LINK, this.pageNumber + i),
           ]);
         }
       }
@@ -279,7 +292,7 @@
         this.addFragmentBefore(fragment, [
           this.pageInfos[0],
           this.pageInfos[1],
-          this.getPageInfos(CLASS_NAME.LINK, 1)
+          this.getPageInfos(CLASS_NAME.LINK, 1),
         ]);
       }
       if (this.pageNumber + this.options.pageShow + 1 < this.pageCount) {
@@ -289,7 +302,7 @@
         this.addFragmentAfter(fragment, [
           this.getPageInfos(CLASS_NAME.LINK, this.pageCount),
           this.pageInfos[2],
-          this.pageInfos[3]
+          this.pageInfos[3],
         ]);
       }
       return fragment;
@@ -303,18 +316,18 @@
     createHtml: function(elemDatas) {
       var self = this;
       var fragment = document.createDocumentFragment();
-      var liEle = document.createElement("li");
-      var aEle = document.createElement("a");
+      var liEle = document.createElement('li');
+      var aEle = document.createElement('a');
       elemDatas.forEach(function(elementData, index) {
         liEle = liEle.cloneNode(false);
         aEle = aEle.cloneNode(false);
-        liEle.setAttribute("class", CLASS_NAME.ITEM);
-        aEle.setAttribute("href", "javascript:;");
-        aEle.setAttribute("id", elementData.id);
+        liEle.setAttribute('class', CLASS_NAME.ITEM);
+        aEle.setAttribute('href', 'javascript:;');
+        aEle.setAttribute('id', elementData.id);
         if (elementData.id !== 'page') {
-          aEle.setAttribute("class", CLASS_NAME.LINK);
+          aEle.setAttribute('class', CLASS_NAME.LINK);
         } else {
-          aEle.setAttribute("class", elementData.className);
+          aEle.setAttribute('class', elementData.className);
         }
         aEle.innerHTML = elementData.content;
         liEle.appendChild(aEle);
@@ -324,9 +337,12 @@
     },
     renderDom: function(begin, end) {
       var fragment = document.createDocumentFragment();
-      var str = "";
+      var str = '';
       for (var i = begin; i <= end; i++) {
-        str = this.pageNumber === i ? CLASS_NAME.LINK + " current" : CLASS_NAME.LINK;
+        str =
+          this.pageNumber === i
+            ? CLASS_NAME.LINK + ' current'
+            : CLASS_NAME.LINK;
         this.addFragmentAfter(fragment, [this.getPageInfos(str, i)]);
       }
       return fragment;
@@ -345,7 +361,7 @@
     },
     lastPage: function() {
       this.pageNumber = this.pageCount;
-    }
+    },
   };
   return Pagination;
 });

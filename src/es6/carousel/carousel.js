@@ -1,14 +1,14 @@
-import "../../../style/carousel/carousel.scss";
+import '../../../style/carousel/carousel.scss';
 
 // polyfill requestAnimationFrame
 let polyfillAnimation = () => {
   let lastTime = 0;
-  let vendors = ["webkit", "moz"];
+  let vendors = ['webkit', 'moz'];
   for (let x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-    window.requestAnimationFrame = window[vendors[x] + "RequestAnimationFrame"];
+    window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
     window.cancelAnimationFrame =
-      window[vendors[x] + "CancelAnimationFrame"] || // Webkit中此取消方法的名字变了
-      window[vendors[x] + "CancelRequestAnimationFrame"];
+      window[vendors[x] + 'CancelAnimationFrame'] || // Webkit中此取消方法的名字变了
+      window[vendors[x] + 'CancelRequestAnimationFrame'];
   }
   if (!window.requestAnimationFrame) {
     window.requestAnimationFrame = (callback, element) => {
@@ -26,37 +26,37 @@ let polyfillAnimation = () => {
       clearTimeout(id);
     };
   }
-}
+};
 
 // polyfill event
 let addEvent = (element, type, handler) => {
-    if (element.addEventListener) {
-        element.addEventListener(type, handler, false);
-    } else if (element.attachEvent) {
-        element.attachEvent("on" + type, handler);
-    } else {
-        element["on" + type] = handler;
-    }
-}
+  if (element.addEventListener) {
+    element.addEventListener(type, handler, false);
+  } else if (element.attachEvent) {
+    element.attachEvent('on' + type, handler);
+  } else {
+    element['on' + type] = handler;
+  }
+};
 
 class Carousel {
   // ID-NAMES
   static ID = {
-    CAROUSEL_WRAP: "#carouselWrap",
-    CAROUSEL_DOTS: "#carouselDots",
-    ARROW_LEFT: "#arrowLeft",
-    ARROW_RIGHT: "#arrowRight"
+    CAROUSEL_WRAP: '#carouselWrap',
+    CAROUSEL_DOTS: '#carouselDots',
+    ARROW_LEFT: '#arrowLeft',
+    ARROW_RIGHT: '#arrowRight',
   };
 
   static CLASS = {
-    CAROUSEL_WRAP: "carousel-wrap",
-    CAROUSEL_IMG: "carousel-image",
-    CAROUSEL_DOTS_WRAP: "carousel-buttons-wrap",
-    CAROUSEL_DOTS: "carousel-buttons",
-    CAROUSEL_DOT: "carousel-button",
-    CAROUSEL_DOT_ON: "carousel-button on",
-    CAROUSEL_ARROW_LEFT: "carousel-arrow arrow-left",
-    CAROUSEL_ARROW_RIGHT: "carousel-arrow arrow-right"
+    CAROUSEL_WRAP: 'carousel-wrap',
+    CAROUSEL_IMG: 'carousel-image',
+    CAROUSEL_DOTS_WRAP: 'carousel-buttons-wrap',
+    CAROUSEL_DOTS: 'carousel-buttons',
+    CAROUSEL_DOT: 'carousel-button',
+    CAROUSEL_DOT_ON: 'carousel-button on',
+    CAROUSEL_ARROW_LEFT: 'carousel-arrow arrow-left',
+    CAROUSEL_ARROW_RIGHT: 'carousel-arrow arrow-right',
   };
 
   // 轮播-构造函数
@@ -74,7 +74,7 @@ class Carousel {
       // 轮播动画总时间
       carouselAnimateTime: 150,
       // 轮播动画间隔
-      carouselAnimateInterval: 10
+      carouselAnimateInterval: 10,
     };
     // 合并配置
     Object.assign(this.carouselOptions, userOptions);
@@ -141,7 +141,7 @@ class Carousel {
     // 复制首尾节点
     let first = this.carouselWrap.children[0].cloneNode(true);
     let last = this.carouselWrap.children[this.carouselCount - 1].cloneNode(
-      true
+      true,
     );
     // 添加过渡元素
     this.carouselWrap.insertBefore(last, this.carouselWrap.children[0]);
@@ -157,39 +157,39 @@ class Carousel {
     // 设置轮播长度
     this.setWidth(
       this.carouselWrap,
-      this.carouselWidth * this.carouselWrap.children.length
+      this.carouselWidth * this.carouselWrap.children.length,
     );
   }
   setWidth(elem, value) {
-    elem.style.width = value + "px";
+    elem.style.width = value + 'px';
   }
   setHeight(elem, value) {
-    elem.style.height = value + "px";
+    elem.style.height = value + 'px';
   }
   getWidth(elem) {
     return parseInt(elem.style.width);
   }
   setLeft(elem, value) {
-    elem.style.left = value + "px";
+    elem.style.left = value + 'px';
   }
   getLeft(elem) {
     return parseInt(elem.style.left);
   }
   getImgs() {
     // 生成轮播图片DOM
-    let carouselWrapEle = document.createElement("div");
-    carouselWrapEle.setAttribute("class", Carousel.CLASS.CAROUSEL_WRAP);
+    let carouselWrapEle = document.createElement('div');
+    carouselWrapEle.setAttribute('class', Carousel.CLASS.CAROUSEL_WRAP);
     carouselWrapEle.setAttribute(
-      "id",
-      Carousel.ID.CAROUSEL_WRAP.substring(1, Carousel.ID.CAROUSEL_WRAP.length)
+      'id',
+      Carousel.ID.CAROUSEL_WRAP.substring(1, Carousel.ID.CAROUSEL_WRAP.length),
     );
     let fragment = document.createDocumentFragment();
-    let imgEle = document.createElement("img");
+    let imgEle = document.createElement('img');
     this.carouselOptions.carouselImages.forEach((carouselImage, index) => {
       imgEle = imgEle.cloneNode(false);
-      imgEle.setAttribute("class", Carousel.CLASS.CAROUSEL_IMG);
-      imgEle.setAttribute("src", carouselImage);
-      imgEle.setAttribute("alt", index + 1);
+      imgEle.setAttribute('class', Carousel.CLASS.CAROUSEL_IMG);
+      imgEle.setAttribute('src', carouselImage);
+      imgEle.setAttribute('alt', index + 1);
       fragment.appendChild(imgEle);
     });
     carouselWrapEle.appendChild(fragment);
@@ -209,22 +209,22 @@ class Carousel {
   getArrows() {
     // 生成轮播箭头DOM
     let fragment = document.createDocumentFragment();
-    let arrowLeftEle = document.createElement("a");
-    let arrowRightEle = document.createElement("a");
-    arrowLeftEle.setAttribute("href", "javascript:;");
-    arrowLeftEle.setAttribute("class", Carousel.CLASS.CAROUSEL_ARROW_LEFT);
+    let arrowLeftEle = document.createElement('a');
+    let arrowRightEle = document.createElement('a');
+    arrowLeftEle.setAttribute('href', 'javascript:;');
+    arrowLeftEle.setAttribute('class', Carousel.CLASS.CAROUSEL_ARROW_LEFT);
     arrowLeftEle.setAttribute(
-      "id",
-      Carousel.ID.ARROW_LEFT.substring(1, Carousel.ID.ARROW_LEFT.length)
+      'id',
+      Carousel.ID.ARROW_LEFT.substring(1, Carousel.ID.ARROW_LEFT.length),
     );
-    arrowLeftEle.innerHTML = "&lt;";
-    arrowRightEle.setAttribute("href", "javascript:;");
-    arrowRightEle.setAttribute("class", Carousel.CLASS.CAROUSEL_ARROW_RIGHT);
+    arrowLeftEle.innerHTML = '&lt;';
+    arrowRightEle.setAttribute('href', 'javascript:;');
+    arrowRightEle.setAttribute('class', Carousel.CLASS.CAROUSEL_ARROW_RIGHT);
     arrowRightEle.setAttribute(
-      "id",
-      Carousel.ID.ARROW_RIGHT.substring(1, Carousel.ID.ARROW_RIGHT.length)
+      'id',
+      Carousel.ID.ARROW_RIGHT.substring(1, Carousel.ID.ARROW_RIGHT.length),
     );
-    arrowRightEle.innerHTML = "&gt;";
+    arrowRightEle.innerHTML = '&gt;';
     fragment.appendChild(arrowLeftEle);
     fragment.appendChild(arrowRightEle);
     return fragment;
@@ -243,19 +243,19 @@ class Carousel {
   }
   getDots() {
     // 生成轮播圆点DOM
-    let dotsWrap = document.createElement("div");
-    dotsWrap.setAttribute("class", Carousel.CLASS.CAROUSEL_DOTS_WRAP);
-    let dots = document.createElement("div");
-    dots.setAttribute("class", Carousel.CLASS.CAROUSEL_DOTS);
+    let dotsWrap = document.createElement('div');
+    dotsWrap.setAttribute('class', Carousel.CLASS.CAROUSEL_DOTS_WRAP);
+    let dots = document.createElement('div');
+    dots.setAttribute('class', Carousel.CLASS.CAROUSEL_DOTS);
     dots.setAttribute(
-      "id",
-      Carousel.ID.CAROUSEL_DOTS.substring(1, Carousel.ID.CAROUSEL_DOTS.length)
+      'id',
+      Carousel.ID.CAROUSEL_DOTS.substring(1, Carousel.ID.CAROUSEL_DOTS.length),
     );
     let fragment = document.createDocumentFragment();
-    let spanEle = document.createElement("span");
+    let spanEle = document.createElement('span');
     for (let i = 0, len = this.carouselCount; i < len; i++) {
       spanEle = spanEle.cloneNode(false);
-      spanEle.setAttribute("class", Carousel.CLASS.CAROUSEL_DOT);
+      spanEle.setAttribute('class', Carousel.CLASS.CAROUSEL_DOT);
       fragment.appendChild(spanEle);
     }
     dots.appendChild(fragment);
@@ -264,7 +264,7 @@ class Carousel {
   }
   bindDots() {
     for (let i = 0, len = this.carouselDots.children.length; i < len; i++) {
-      addEvent(this.carouselDots.children[i], "click", ev => {
+      addEvent(this.carouselDots.children[i], 'click', ev => {
         // 获取点击的圆点序号
         this.dotIndex = i + 1;
         if (!this.isCarouselAnimate && this.carouselIndex !== this.dotIndex) {
@@ -296,33 +296,36 @@ class Carousel {
       this.carouselWrap.insertBefore(targetNode.cloneNode(true), nextNode);
       this.moveCarousel(
         this.getLeft(this.carouselWrap) - this.carouselWidth,
-        -this.carouselAnimateSpeed
+        -this.carouselAnimateSpeed,
       );
     }
     if (this.carouselIndex > this.dotIndex) {
       // 在当前元素左边插入目标节点
       this.carouselWrap.insertBefore(
         targetNode.cloneNode(true),
-        this.currentNode
+        this.currentNode,
       );
       // 因为向左边插入节点后，当前元素的位置被改变，导致画面有抖动现象，这里重置为新的位置
       this.setLeft(
         this.carouselWrap,
-        -(this.carouselIndex + 1) * this.carouselWidth
+        -(this.carouselIndex + 1) * this.carouselWidth,
       );
       this.moveCarousel(
         this.getLeft(this.carouselWrap) + this.carouselWidth,
-        this.carouselAnimateSpeed
+        this.carouselAnimateSpeed,
       );
     }
   }
   setDot() {
     for (let i = 0, len = this.carouselDots.children.length; i < len; i++) {
-      this.carouselDots.children[i].setAttribute("class", Carousel.CLASS.CAROUSEL_DOT);
+      this.carouselDots.children[i].setAttribute(
+        'class',
+        Carousel.CLASS.CAROUSEL_DOT,
+      );
     }
     this.carouselDots.children[this.carouselIndex - 1].setAttribute(
-      "class",
-      Carousel.CLASS.CAROUSEL_DOT_ON
+      'class',
+      Carousel.CLASS.CAROUSEL_DOT_ON,
     );
   }
   playCarousel() {
@@ -335,13 +338,13 @@ class Carousel {
   }
   bindCarousel() {
     // 鼠标移入移出事件
-    addEvent(this.carousel, "mouseenter", e => {
+    addEvent(this.carousel, 'mouseenter', e => {
       clearInterval(this.carouselInterval);
     });
-    addEvent(this.carousel, "mouseleave", e => {
+    addEvent(this.carousel, 'mouseleave', e => {
       this.playCarousel();
     });
-    addEvent(document, "visibilitychange", e => {
+    addEvent(document, 'visibilitychange', e => {
       if (document.hidden) {
         clearInterval(this.carouselInterval);
       } else {
@@ -351,10 +354,10 @@ class Carousel {
   }
   bindArrows() {
     // 箭头点击事件
-    addEvent(this.arrowLeft, "click", e => {
+    addEvent(this.arrowLeft, 'click', e => {
       this.prevCarousel();
     });
-    addEvent(this.arrowRight, "click", e => {
+    addEvent(this.arrowRight, 'click', e => {
       this.nextCarousel();
     });
   }
@@ -376,7 +379,7 @@ class Carousel {
       // 设置轮播位置
       this.moveCarousel(
         this.getLeft(this.carouselWrap) + this.carouselWidth,
-        this.carouselAnimateSpeed
+        this.carouselAnimateSpeed,
       );
       if (this.carouselOptions.showCarouselDot) {
         // 显示当前圆点
@@ -392,7 +395,7 @@ class Carousel {
       }
       this.moveCarousel(
         this.getLeft(this.carouselWrap) - this.carouselWidth,
-        -this.carouselAnimateSpeed
+        -this.carouselAnimateSpeed,
       );
       if (this.carouselOptions.showCarouselDot) {
         // 显示当前圆点

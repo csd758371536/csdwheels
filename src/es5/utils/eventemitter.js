@@ -1,14 +1,14 @@
 (function() {
   var root =
-    (typeof self == "object" && self.self == self && self) ||
-    (typeof global == "object" && global.global == global && global) ||
+    (typeof self == 'object' && self.self == self && self) ||
+    (typeof global == 'object' && global.global == global && global) ||
     this ||
     {};
 
   function isValidListener(listener) {
-    if (typeof listener === "function") {
+    if (typeof listener === 'function') {
       return true;
-    } else if (listener && typeof listener === "object") {
+    } else if (listener && typeof listener === 'object') {
       return isValidListener(listener.listener);
     } else {
       return false;
@@ -17,7 +17,7 @@
 
   function indexOf(array, item) {
     var result = -1;
-    item = typeof item === "object" ? item.listener : item;
+    item = typeof item === 'object' ? item.listener : item;
 
     for (var i = 0, len = array.length; i < len; i++) {
       if (array[i].listener === item) {
@@ -33,7 +33,7 @@
     this.__events = {};
   }
 
-  EventEmitter.VERSION = "1.0.0";
+  EventEmitter.VERSION = '1.0.0';
 
   var proto = EventEmitter.prototype;
 
@@ -47,12 +47,12 @@
     if (!eventName || !listener) return;
 
     if (!isValidListener(listener)) {
-      throw new TypeError("listener must be a function");
+      throw new TypeError('listener must be a function');
     }
 
     var events = this.__events;
     var listeners = (events[eventName] = events[eventName] || []);
-    var listenerIsWrapped = typeof listener === "object";
+    var listenerIsWrapped = typeof listener === 'object';
 
     // 不重复添加事件
     if (indexOf(listeners, listener) === -1) {
@@ -61,8 +61,8 @@
           ? listener
           : {
               listener: listener,
-              once: false
-            }
+              once: false,
+            },
       );
     }
 
@@ -78,7 +78,7 @@
   proto.once = function(eventName, listener) {
     return this.on(eventName, {
       listener: listener,
-      once: true
+      once: true,
     });
   };
 
@@ -100,7 +100,7 @@
       }
     }
 
-    if (typeof index !== "undefined") {
+    if (typeof index !== 'undefined') {
       listeners.splice(index, 1, null);
     }
 
@@ -142,8 +142,8 @@
     }
   };
 
-  if (typeof exports != "undefined" && !exports.nodeType) {
-    if (typeof module != "undefined" && !module.nodeType && module.exports) {
+  if (typeof exports != 'undefined' && !exports.nodeType) {
+    if (typeof module != 'undefined' && !module.nodeType && module.exports) {
       exports = module.exports = EventEmitter;
     }
     exports.EventEmitter = EventEmitter;

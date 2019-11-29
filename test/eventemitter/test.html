@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title></title>
-</head>
+  </head>
 
-<body>
-    <script src="../../src/es5/utils/eventemitter.js" charset="utf-8"></script>
+  <body>
+    <script src="/src/es5/utils/eventemitter.js" charset="utf-8"></script>
     <script type="text/javascript">
-        //使用
-        var a = new EventEmitter();
-        a.on("type1", function (a, b, c) {
-            console.log(a, b, c);
-        })
-        a.on("type1", function () {
-            console.log("service2");
-        })
-        a.emit("type1", [1, 2, 3]);
-        function otherService() {
-            console.log("other service");
-        }
-        a.on("type2", otherService);
-        a.on("type2", function () { console.log("service 3") })
-        a.emit("type2");
-        a.off("type2", otherService);
-        a.emit("type2");
+      //使用
+      var a = new EventEmitter();
+      a.on('type1', function(a, b, c) {
+        console.log(a, b, c);
+      });
+      a.on('type1', function() {
+        console.log('service2');
+      });
+      a.emit('type1', [1, 2, 3]);
+      function otherService() {
+        console.log('other service');
+      }
+      a.on('type2', otherService);
+      a.on('type2', function() {
+        console.log('service 3');
+      });
+      a.emit('type2');
+      a.off('type2', otherService);
+      a.emit('type2');
     </script>
-</body>
-
+  </body>
 </html>

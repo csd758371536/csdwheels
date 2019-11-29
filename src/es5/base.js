@@ -1,4 +1,4 @@
-; // JavaScript弱语法的特点,如果前面刚好有个函数没有以";"结尾,那么可能会有语法错误
+// JavaScript弱语法的特点,如果前面刚好有个函数没有以";"结尾,那么可能会有语法错误
 (function(window, document, undefined) {
   'use strict';
   var Base = function() {
@@ -8,9 +8,7 @@
   };
   Base.prototype = {
     construct: Base,
-    init: function() {
-
-    }
+    init: function() {},
   };
   window.Base = Base;
 })(window, document);
@@ -20,7 +18,6 @@
 //   throw 'missing required arguments: data';
 // }
 
-;
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -29,7 +26,7 @@
   } else {
     root.Plugin = factory();
   }
-}(typeof self !== 'undefined' ? self : this, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
   'use strict';
 
   // tool
@@ -55,10 +52,10 @@
         element.addEventListener(type, handler, false);
       } else if (element.attachEvent) {
         // 使用IE方法添加事件
-        element.attachEvent("on" + type, handler);
+        element.attachEvent('on' + type, handler);
       } else {
         // 使用DOM0级方法添加事件
-        element["on" + type] = handler;
+        element['on' + type] = handler;
       }
     },
     // 移除事件
@@ -66,9 +63,9 @@
       if (element.removeEventListener) {
         element.removeEventListener(type, handler, false);
       } else if (element.datachEvent) {
-        element.detachEvent("on" + type, handler);
+        element.detachEvent('on' + type, handler);
       } else {
-        element["on" + type] = null;
+        element['on' + type] = null;
       }
     },
     getEvent: function(event) {
@@ -110,7 +107,7 @@
     },
     // 获取mousedown或mouseup按下或释放的按钮是鼠标中的哪一个
     getButton: function(event) {
-      if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+      if (document.implementation.hasFeature('MouseEvents', '2.0')) {
         return event.button;
       } else {
         //将IE模型下的button属性映射为DOM模型下的button属性
@@ -142,19 +139,19 @@
     },
     // 以跨浏览器取得相同的字符编码，需在keypress事件中使用
     getCharCode: function(event) {
-      if (typeof event.charCode == "number") {
+      if (typeof event.charCode == 'number') {
         return event.charCode;
       } else {
         return event.keyCode;
       }
-    }
+    },
   };
 
   // plugin construct function
   function Plugin(selector, userOptions) {
     // Plugin() or new Plugin()
     if (!(this instanceof Plugin)) return new Plugin(selector, userOptions);
-    this.init(selector, userOptions)
+    this.init(selector, userOptions);
   }
   Plugin.prototype = {
     constructor: Plugin,
@@ -162,12 +159,11 @@
     options: {},
     init: function(selector, userOptions) {
       extend(this.options, userOptions, true);
-    }
+    },
   };
 
   return Plugin;
-}));
-
+});
 
 // var plugin =(function(){
 //      function _firstFunc(str){

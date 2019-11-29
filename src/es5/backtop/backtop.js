@@ -1,23 +1,23 @@
 // 文章： 从几个常见属性讲起（offset scrollTop client）
 (function(root, factory) {
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     define([], factory);
-  } else if (typeof module === "object" && module.exports) {
+  } else if (typeof module === 'object' && module.exports) {
     module.exports = factory();
   } else {
     root.BackTop = factory();
   }
-})(typeof self !== "undefined" ? self : this, function() {
-  "use strict";
+})(typeof self !== 'undefined' ? self : this, function() {
+  'use strict';
 
   // Polyfills
   function addEvent(element, type, handler) {
     if (element.addEventListener) {
       element.addEventListener(type, handler, false);
     } else if (element.attachEvent) {
-      element.attachEvent("on" + type, handler);
+      element.attachEvent('on' + type, handler);
     } else {
-      element["on" + type] = handler;
+      element['on' + type] = handler;
     }
   }
 
@@ -70,7 +70,7 @@
     },
     bindBackTop: function() {
       var _this = this;
-      addEvent(this.backTop, "click", function(e) {
+      addEvent(this.backTop, 'click', function(e) {
         if (_this.scrollTimer) {
           clearInterval(_this.scrollTimer);
         }
@@ -87,7 +87,7 @@
     },
     bindScroll: function() {
       var _this = this;
-      addEvent(window, "scroll", function(e) {
+      addEvent(window, 'scroll', function(e) {
         if (getScrollTop() >= getClientHeight()) {
           _this.isShowScroll = true;
         } else {
@@ -99,7 +99,7 @@
         _this.isTop = false;
       });
     },
-    constructor: BackTop
+    constructor: BackTop,
   };
 
   return BackTop;

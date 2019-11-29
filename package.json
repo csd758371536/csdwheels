@@ -4,9 +4,21 @@
   "description": "some javascript wheels made by csdoker.",
   "main": "dist-es6/csdwheels.min.js",
   "scripts": {
-    "test": "node test/test.js",
+    "precommit": "lint-staged",
+    "test": "node ./test/server.js",
     "dev": "webpack-dev-server",
+    "prettier": "prettier --write \"./src/**/*.{js,css,html}\"",
     "build": "webpack && gulp mini && npm run test"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "prettier --write",
+      "git add"
+    ],
+    "**/*.{md,json}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -37,10 +49,14 @@
     "clean-webpack-plugin": "^0.1.19",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
+    "express": "^4.17.1",
     "gulp": "^4.0.0",
     "gulp-rename": "^1.4.0",
     "gulp-uglify": "^3.0.1",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
     "node-sass": "^4.9.2",
+    "prettier": "^1.19.1",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
