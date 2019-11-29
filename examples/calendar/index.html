@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="../../style/base.css">
+    <link rel="stylesheet" href="../../style/calendar/test.min.css">
+    <link rel="stylesheet" href="../../style/calendar/calendar.min.css">
+</head>
+<body>
+    <div class="main">
+        <div class="calendar" id="calendar"></div>
+    </div>
+    <script src="../../src/es5/calendar/calendar.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        var calendar = new Calendar('#calendar', {
+            // time: '275760-09-01',
+            // time: new Date('2018-09-07')
+            // time: '1970-1-1'
+        });
+        calendar.on('click', function(calendarTime) {
+            console.log(calendarTime);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="../../style/base.css">
+  <link rel="stylesheet" href="../../style/pagination/test.min.css">
+  <link rel="stylesheet" href="../../style/pagination/pagination.min.css">
+</head>
+
+<body>
+  <div class="main">
+    <span>显示省略号：</span>
+    <ol class="pagination" id="pagelist1"></ol>
+    <p>不显示省略号：</p>
+    <ol class="pagination" id="pagelist2"></ol>
+    <p>带Hash参数：</p>
+    <ol class="pagination" id="pagelist3"></ol>
+  </div>
+  <script src="../../dist/pagination/pagination.min.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    // 显示省略号
+    new Pagination('#pagelist1', {
+      curr: 1,
+      count: 162,
+      limit: 5,
+      ellipsis: true,
+      callback: function(obj) {
+        console.log(obj);
+      }
+    });
+    // 不显示省略号
+    new Pagination('#pagelist2', {
+      curr: 1,
+      count: 162,
+      limit: 5,
+      ellipsis: false,
+      callback: function(obj) {
+        console.log(obj);
+      }
+    });
+    // 带hash参数
+    new Pagination('#pagelist3', {
+      curr: parseInt(location.hash.replace('#!page=', '')) || 1,
+      count: 162,
+      limit: 5,
+      ellipsis: true,
+      hash: 'page',
+      callback: function(obj) {
+        console.log(obj);
+        // 首次不执行
+        if (!obj.isFirst) {
+          // do something
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
