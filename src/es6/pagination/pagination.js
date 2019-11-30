@@ -1,32 +1,33 @@
-import '../../../style/pagination/pagination.scss'
+import '../../../style/pagination/pagination.scss';
 
 class Pagination {
   static CLASS_NAME = {
     ITEM: 'pagination-item',
-    LINK: 'pagination-link'
-  }
+    LINK: 'pagination-link',
+  };
 
-  static PAGE_INFOS = [{
-      id: "first",
-      content: "首页"
+  static PAGE_INFOS = [
+    {
+      id: 'first',
+      content: '首页',
     },
     {
-      id: "prev",
-      content: "前一页"
+      id: 'prev',
+      content: '前一页',
     },
     {
-      id: "next",
-      content: "后一页"
+      id: 'next',
+      content: '后一页',
     },
     {
-      id: "last",
-      content: "尾页"
+      id: 'last',
+      content: '尾页',
     },
     {
-      id: "",
-      content: "..."
-    }
-  ]
+      id: '',
+      content: '...',
+    },
+  ];
 
   constructor(selector, options = {}) {
     // 默认配置
@@ -34,23 +35,23 @@ class Pagination {
       curr: 1,
       pageShow: 2,
       ellipsis: true,
-      hash: false
+      hash: false,
     };
     Object.assign(this.options, options);
     this.init(selector);
   }
 
-  addEvent (element, type, handler) {
+  addEvent(element, type, handler) {
     // 添加绑定
     if (element.addEventListener) {
       // 使用DOM2级方法添加事件
       element.addEventListener(type, handler, false);
     } else if (element.attachEvent) {
       // 使用IE方法添加事件
-      element.attachEvent("on" + type, handler);
+      element.attachEvent('on' + type, handler);
     } else {
       // 使用DOM0级方法添加事件
-      element["on" + type] = handler;
+      element['on' + type] = handler;
     }
   }
 
@@ -60,52 +61,53 @@ class Pagination {
     return context ? context.querySelectorAll(selector) : null;
   }
 
-  getPageInfos (className, content) {
+  getPageInfos(className, content) {
     return {
-      id: "page",
+      id: 'page',
       className: className,
-      content: content
+      content: content,
     };
   }
 
-  changePage () {
+  changePage() {
     let pageElement = this.pageElement;
-    this.addEvent(pageElement, "click", (ev) => {
+    this.addEvent(pageElement, 'click', ev => {
       let e = ev || window.event;
       let target = e.target || e.srcElement;
-      if (target.nodeName.toLocaleLowerCase() == "a") {
-        if (target.id === "prev") {
+      if (target.nodeName.toLocaleLowerCase() == 'a') {
+        if (target.id === 'prev') {
           this.prevPage();
-        } else if (target.id === "next") {
+        } else if (target.id === 'next') {
           this.nextPage();
-        } else if (target.id === "first") {
+        } else if (target.id === 'first') {
           this.firstPage();
-        } else if (target.id === "last") {
+        } else if (target.id === 'last') {
           this.lastPage();
-        } else if (target.id === "page") {
+        } else if (target.id === 'page') {
           this.goPage(parseInt(target.innerHTML));
         } else {
           return;
         }
         this.renderPages();
-        this.options.callback && this.options.callback({
-          curr: this.pageNumber,
-          limit: this.options.limit,
-          isFirst: false
-        });
+        this.options.callback &&
+          this.options.callback({
+            curr: this.pageNumber,
+            limit: this.options.limit,
+            isFirst: false,
+          });
         this.pageHash();
       }
     });
   }
 
-  pageHash () {
+  pageHash() {
     if (this.options.hash) {
       window.location.hash = '#!' + this.options.hash + '=' + this.pageNumber;
     }
   }
 
-  renderPages () {
-    this.pageElement.innerHTML = "";
+  renderPages() {
+    this.pageElement.innerHTML = '';
     if (this.options.ellipsis) {
       this.pageElement.appendChild(this.renderEllipsis());
     } else {
@@ -113,41 +115,57 @@ class Pagination {
     }
   }
 
-  renderNoEllipsis () {
+  renderNoEllipsis() {
     let fragment = document.createDocumentFragment();
     if (this.pageNumber < this.options.pageShow + 1) {
       fragment.appendChild(this.renderDom(1, this.options.pageShow * 2 + 1));
     } else if (this.pageNumber > this.pageCount - this.options.pageShow) {
-      fragment.appendChild(this.renderDom(this.pageCount - this.options.pageShow * 2, this.pageCount));
+      fragment.appendChild(
+        this.renderDom(
+          this.pageCount - this.options.pageShow * 2,
+          this.pageCount,
+        ),
+      );
     } else {
-      fragment.appendChild(this.renderDom(this.pageNumber - this.options.pageShow, this.pageNumber + this.options.pageShow));
+      fragment.appendChild(
+        this.renderDom(
+          this.pageNumber - this.options.pageShow,
+          this.pageNumber + this.options.pageShow,
+        ),
+      );
     }
     if (this.pageNumber > 1) {
       this.addFragmentBefore(fragment, [
         Pagination.PAGE_INFOS[0],
-        Pagination.PAGE_INFOS[1]
+        Pagination.PAGE_INFOS[1],
       ]);
     }
     if (this.pageNumber < this.pageCount) {
-      this.addFragmentAfter(fragment, [Pagination.PAGE_INFOS[2], Pagination.PAGE_INFOS[3]]);
+      this.addFragmentAfter(fragment, [
+        Pagination.PAGE_INFOS[2],
+        Pagination.PAGE_INFOS[3],
+      ]);
     }
     return fragment;
   }
 
-  renderEllipsis () {
+  renderEllipsis() {
     let fragment = document.createDocumentFragment();
     this.addFragmentAfter(fragment, [
-      this.getPageInfos(Pagination.CLASS_NAME.LINK + " current", this.pageNumber)
+      this.getPageInfos(
+        Pagination.CLASS_NAME.LINK + ' current',
+        this.pageNumber,
+      ),
     ]);
     for (let i = 1; i <= this.options.pageShow; i++) {
       if (this.pageNumber - i > 1) {
         this.addFragmentBefore(fragment, [
-          this.getPageInfos(Pagination.CLASS_NAME.LINK, this.pageNumber - i)
+          this.getPageInfos(Pagination.CLASS_NAME.LINK, this.pageNumber - i),
         ]);
       }
       if (this.pageNumber + i < this.pageCount) {
         this.addFragmentAfter(fragment, [
-          this.getPageInfos(Pagination.CLASS_NAME.LINK, this.pageNumber + i)
+          this.getPageInfos(Pagination.CLASS_NAME.LINK, this.pageNumber + i),
         ]);
       }
     }
@@ -158,7 +176,7 @@ class Pagination {
       this.addFragmentBefore(fragment, [
         Pagination.PAGE_INFOS[0],
         Pagination.PAGE_INFOS[1],
-        this.getPageInfos(Pagination.CLASS_NAME.LINK, 1)
+        this.getPageInfos(Pagination.CLASS_NAME.LINK, 1),
       ]);
     }
     if (this.pageNumber + this.options.pageShow + 1 < this.pageCount) {
@@ -168,34 +186,34 @@ class Pagination {
       this.addFragmentAfter(fragment, [
         this.getPageInfos(Pagination.CLASS_NAME.LINK, this.pageCount),
         Pagination.PAGE_INFOS[2],
-        Pagination.PAGE_INFOS[3]
+        Pagination.PAGE_INFOS[3],
       ]);
     }
     return fragment;
   }
 
-  addFragmentBefore (fragment, datas) {
+  addFragmentBefore(fragment, datas) {
     fragment.insertBefore(this.createHtml(datas), fragment.firstChild);
   }
 
-  addFragmentAfter (fragment, datas) {
+  addFragmentAfter(fragment, datas) {
     fragment.appendChild(this.createHtml(datas));
   }
 
-  createHtml (elemDatas) {
+  createHtml(elemDatas) {
     let fragment = document.createDocumentFragment();
-    let liEle = document.createElement("li");
-    let aEle = document.createElement("a");
+    let liEle = document.createElement('li');
+    let aEle = document.createElement('a');
     elemDatas.forEach((elementData, index) => {
       liEle = liEle.cloneNode(false);
       aEle = aEle.cloneNode(false);
-      liEle.setAttribute("class", Pagination.CLASS_NAME.ITEM);
-      aEle.setAttribute("href", "javascript:;");
-      aEle.setAttribute("id", elementData.id);
+      liEle.setAttribute('class', Pagination.CLASS_NAME.ITEM);
+      aEle.setAttribute('href', 'javascript:;');
+      aEle.setAttribute('id', elementData.id);
       if (elementData.id !== 'page') {
-        aEle.setAttribute("class", Pagination.CLASS_NAME.LINK);
+        aEle.setAttribute('class', Pagination.CLASS_NAME.LINK);
       } else {
-        aEle.setAttribute("class", elementData.className);
+        aEle.setAttribute('class', elementData.className);
       }
       aEle.innerHTML = elementData.content;
       liEle.appendChild(aEle);
@@ -204,33 +222,36 @@ class Pagination {
     return fragment;
   }
 
-  renderDom (begin, end) {
+  renderDom(begin, end) {
     let fragment = document.createDocumentFragment();
-    let str = "";
+    let str = '';
     for (let i = begin; i <= end; i++) {
-      str = this.pageNumber === i ? Pagination.CLASS_NAME.LINK + " current" : Pagination.CLASS_NAME.LINK;
+      str =
+        this.pageNumber === i
+          ? Pagination.CLASS_NAME.LINK + ' current'
+          : Pagination.CLASS_NAME.LINK;
       this.addFragmentAfter(fragment, [this.getPageInfos(str, i)]);
     }
     return fragment;
   }
 
-  prevPage () {
+  prevPage() {
     this.pageNumber--;
   }
 
-  nextPage () {
+  nextPage() {
     this.pageNumber++;
   }
 
-  goPage (pageNumber) {
+  goPage(pageNumber) {
     this.pageNumber = pageNumber;
   }
 
-  firstPage () {
+  firstPage() {
     this.pageNumber = 1;
   }
 
-  lastPage () {
+  lastPage() {
     this.pageNumber = this.pageCount;
   }
 
@@ -246,11 +267,12 @@ class Pagination {
     // 渲染
     this.renderPages();
     // 执行回调函数
-    this.options.callback && this.options.callback({
-      curr: this.pageNumber,
-      limit: this.options.limit,
-      isFirst: true
-    });
+    this.options.callback &&
+      this.options.callback({
+        curr: this.pageNumber,
+        limit: this.options.limit,
+        isFirst: true,
+      });
     // 改变页数并触发事件
     this.changePage();
   }

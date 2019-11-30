@@ -1,34 +1,32 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+    <link rel="stylesheet" href="/style/base.css" />
+    <link rel="stylesheet" href="/style/carousel/test.min.css" />
+    <link rel="stylesheet" href="/style/carousel/carousel.min.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <link rel="stylesheet" href="../../style/base.css">
-  <link rel="stylesheet" href="../../style/carousel/test.min.css">
-  <link rel="stylesheet" href="../../style/carousel/carousel.min.css">
-</head>
-
-<body>
-  <div class="main">
-    <div class="carousel-container" id="carousel"></div>
-  </div>
-  <script src="../../src/es5/carousel/carousel.js" charset="utf-8"></script>
-  <script type="text/javascript">
-    new Carousel('#carousel', {
-      // 轮播高度
-      carouselWidth: 600,
-      // 轮播宽度
-      carouselHeight: 400,
-      carouselImages: [
-        'https://i.loli.net/2018/08/04/5b657fef3a46c.jpg',
-        'https://i.loli.net/2018/08/04/5b657fef509c9.jpg',
-        'https://i.loli.net/2018/08/04/5b657fef51617.jpg',
-        'https://i.loli.net/2018/08/04/5b657fef530a1.jpg',
-        'https://i.loli.net/2018/08/04/5b657fef52441.jpg'
-      ]
-    });
-  </script>
-</body>
-
+  <body>
+    <div class="main">
+      <div class="carousel-container" id="carousel"></div>
+    </div>
+    <script src="/src/es5/carousel/carousel.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      new Carousel('#carousel', {
+        // 轮播高度
+        carouselWidth: 600,
+        // 轮播宽度
+        carouselHeight: 400,
+        carouselImages: [
+          'https://i.loli.net/2018/08/04/5b657fef3a46c.jpg',
+          'https://i.loli.net/2018/08/04/5b657fef509c9.jpg',
+          'https://i.loli.net/2018/08/04/5b657fef51617.jpg',
+          'https://i.loli.net/2018/08/04/5b657fef530a1.jpg',
+          'https://i.loli.net/2018/08/04/5b657fef52441.jpg',
+        ],
+      });
+    </script>
+  </body>
 </html>

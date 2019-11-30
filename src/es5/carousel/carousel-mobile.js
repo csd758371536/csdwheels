@@ -1,22 +1,22 @@
 (function(root, factory) {
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     define([], factory);
-  } else if (typeof module === "object" && module.exports) {
+  } else if (typeof module === 'object' && module.exports) {
     module.exports = factory();
   } else {
     root.CarouselMobile = factory();
   }
-})(typeof self !== "undefined" ? self : this, function() {
-  "use strict";
+})(typeof self !== 'undefined' ? self : this, function() {
+  'use strict';
 
   // ID-NAMES
   var ID = {
-    CAROUSEL_WRAP: "#carouselWrap"
+    CAROUSEL_WRAP: '#carouselWrap',
   };
 
   var CLASS = {
-    CAROUSEL_WRAP: "carousel-wrap",
-    CAROUSEL_IMG: "carousel-image"
+    CAROUSEL_WRAP: 'carousel-wrap',
+    CAROUSEL_IMG: 'carousel-image',
   };
 
   // Polyfills
@@ -24,9 +24,9 @@
     if (element.addEventListener) {
       element.addEventListener(type, handler, false);
     } else if (element.attachEvent) {
-      element.attachEvent("on" + type, handler);
+      element.attachEvent('on' + type, handler);
     } else {
-      element["on" + type] = handler;
+      element['on' + type] = handler;
     }
   }
 
@@ -75,7 +75,7 @@
       // 轮播自动播放间隔
       carouselInterval: 3000,
       // 轮播滑动一次的时间
-      carouselDuration: 300
+      carouselDuration: 300,
     },
     isCarouselComplete: function() {
       // 检测页面图片是否加载完成
@@ -104,7 +104,7 @@
         start: 0,
         move: 0,
         end: 0,
-        offset: 0.3
+        offset: 0.3,
       };
       // 绑定轮播图事件
       this.bindCarousel();
@@ -116,7 +116,7 @@
       // 复制首尾节点
       var first = _this.carouselWrap.children[0].cloneNode(true);
       var last = _this.carouselWrap.children[_this.carouselCount - 1].cloneNode(
-        true
+        true,
       );
       // 添加过渡元素
       _this.carouselWrap.insertBefore(last, _this.carouselWrap.children[0]);
@@ -132,40 +132,38 @@
     setTransition: function(elem, value) {
       elem.style.transition = value + 'ms';
     },
-    setTransform: function(elem ,value) {
-      elem.style.transform =
-        "translate3d(" + value + "px, 0px, 0px)";
-      elem.style["-webkit-transform"] =
-        "translate3d(" + value + "px, 0px, 0px)";
-      elem.style["-ms-transform"] =
-        "translate3d(" + value + "px, 0px, 0px)";
+    setTransform: function(elem, value) {
+      elem.style.transform = 'translate3d(' + value + 'px, 0px, 0px)';
+      elem.style['-webkit-transform'] =
+        'translate3d(' + value + 'px, 0px, 0px)';
+      elem.style['-ms-transform'] = 'translate3d(' + value + 'px, 0px, 0px)';
     },
     getTransform: function() {
       var x =
         this.carouselWrap.style.transform ||
-        this.carouselWrap.style["-webkit-transform"] ||
-        this.carouselWrap.style["-ms-transform"];
+        this.carouselWrap.style['-webkit-transform'] ||
+        this.carouselWrap.style['-ms-transform'];
       x = x.substring(12);
       x = x.match(/(\S*)px/)[1];
       return Number(x);
     },
     getImgs: function() {
-      var carouselWrapEle = document.createElement("div");
-      carouselWrapEle.setAttribute("class", CLASS.CAROUSEL_WRAP);
+      var carouselWrapEle = document.createElement('div');
+      carouselWrapEle.setAttribute('class', CLASS.CAROUSEL_WRAP);
       carouselWrapEle.setAttribute(
-        "id",
-        ID.CAROUSEL_WRAP.substring(1, ID.CAROUSEL_WRAP.length)
+        'id',
+        ID.CAROUSEL_WRAP.substring(1, ID.CAROUSEL_WRAP.length),
       );
       var fragment = document.createDocumentFragment();
-      var imgEle = document.createElement("img");
+      var imgEle = document.createElement('img');
       this.carouselOptions.carouselImages.forEach(function(
         carouselImage,
-        index
+        index,
       ) {
         imgEle = imgEle.cloneNode(false);
-        imgEle.setAttribute("class", CLASS.CAROUSEL_IMG);
-        imgEle.setAttribute("src", carouselImage);
-        imgEle.setAttribute("alt", index + 1);
+        imgEle.setAttribute('class', CLASS.CAROUSEL_IMG);
+        imgEle.setAttribute('src', carouselImage);
+        imgEle.setAttribute('alt', index + 1);
         fragment.appendChild(imgEle);
       });
       carouselWrapEle.appendChild(fragment);
@@ -183,34 +181,40 @@
     bindCarousel: function() {
       var _this = this;
       // 鼠标移入移出事件
-      addEvent(this.carousel, "touchstart", function(e) {
+      addEvent(this.carousel, 'touchstart', function(e) {
         if (!_this.isCarouselAnimate) {
           clearInterval(_this.carouselIntervalr);
           _this.carouselTouch.startX = _this.getTransform();
-          _this.carouselTouch.start = e.changedTouches[e.changedTouches.length - 1].clientX;
+          _this.carouselTouch.start =
+            e.changedTouches[e.changedTouches.length - 1].clientX;
         }
       });
-      addEvent(this.carousel, "touchmove", function(e) {
+      addEvent(this.carousel, 'touchmove', function(e) {
         if (!_this.isCarouselAnimate && _this.carouselTouch.start != -1) {
           clearInterval(_this.carouselIntervalr);
           _this.carouselTouch.move =
-            e.changedTouches[e.changedTouches.length - 1].clientX - _this.carouselTouch.start;
-          _this.setTransform(_this.carouselWrap, _this.carouselTouch.move + _this.carouselTouch.startX);
+            e.changedTouches[e.changedTouches.length - 1].clientX -
+            _this.carouselTouch.start;
+          _this.setTransform(
+            _this.carouselWrap,
+            _this.carouselTouch.move + _this.carouselTouch.startX,
+          );
         }
       });
-      addEvent(this.carousel, "touchend", function(e) {
+      addEvent(this.carousel, 'touchend', function(e) {
         if (!_this.isCarouselAnimate && _this.carouselTouch.start != -1) {
           clearInterval(_this.carouselIntervalr);
-          _this.setTransform(_this.carouselWrap, _this.carouselTouch.move + _this.carouselTouch.startX);
+          _this.setTransform(
+            _this.carouselWrap,
+            _this.carouselTouch.move + _this.carouselTouch.startX,
+          );
           var x = _this.getTransform();
           x +=
             _this.carouselTouch.move > 0
               ? _this.carouselWidth * _this.carouselTouch.offset
               : _this.carouselWidth * -_this.carouselTouch.offset;
           _this.carouselIndex = Math.round(x / _this.carouselWidth) * -1;
-          _this.moveCarousel(
-            _this.carouselIndex * -_this.carouselWidth
-          );
+          _this.moveCarousel(_this.carouselIndex * -_this.carouselWidth);
           if (_this.carouselIndex > _this.carouselCount) {
             _this.carouselIndex = 1;
           }
@@ -234,14 +238,15 @@
         if (this.carouselIndex > this.carouselCount) {
           this.carouselIndex = 1;
         }
-        this.moveCarousel(
-          this.getTransform() - this.carouselWidth
-        );
+        this.moveCarousel(this.getTransform() - this.carouselWidth);
       }
     },
     moveCarousel: function(target) {
       this.isCarouselAnimate = true;
-      this.setTransition(this.carouselWrap, this.carouselOptions.carouselDuration);
+      this.setTransition(
+        this.carouselWrap,
+        this.carouselOptions.carouselDuration,
+      );
       this.setTransform(this.carouselWrap, target);
       this.resetCarousel(target);
     },
@@ -259,13 +264,16 @@
       this.setTransform(this.carouselWrap, target);
       //如当前在辅助图上，就归位到真的图上
       if (target > -this.carouselWidth) {
-        this.setTransform(this.carouselWrap, -this.carouselCount * this.carouselWidth);
+        this.setTransform(
+          this.carouselWrap,
+          -this.carouselCount * this.carouselWidth,
+        );
       }
       if (target < -this.carouselWidth * this.carouselCount) {
         this.setTransform(this.carouselWrap, -this.carouselWidth);
       }
     },
-    constructor: CarouselMobile
+    constructor: CarouselMobile,
   };
   return CarouselMobile;
 });

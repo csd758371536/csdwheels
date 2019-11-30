@@ -1,34 +1,34 @@
-import "../../../style/carousel/carousel-mobile.scss";
+import '../../../style/carousel/carousel-mobile.scss';
 
 // polyfill event
 let addEvent = (element, type, handler) => {
-    if (element.addEventListener) {
-        element.addEventListener(type, handler, false);
-    } else if (element.attachEvent) {
-        element.attachEvent("on" + type, handler);
-    } else {
-        element["on" + type] = handler;
-    }
-}
+  if (element.addEventListener) {
+    element.addEventListener(type, handler, false);
+  } else if (element.attachEvent) {
+    element.attachEvent('on' + type, handler);
+  } else {
+    element['on' + type] = handler;
+  }
+};
 
 class CarouselMobile {
   // ID-NAMES
   static ID = {
-    CAROUSEL_WRAP: "#carouselWrap"
-  }
+    CAROUSEL_WRAP: '#carouselWrap',
+  };
 
   static CLASS = {
-    CAROUSEL_WRAP: "carousel-wrap",
-    CAROUSEL_IMG: "carousel-image"
-  }
+    CAROUSEL_WRAP: 'carousel-wrap',
+    CAROUSEL_IMG: 'carousel-image',
+  };
 
   // 轮播-构造函数
-  constructor (selector, userOptions = {}) {
+  constructor(selector, userOptions = {}) {
     this.carouselOptions = {
-        // 轮播自动播放间隔
-        carouselInterval: 3000,
-        // 轮播滑动一次的时间
-        carouselDuration: 300
+      // 轮播自动播放间隔
+      carouselInterval: 3000,
+      // 轮播滑动一次的时间
+      carouselDuration: 300,
     };
     // 合并配置
     Object.assign(this.carouselOptions, userOptions);
@@ -51,7 +51,7 @@ class CarouselMobile {
     }, checkInterval);
   }
 
-  isCarouselComplete () {
+  isCarouselComplete() {
     // 检测页面图片是否加载完成
     let completeCount = 0;
     for (let i = 0; i < this.carouselWrap.children.length; i++) {
@@ -62,7 +62,7 @@ class CarouselMobile {
     return completeCount === this.carouselWrap.children.length ? true : false;
   }
 
-  initCarousel (selector, userOptions) {
+  initCarousel(selector, userOptions) {
     // 获取轮播数量
     this.carouselCount = this.carouselWrap.children.length;
     // 设置轮播
@@ -79,7 +79,7 @@ class CarouselMobile {
       start: 0,
       move: 0,
       end: 0,
-      offset: 0.3
+      offset: 0.3,
     };
     // 绑定轮播图事件
     this.bindCarousel();
@@ -87,11 +87,11 @@ class CarouselMobile {
     this.playCarousel();
   }
 
-  setCarousel () {
+  setCarousel() {
     // 复制首尾节点
     let first = this.carouselWrap.children[0].cloneNode(true);
     let last = this.carouselWrap.children[this.carouselCount - 1].cloneNode(
-      true
+      true,
     );
     // 添加过渡元素
     this.carouselWrap.insertBefore(last, this.carouselWrap.children[0]);
@@ -102,55 +102,54 @@ class CarouselMobile {
     this.setTransform(this.carouselWrap, -this.carouselWidth);
   }
 
-  getCarouselWidth () {
+  getCarouselWidth() {
     return parseInt(this.carousel.offsetWidth);
   }
 
-  setTransition (elem, value) {
-    elem.style.transition = value + "ms";
+  setTransition(elem, value) {
+    elem.style.transition = value + 'ms';
   }
 
-  setTransform (elem, value) {
-    elem.style.transform = "translate3d(" + value + "px, 0px, 0px)";
-    elem.style["-webkit-transform"] =
-      "translate3d(" + value + "px, 0px, 0px)";
-    elem.style["-ms-transform"] = "translate3d(" + value + "px, 0px, 0px)";
+  setTransform(elem, value) {
+    elem.style.transform = 'translate3d(' + value + 'px, 0px, 0px)';
+    elem.style['-webkit-transform'] = 'translate3d(' + value + 'px, 0px, 0px)';
+    elem.style['-ms-transform'] = 'translate3d(' + value + 'px, 0px, 0px)';
   }
 
-  getTransform () {
+  getTransform() {
     let x =
       this.carouselWrap.style.transform ||
-      this.carouselWrap.style["-webkit-transform"] ||
-      this.carouselWrap.style["-ms-transform"];
+      this.carouselWrap.style['-webkit-transform'] ||
+      this.carouselWrap.style['-ms-transform'];
     x = x.substring(12);
     x = x.match(/(\S*)px/)[1];
     return Number(x);
   }
 
-  getImgs () {
-    let carouselWrapEle = document.createElement("div");
-    carouselWrapEle.setAttribute("class", CarouselMobile.CLASS.CAROUSEL_WRAP);
+  getImgs() {
+    let carouselWrapEle = document.createElement('div');
+    carouselWrapEle.setAttribute('class', CarouselMobile.CLASS.CAROUSEL_WRAP);
     carouselWrapEle.setAttribute(
-      "id",
-      CarouselMobile.ID.CAROUSEL_WRAP.substring(1, CarouselMobile.ID.CAROUSEL_WRAP.length)
+      'id',
+      CarouselMobile.ID.CAROUSEL_WRAP.substring(
+        1,
+        CarouselMobile.ID.CAROUSEL_WRAP.length,
+      ),
     );
     let fragment = document.createDocumentFragment();
-    let imgEle = document.createElement("img");
-    this.carouselOptions.carouselImages.forEach((
-      carouselImage,
-      index
-    ) => {
+    let imgEle = document.createElement('img');
+    this.carouselOptions.carouselImages.forEach((carouselImage, index) => {
       imgEle = imgEle.cloneNode(false);
-      imgEle.setAttribute("class", CarouselMobile.CLASS.CAROUSEL_IMG);
-      imgEle.setAttribute("src", carouselImage);
-      imgEle.setAttribute("alt", index + 1);
+      imgEle.setAttribute('class', CarouselMobile.CLASS.CAROUSEL_IMG);
+      imgEle.setAttribute('src', carouselImage);
+      imgEle.setAttribute('alt', index + 1);
       fragment.appendChild(imgEle);
     });
     carouselWrapEle.appendChild(fragment);
     return carouselWrapEle;
   }
 
-  playCarousel () {
+  playCarousel() {
     if (this.carouselIntervalr) {
       clearInterval(this.carouselIntervalr);
     }
@@ -159,9 +158,9 @@ class CarouselMobile {
     }, this.carouselOptions.carouselInterval);
   }
 
-  bindCarousel () {
+  bindCarousel() {
     // 鼠标移入移出事件
-    addEvent(this.carousel, "touchstart", (e) => {
+    addEvent(this.carousel, 'touchstart', e => {
       if (!this.isCarouselAnimate) {
         clearInterval(this.carouselIntervalr);
         this.carouselTouch.startX = this.getTransform();
@@ -169,7 +168,7 @@ class CarouselMobile {
           e.changedTouches[e.changedTouches.length - 1].clientX;
       }
     });
-    addEvent(this.carousel, "touchmove", (e) => {
+    addEvent(this.carousel, 'touchmove', e => {
       if (!this.isCarouselAnimate && this.carouselTouch.start != -1) {
         clearInterval(this.carouselIntervalr);
         this.carouselTouch.move =
@@ -177,16 +176,16 @@ class CarouselMobile {
           this.carouselTouch.start;
         this.setTransform(
           this.carouselWrap,
-          this.carouselTouch.move + this.carouselTouch.startX
+          this.carouselTouch.move + this.carouselTouch.startX,
         );
       }
     });
-    addEvent(this.carousel, "touchend", (e) => {
+    addEvent(this.carousel, 'touchend', e => {
       if (!this.isCarouselAnimate && this.carouselTouch.start != -1) {
         clearInterval(this.carouselIntervalr);
         this.setTransform(
           this.carouselWrap,
-          this.carouselTouch.move + this.carouselTouch.startX
+          this.carouselTouch.move + this.carouselTouch.startX,
         );
         let x = this.getTransform();
         x +=
@@ -204,7 +203,7 @@ class CarouselMobile {
         this.playCarousel();
       }
     });
-    addEvent(document, "visibilitychange", (e) => {
+    addEvent(document, 'visibilitychange', e => {
       if (document.hidden) {
         clearInterval(this.carouselIntervalr);
       } else {
@@ -213,7 +212,7 @@ class CarouselMobile {
     });
   }
 
-  nextCarousel () {
+  nextCarousel() {
     if (!this.isCarouselAnimate) {
       this.carouselIndex++;
       if (this.carouselIndex > this.carouselCount) {
@@ -223,17 +222,17 @@ class CarouselMobile {
     }
   }
 
-  moveCarousel (target) {
+  moveCarousel(target) {
     this.isCarouselAnimate = true;
     this.setTransition(
       this.carouselWrap,
-      this.carouselOptions.carouselDuration
+      this.carouselOptions.carouselDuration,
     );
     this.setTransform(this.carouselWrap, target);
     this.resetCarousel(target);
   }
 
-  resetCarousel (target) {
+  resetCarousel(target) {
     window.setTimeout(() => {
       // 重置箭头或者自动轮播后的状态
       this.resetMoveCarousel(target);
@@ -241,7 +240,7 @@ class CarouselMobile {
     }, this.carouselOptions.carouselDuration);
   }
 
-  resetMoveCarousel (target) {
+  resetMoveCarousel(target) {
     this.setTransition(this.carouselWrap, 0);
     // 不符合位移条件，把当前left值置为目标值
     this.setTransform(this.carouselWrap, target);
@@ -249,7 +248,7 @@ class CarouselMobile {
     if (target > -this.carouselWidth) {
       this.setTransform(
         this.carouselWrap,
-        -this.carouselCount * this.carouselWidth
+        -this.carouselCount * this.carouselWidth,
       );
     }
     if (target < -this.carouselWidth * this.carouselCount) {

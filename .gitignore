@@ -1,2 +1,14 @@
-# Dependency directories
-node_modules/
+# always ignore files
+*.DS_Store
+.idea
+.vscode
+*.sublime-*
+
+# npm
+node_modules
+npm-debug.log
+package-lock.json
+
+# yarn
+yarn.lock
+yarn-error.log

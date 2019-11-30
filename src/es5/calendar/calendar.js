@@ -1,13 +1,13 @@
 (function(root, factory) {
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     define([], factory);
-  } else if (typeof module === "object" && module.exports) {
+  } else if (typeof module === 'object' && module.exports) {
     module.exports = factory();
   } else {
     root.Calendar = factory();
   }
-})(typeof self !== "undefined" ? self : this, function() {
-  "use strict";
+})(typeof self !== 'undefined' ? self : this, function() {
+  'use strict';
 
   // 基于MVVM思想来实现，参考收藏的文章
   // 用mvvm重构目前的代码 再加入选择月份和年限的功能
@@ -34,19 +34,19 @@
   // Thu May 20 1999 00:00:00 GMT+0800 (中国标准时间)
 
   var CLASS = {
-    CALENDAR_INPUT: "calendar-input",
-    CALENDAR_WRAP: "calendar-wrapper",
-    CALENDAR_PREV: "calendar-btn-prev",
-    CALENDAR_NEXT: "calendar-btn-next",
-    CALENDAR_BTN: "calendar-btn",
-    CALENDAR_DAY: "calendar-day",
+    CALENDAR_INPUT: 'calendar-input',
+    CALENDAR_WRAP: 'calendar-wrapper',
+    CALENDAR_PREV: 'calendar-btn-prev',
+    CALENDAR_NEXT: 'calendar-btn-next',
+    CALENDAR_BTN: 'calendar-btn',
+    CALENDAR_DAY: 'calendar-day',
   };
 
   var ID = {
-    CALENDAR_DATE: "calendarDate",
-    CALENDAR_DATE_TIME: "calendarDateTime",
-    CALENDAR_DATE_PREV: "calendarDatePrev",
-    CALENDAR_DATE_NEXT: "calendarDateNext"
+    CALENDAR_DATE: 'calendarDate',
+    CALENDAR_DATE_TIME: 'calendarDateTime',
+    CALENDAR_DATE_PREV: 'calendarDatePrev',
+    CALENDAR_DATE_NEXT: 'calendarDateNext',
   };
 
   var util = {
@@ -54,9 +54,9 @@
       if (element.addEventListener) {
         element.addEventListener(type, handler, false);
       } else if (element.attachEvent) {
-        element.attachEvent("on" + type, handler);
+        element.attachEvent('on' + type, handler);
       } else {
-        element["on" + type] = handler;
+        element['on' + type] = handler;
       }
     },
     stopPropagation: function(event) {
@@ -77,9 +77,9 @@
       return target;
     },
     isValidListener: function(listener) {
-      if (typeof listener === "function") {
+      if (typeof listener === 'function') {
         return true;
-      } else if (listener && typeof listener === "object") {
+      } else if (listener && typeof listener === 'object') {
         return util.isValidListener(listener.listener);
       } else {
         return false;
@@ -142,10 +142,10 @@
     },
     formatDate: function(time, format) {
       function timeFormat(i) {
-        i = typeof i == "string" ? parseInt(i) : i;
-        return (i < 10 ? "0" : "") + i;
+        i = typeof i == 'string' ? parseInt(i) : i;
+        return (i < 10 ? '0' : '') + i;
       }
-      time = typeof time == "string" ? new Date(time) : time;
+      time = typeof time == 'string' ? new Date(time) : time;
       var getFullYear = timeFormat(time.getFullYear()),
         getMonth = timeFormat(time.getMonth() + 1),
         getDate = timeFormat(time.getDate()),
@@ -157,19 +157,19 @@
         getDay: parseInt(getDay),
         date: format.replace(/yyyy|MM|dd/g, function(a) {
           switch (a) {
-            case "yyyy":
+            case 'yyyy':
               return getFullYear;
               break;
-            case "MM":
+            case 'MM':
               return getMonth;
               break;
-            case "dd":
+            case 'dd':
               return getDate;
               break;
           }
-        })
+        }),
       };
-    }
+    },
   };
 
   function EventEmitter() {
@@ -180,12 +180,12 @@
     if (!eventName || !listener) return;
 
     if (!util.isValidListener(listener)) {
-      throw new TypeError("listener must be a function");
+      throw new TypeError('listener must be a function');
     }
 
     var events = this.__events;
     var listeners = (events[eventName] = events[eventName] || []);
-    var listenerIsWrapped = typeof listener === "object";
+    var listenerIsWrapped = typeof listener === 'object';
 
     // 不重复添加事件
     if (util.indexOf(listeners, listener) === -1) {
@@ -194,8 +194,8 @@
           ? listener
           : {
               listener: listener,
-              once: false
-            }
+              once: false,
+            },
       );
     }
     return this;
@@ -203,7 +203,7 @@
   EventEmitter.prototype.once = function(eventName, listener) {
     return this.on(eventName, {
       listener: listener,
-      once: true
+      once: true,
     });
   };
   EventEmitter.prototype.off = function(eventName, listener) {
@@ -218,7 +218,7 @@
       }
     }
 
-    if (typeof index !== "undefined") {
+    if (typeof index !== 'undefined') {
       listeners.splice(index, 1, null);
     }
 
@@ -242,19 +242,18 @@
 
   function Calendar(selector, userOptions) {
     // 合并配置
-    this.options = util.extend({}, this.constructor.calendarOptions, userOptions, true);
+    this.options = util.extend(
+      {},
+      this.constructor.calendarOptions,
+      userOptions,
+      true,
+    );
     // 初始化
     this._initCalendar(selector);
     // 日历设置时间（默认为当前时间）
-    this.calendarTime = util.formatDate(
-      this.options.time,
-      "yyyy-MM-dd"
-    ).date;
+    this.calendarTime = util.formatDate(this.options.time, 'yyyy-MM-dd').date;
     // 日历显示时间
-    this.calendarShowTime = util.formatDate(
-      this.options.time,
-      "yyyy-MM"
-    ).date;
+    this.calendarShowTime = util.formatDate(this.options.time, 'yyyy-MM').date;
     this._refreshCalendar(new Date(this.options.time));
     // 获取日历元素
     this._getCalendar();
@@ -263,7 +262,7 @@
   }
 
   Calendar.calendarOptions = {
-    time: new Date()
+    time: new Date(),
   };
 
   var proto = (Calendar.prototype = new EventEmitter());
@@ -278,16 +277,16 @@
       return false;
     };
     // 因为一周有7天，一个月最多有31天，一个月最多能横跨6行，所以至少要7*6=42个格子，其余的格子用前后月份日期补足
-    this.calendarWeeks = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+    this.calendarWeeks = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
     // 每个月最大天数
     this.calendarMaxDay = 31;
     // 最大日期
     this.calendarMax = util.formatDate(
       new Date(8640000000000000),
-      "yyyy-MM-dd"
+      'yyyy-MM-dd',
     ).date;
     // 最小日期
-    this.calendarMin = "100-01-01";
+    this.calendarMin = '100-01-01';
     // 日历行数
     this.calendarRow =
       Math.floor(this.calendarMaxDay / this.calendarWeeks.length) + 2;
@@ -333,7 +332,7 @@
       date.getMonth() < 1 ? 12 : date.getMonth(),
       start,
       end,
-      false
+      false,
     );
   };
 
@@ -351,7 +350,7 @@
       date.getMonth() + 1,
       1,
       end,
-      true
+      true,
     );
   };
 
@@ -366,7 +365,7 @@
           date.getMonth() + 2 > 12 ? 1 : date.getMonth() + 2,
           1,
           this.calendarDaysCount - this.calendarDays.length,
-          false
+          false,
         );
       }
     }
@@ -378,7 +377,7 @@
         year: year,
         month: month,
         day: day,
-        isCurrent: isCurrent
+        isCurrent: isCurrent,
       });
     }
   };
@@ -387,17 +386,18 @@
     // 生成日历框
     var $input = document.querySelector('.' + CLASS.CALENDAR_INPUT);
     if (!$input) {
-      $input = '<input type="text" class="calendar-input" readonly placeholder="点击选择日期" />';
+      $input =
+        '<input type="text" class="calendar-input" readonly placeholder="点击选择日期" />';
       this.calendar.innerHTML = $input;
     }
 
     // 生成日历表格
     var template =
-      "{{calendarShowTime}}" +
+      '{{calendarShowTime}}' +
       '<table class="calendar-content">' +
-      "{{calendarWeeks}}" +
-      "{{calendarDays}}" +
-      "</table>";
+      '{{calendarWeeks}}' +
+      '{{calendarDays}}' +
+      '</table>';
     var $wrapper = document.querySelector('.' + CLASS.CALENDAR_WRAP);
     if (!$wrapper) {
       $wrapper = document.createElement('div');
@@ -405,9 +405,9 @@
       $wrapper.className = CLASS.CALENDAR_WRAP;
     }
     $wrapper.innerHTML = template
-      .replace("{{calendarShowTime}}", this._renderCalendarTitle())
-      .replace("{{calendarWeeks}}", this._renderCalendarWeeks())
-      .replace("{{calendarDays}}", this._renderCalendarDays());
+      .replace('{{calendarShowTime}}', this._renderCalendarTitle())
+      .replace('{{calendarWeeks}}', this._renderCalendarWeeks())
+      .replace('{{calendarDays}}', this._renderCalendarDays());
     // // 第一种模式：显示天数
   };
 
@@ -417,27 +417,27 @@
       '<a href="javascript:;" class="calendar-btn calendar-btn-prev" id="calendarDatePrev">&lt;</a>' +
       '<span class="calendar-time" id="calendarDateTime">' +
       this.calendarShowTime +
-      "</span>" +
+      '</span>' +
       '<a href="javascript:;" class="calendar-btn calendar-btn-next" id="calendarDateNext">&gt;</a>' +
-      "</div>"
+      '</div>'
     );
   };
 
   proto._renderCalendarWeeks = function() {
-    var html = "";
+    var html = '';
     for (var i = 0; i < this.calendarWeeks.length; i++) {
-      html += '<th class="calendar-week">' + this.calendarWeeks[i] + "</th>";
+      html += '<th class="calendar-week">' + this.calendarWeeks[i] + '</th>';
     }
-    return '<thead><tr class="calendar-weeks">' + html + "</tr></thead>";
+    return '<thead><tr class="calendar-weeks">' + html + '</tr></thead>';
   };
 
   proto._renderCalendarDays = function() {
-    var html = "",
+    var html = '',
       dom = [],
       calendarDays = [];
     var len = this.calendarWeeks.length;
     for (var i = 0; i < this.calendarRow; i++) {
-      html = "";
+      html = '';
       html += '<tr class="calendar-days">';
       calendarDays = this.calendarDays.slice(i * len, i * len + len);
       for (var j = 0; j < calendarDays.length; j++) {
@@ -447,29 +447,38 @@
               new Date(
                 calendarDays[j].year,
                 calendarDays[j].month - 1,
-                calendarDays[j].day
+                calendarDays[j].day,
               ),
-              "yyyy-MM-dd"
+              'yyyy-MM-dd',
             ).date === this.calendarTime
           ) {
             html +=
-              '<td class="calendar-day select" data-date="'+ calendarDays[j].day + '">' +
+              '<td class="calendar-day select" data-date="' +
               calendarDays[j].day +
-              "</td>";
+              '">' +
+              calendarDays[j].day +
+              '</td>';
           } else {
             html +=
-              '<td class="calendar-day current" data-date="' + calendarDays[j].day + '">' +
+              '<td class="calendar-day current" data-date="' +
               calendarDays[j].day +
-              "</td>";
+              '">' +
+              calendarDays[j].day +
+              '</td>';
           }
         } else {
-          html += '<td class="calendar-day" data-date="' + calendarDays[j].day + '">' + calendarDays[j].day + "</td>";
+          html +=
+            '<td class="calendar-day" data-date="' +
+            calendarDays[j].day +
+            '">' +
+            calendarDays[j].day +
+            '</td>';
         }
       }
-      html += "</tr>";
+      html += '</tr>';
       dom.push(html);
     }
-    return dom.join("");
+    return dom.join('');
   };
 
   proto._bindCalendar = function() {
@@ -483,7 +492,7 @@
     var $input = document.querySelector('.' + CLASS.CALENDAR_INPUT);
     var $wrapper = document.querySelector('.' + CLASS.CALENDAR_WRAP);
     this.calendarIsOpen = false;
-    util.addEvent($input, "click", function(ev) {
+    util.addEvent($input, 'click', function(ev) {
       var e = ev || window.event;
       var $target = e.target || e.srcElement;
       if (_this.calendarIsOpen) {
@@ -505,11 +514,11 @@
     var _this = this;
     var $input = document.querySelector('.' + CLASS.CALENDAR_INPUT);
     var $wrapper = document.querySelector('.' + CLASS.CALENDAR_WRAP);
-    util.addEvent($wrapper, "click", function(ev) {
+    util.addEvent($wrapper, 'click', function(ev) {
       var e = ev || window.event;
       var $target = e.target || e.srcElement;
       // util.stopPropagation(e);
-      var $days = document.querySelectorAll("." + CLASS.CALENDAR_DAY);
+      var $days = document.querySelectorAll('.' + CLASS.CALENDAR_DAY);
       if ($target.tagName.toLowerCase() !== 'td') {
         return;
       }
@@ -519,23 +528,23 @@
             new Date(
               _this.calendarDays[i].year,
               _this.calendarDays[i].month - 1,
-              _this.calendarDays[i].day
+              _this.calendarDays[i].day,
             ),
-            "yyyy-MM-dd"
+            'yyyy-MM-dd',
           ).date;
           _this.calendarShowTime = util.formatDate(
             new Date(
               _this.calendarDays[i].year,
               _this.calendarDays[i].month - 1,
-              _this.calendarDays[i].day
+              _this.calendarDays[i].day,
             ),
-            "yyyy-MM"
+            'yyyy-MM',
           ).date;
           _this._refreshCalendar(new Date(_this.calendarTime));
           break;
         }
       }
-      _this.emit("click", [_this.calendarTime]);
+      _this.emit('click', [_this.calendarTime]);
       $input.value = _this.calendarTime;
       $wrapper.classList.remove('calendar-wrapper-show');
       _this.calendarIsOpen = false;
@@ -545,7 +554,7 @@
   proto._bindCalendarBtn = function() {
     var _this = this;
     var $wrapper = document.querySelector('.' + CLASS.CALENDAR_WRAP);
-    util.addEvent($wrapper, "click", function(ev) {
+    util.addEvent($wrapper, 'click', function(ev) {
       var e = ev || window.event;
       var $target = e.target || e.srcElement;
       var year = new Date(_this.calendarShowTime).getFullYear();
@@ -569,7 +578,7 @@
     }
     this.calendarShowTime = util.formatDate(
       new Date(year, month - 1),
-      "yyyy-MM"
+      'yyyy-MM',
     ).date;
     this._refreshCalendar(new Date(this.calendarShowTime));
   };
@@ -585,7 +594,7 @@
     }
     this.calendarShowTime = util.formatDate(
       new Date(year, month - 1),
-      "yyyy-MM"
+      'yyyy-MM',
     ).date;
     this._refreshCalendar(new Date(this.calendarShowTime));
   };
