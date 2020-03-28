@@ -1,4 +1,4 @@
-> 本项目已废弃，请使用新项目，地址：https://github.com/csdoker/tiny-wheels
+> 注意！本仓库项目已废弃，请查看新项目，地址：https://github.com/csdoker/tiny-wheels
 
 # csdwheels
 
